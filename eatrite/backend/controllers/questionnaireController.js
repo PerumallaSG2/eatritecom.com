@@ -38,7 +38,10 @@ export const submitQuestionnaire = async (req, res) => {
     }
     
     console.log('\n🍃 NEW QUESTIONNAIRE SUBMISSION')
+    console.log('======================================')
     console.log(`⏰ Timestamp: ${timestamp}`)
+    console.log(`🌐 Client IP: ${clientInfo.ip}`)
+    console.log(`📱 User Agent: ${clientInfo.userAgent}`)
     console.log('📝 SUBMITTED DATA:')
     console.log(JSON.stringify(submissionData, null, 2))
     
@@ -62,16 +65,29 @@ export const submitQuestionnaire = async (req, res) => {
     
     const planDeliveryDate = new Date(Date.now() + 24 * 60 * 60 * 1000)
     
+    console.log(`\n✅ SUBMISSION PROCESSED SUCCESSFULLY`)
+    console.log(`📊 Storage: ${result.storage}`)
+    console.log(`🆔 Submission ID: ${result.data.id}`)
+    console.log(`📧 Customer: ${submissionData.name} <${submissionData.email}>`)
+    console.log(`🎯 Goal: ${submissionData.goal}`)
+    if (questionnaireService.useDatabase) {
+      console.log(`🗃️ Database: UserSubmissions table updated`)
+      console.log(`🍽️ Nutrition plan: Auto-generated in NutritionPlans table`)
+    }
+    console.log('======================================\n')
+    
     res.status(200).json({
       success: true,
-      message: 'Questionnaire submitted successfully!',
+      message: 'Questionnaire submitted successfully! Your personalized nutrition plan will be ready soon.',
       data: {
         submissionId: result.data.id,
         customerName: submissionData.name,
         email: submissionData.email,
         primaryGoal: submissionData.goal,
         estimatedPlanDelivery: planDeliveryDate.toISOString(),
-        supportContact: 'sairam.perumalla@eatrite.com'
+        supportContact: 'sairam.perumalla@eatrite.com',
+        storage: result.storage,
+        nutritionPlanIncluded: questionnaireService.useDatabase
       },
       timestamp
     })
@@ -81,7 +97,7 @@ export const submitQuestionnaire = async (req, res) => {
     
     res.status(500).json({
       success: false,
-      message: 'Database error occurred.',
+      message: 'Database error occurred. Please try again.',
       timestamp: new Date().toISOString(),
       supportContact: 'sairam.perumalla@eatrite.com'
     })
@@ -100,13 +116,111 @@ export const getAllSubmissions = async (req, res) => {
       data: submissions,
       count: submissions.length,
       page,
-      pageSize
+      pageSize,
+      storage: questionnaireService.useDatabase ? 'database' : 'memory',
+      timestamp: new Date().toISOString()
     })
   } catch (error) {
     console.error('❌ Error retrieving submissions:', error)
     res.status(500).json({
       success: false,
       error: 'Database error occurred'
+    })
+  }
+}
+
+export const getSubmissionStats = async (req, res) => {
+  try {
+    const stats = await questionnaireService.getSubmissionStats()
+    
+    console.log('📊 Statistics requested')
+    console.log(`📈 Total submissions: ${stats.totalSubmissions}`)
+    console.log(`📅 Today's submissions: ${stats.todaySubmissions}`)
+    console.log(`🗃️ Storage type: ${stats.storage || 'memory'}`)
+    
+    res.status(200).json({
+      success: true,
+      statistics: stats,
+      timestamp: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('❌ Error retrieving stats:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve statistics',
+      timestamp: new Date().toISOString()
+    })
+  }
+}
+
+export const getSubmissionById = async (req, res) => {
+  try {
+    const { id } = req.params
+    
+    if (questionnaireService.useDatabase) {
+      const submission = await questionnaireService.getSubmissionById(id)
+      
+      if (!submission) {
+        return res.status(404).json({
+          success: false,
+          message: 'Submission not found',
+          submissionId: id
+        })
+      }
+      
+      res.status(200).json({
+        success: true,
+        data: submission,
+        timestamp: new Date().toISOString()
+      })
+    } else {
+      res.status(501).json({
+        success: false,
+        message: 'Database not connected. Individual submission lookup not available in memory mode.',
+        storage: 'memory'
+      })
+    }
+  } catch (error) {
+    console.error('❌ Error retrieving submission by ID:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Database error occurred'
+    })
+  }
+}
+
+export const getDatabaseStatus = async (req, res) => {
+  try {
+    const status = {
+      database: {
+        connected: questionnaireService.useDatabase,
+        type: questionnaireService.useDatabase ? 'RavenDB' : 'In-Memory',
+        url: process.env.RAVEN_DB_URL || 'http://localhost:8080',
+        name: process.env.RAVEN_DB_NAME || 'EatriteDB'
+      },
+      server: {
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        version: '2.0.0'
+      },
+      features: {
+        persistentStorage: questionnaireService.useDatabase,
+        nutritionPlanGeneration: questionnaireService.useDatabase,
+        analytics: true,
+        search: questionnaireService.useDatabase
+      }
+    }
+    
+    res.status(200).json({
+      success: true,
+      status,
+      timestamp: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('❌ Error getting database status:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve status'
     })
   }
 }
