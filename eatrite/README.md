@@ -6,6 +6,27 @@ A comprehensive full-stack application featuring a **responsive website**, **mob
 
 ---
 
+## 🚀 **QUICK START** ⭐
+
+### **Simple 3-Step Setup:**
+
+```bash
+# 1. Backend API (Terminal 1)
+cd eatrite/backend && npm install && npm start
+
+# 2. Web App (Terminal 2)  
+cd eatrite/web && npm install && npm run dev
+
+# 3. Open Browser
+# Visit: http://localhost:3000
+```
+
+**✅ That's it!** Your Eatrite app is running!
+
+📋 **For detailed setup instructions, see [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)**
+
+---
+
 ## 📱 Platform Overview
 
 **Eatrite** is a complete nutrition platform that works seamlessly across devices:
