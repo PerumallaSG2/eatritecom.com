@@ -1,17 +1,33 @@
-import express from 'express'
-import { submitQuestionnaire, getSubmissionStats } from '../controllers/questionnaireController.js'
-
-const router = express.Router()
-
 /**
- * Questionnaire routes for the Eatrite API
- * All routes are prefixed with /api
+ * Questionnaire Routes - RavenDB Integration
  */
 
-// POST /api/submit - Submit questionnaire data
+import { Router } from 'express'
+import { 
+  submitQuestionnaire, 
+  getAllSubmissions 
+} from '../controllers/questionnaireController.js'
+
+const router = Router()
+
+// POST /api/submit - Submit new questionnaire
 router.post('/submit', submitQuestionnaire)
 
-// GET /api/stats - Get submission statistics (optional endpoint for analytics)
-router.get('/stats', getSubmissionStats)
+// GET /api/submissions - Get all submissions (admin endpoint)
+router.get('/submissions', getAllSubmissions)
+
+// Health check endpoint
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Questionnaire API with RavenDB is healthy',
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      'POST /api/submit - Submit questionnaire',
+      'GET /api/submissions - Get all submissions (paginated)',
+      'GET /api/health - Health check'
+    ]
+  })
+})
 
 export default router

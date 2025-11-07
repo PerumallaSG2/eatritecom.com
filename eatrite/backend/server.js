@@ -4,7 +4,8 @@ import dotenv from 'dotenv'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 
-// Import routes
+// Import database and routes
+import { dbManager } from './config/database.js'
 import questionnaireRoutes from './routes/questionnaireRoutes.js'
 
 // Load environment variables
@@ -15,6 +16,17 @@ const __dirname = dirname(__filename)
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+// Initialize RavenDB connection
+async function initializeDatabase() {
+  try {
+    await dbManager.initialize()
+    console.log('✅ RavenDB connection established successfully!')
+  } catch (error) {
+    console.error('❌ Failed to connect to RavenDB:', error)
+    console.log('⚠️  Continuing with application startup...')
+  }
+}
 
 // Middleware configuration
 app.use(cors({
@@ -38,13 +50,15 @@ app.use((req, res, next) => {
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    message: 'Eatrite API Server is running!',
+    message: 'Eatrite API Server with RavenDB is running!',
     version: '1.0.0',
     status: 'healthy',
+    database: 'RavenDB',
     timestamp: new Date().toISOString(),
     endpoints: {
       health: '/health',
-      questionnaire: '/api/submit'
+      questionnaire: '/api/submit',
+      submissions: '/api/submissions'
     }
   })
 })
@@ -54,6 +68,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     uptime: process.uptime(),
+    database: 'RavenDB',
     timestamp: new Date().toISOString(),
     memory: process.memoryUsage(),
     environment: process.env.NODE_ENV || 'development'
@@ -72,7 +87,8 @@ app.use('*', (req, res) => {
     availableEndpoints: [
       'GET /',
       'GET /health', 
-      'POST /api/submit'
+      'POST /api/submit',
+      'GET /api/submissions'
     ],
     timestamp: new Date().toISOString()
   })
@@ -90,35 +106,60 @@ app.use((error, req, res, next) => {
   })
 })
 
-// Start the server
-const server = app.listen(PORT, () => {
-  console.log('\n🍃 EATRITE API SERVER STARTED')
-  console.log('===============================')
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`🌐 API URL: http://localhost:${PORT}`)
-  console.log(`📊 Health check: http://localhost:${PORT}/health`)
-  console.log(`📝 Submit endpoint: http://localhost:${PORT}/api/submit`)
-  console.log(`🕐 Started at: ${new Date().toISOString()}`)
-  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`)
-  console.log('===============================\n')
-})
-
-// Graceful shutdown handling
-const gracefulShutdown = (signal) => {
-  console.log(`\n📡 ${signal} received, initiating graceful shutdown...`)
-  
-  server.close((err) => {
-    if (err) {
-      console.error('❌ Error during server shutdown:', err)
-      process.exit(1)
-    }
+// Start the server and initialize database
+async function startServer() {
+  try {
+    // Initialize database connection
+    await initializeDatabase()
     
-    console.log('✅ Server closed successfully')
-    process.exit(0)
-  })
+    // Start HTTP server
+    const server = app.listen(PORT, () => {
+      console.log('\n🍃 EATRITE API SERVER STARTED')
+      console.log('===============================')
+      console.log(`🚀 Server running on port ${PORT}`)
+      console.log(`🌐 API URL: http://localhost:${PORT}`)
+      console.log(`📊 Health check: http://localhost:${PORT}/health`)
+      console.log(`📝 Submit endpoint: http://localhost:${PORT}/api/submit`)
+      console.log(`📋 Submissions endpoint: http://localhost:${PORT}/api/submissions`)
+      console.log(`🗃️ Database: RavenDB`)
+      console.log(`🕐 Started at: ${new Date().toISOString()}`)
+      console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`)
+      console.log('===============================\n')
+    })
+
+    // Graceful shutdown handling
+    const gracefulShutdown = async (signal) => {
+      console.log(`\n📡 ${signal} received, initiating graceful shutdown...`)
+      
+      server.close(async (err) => {
+        if (err) {
+          console.error('❌ Error during server shutdown:', err)
+          process.exit(1)
+        }
+        
+        try {
+          await dbManager.closeConnection()
+          console.log('✅ Database connection closed')
+        } catch (error) {
+          console.error('❌ Error closing database:', error)
+        }
+        
+        console.log('✅ Server closed successfully')
+        process.exit(0)
+      })
+    }
+
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+    
+    return server
+  } catch (error) {
+    console.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
 }
 
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
-process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+// Start the application
+startServer()
 
 export default app

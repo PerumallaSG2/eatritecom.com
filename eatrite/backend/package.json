@@ -1,7 +1,7 @@
 {
   "name": "eatrite-backend",
   "version": "1.0.0",
-  "description": "Eatrite nutrition platform - Backend API",
+  "description": "Eatrite nutrition platform - Backend API with RavenDB",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["nutrition", "health", "api", "express", "nodejs"],
+  "keywords": ["nutrition", "health", "api", "express", "nodejs", "ravendb"],
   "author": "Sairam Perumalla",
   "license": "MIT",
   "dependencies": {
@@ -17,7 +17,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "helmet": "^7.1.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "ravendb": "^6.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
