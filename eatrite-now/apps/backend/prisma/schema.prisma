@@ -1,0 +1,250 @@
+// EatRite - Complete Meal Delivery Platform Schema
+// Web design by Sairam Perumalla
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  name      String?
+  firstName String?
+  lastName  String?
+  phone     String?
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  subscriptions Subscription[]
+  orders        Order[]
+  preferences   UserPreference?
+  profile       UserProfile?
+  addresses     Address[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  age                 Int
+  gender              String
+  height              Float    // in cm
+  weight              Float    // in kg
+  activityLevel       String
+  healthGoals         String
+  dietaryRestrictions String?
+  allergies           String?
+  mealsPerDay         Int      @default(3)
+  weeklyBudget        String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model UserPreference {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  dietaryGoals  String[]
+  allergies     String[]
+  dislikes      String[]
+  mealsPerWeek  Int      @default(10)
+  calorieTarget Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Address {
+  id           String  @id @default(cuid())
+  userId       String
+  firstName    String
+  lastName     String
+  street       String
+  city         String
+  state        String
+  zipCode      String
+  country      String  @default("US")
+  isDefault    Boolean @default(false)
+  instructions String?
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@map("addresses")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  meals Meal[]
+
+  @@map("categories")
+}
+
+model Meal {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  shortDescription String?
+  imageUrl        String?
+  categoryId      String
+  ingredients     String[]
+  allergens       String[]
+  nutritionFacts  Json
+  price           Decimal  @db.Decimal(10, 2)
+  calories        Int
+  protein         Int
+  carbs           Int
+  fat             Int
+  fiber           Int?
+  sugar           Int?
+  sodium          Int?
+  isActive        Boolean  @default(true)
+  isPopular       Boolean  @default(false)
+  prepTime        Int? // minutes
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  category  Category    @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("meals")
+}
+
+model Plan {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  mealsPerWeek  Int
+  pricePerMeal  Decimal  @db.Decimal(10, 2)
+  totalPrice    Decimal  @db.Decimal(10, 2)
+  discount      Decimal? @db.Decimal(5, 2)
+  isActive      Boolean  @default(true)
+  isPopular     Boolean  @default(false)
+  features      String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id              String            @id @default(cuid())
+  userId          String
+  planId          String
+  status          SubscriptionStatus @default(ACTIVE)
+  startDate       DateTime
+  nextDeliveryDate DateTime?
+  pausedUntil     DateTime?
+  cancelledAt     DateTime?
+  stripeSubscriptionId String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  plan   Plan   @relation(fields: [planId], references: [id])
+  orders Order[]
+
+  @@map("subscriptions")
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  userId         String
+  subscriptionId String?
+  addressId      String
+  status         OrderStatus @default(PENDING)
+  orderNumber    String      @unique
+  subtotal       Decimal     @db.Decimal(10, 2)
+  tax            Decimal     @db.Decimal(10, 2)
+  shipping       Decimal     @db.Decimal(10, 2)
+  total          Decimal     @db.Decimal(10, 2)
+  deliveryDate   DateTime?
+  deliveredAt    DateTime?
+  trackingNumber String?
+  notes          String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+  address      Address       @relation(fields: [addressId], references: [id])
+  items        OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id       String  @id @default(cuid())
+  orderId  String
+  mealId   String
+  quantity Int
+  price    Decimal @db.Decimal(10, 2)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  meal  Meal  @relation(fields: [mealId], references: [id])
+
+  @@map("order_items")
+}
+
+// Contact form submissions
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contacts")
+}
+
+// Newsletter subscriptions
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("newsletter")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
