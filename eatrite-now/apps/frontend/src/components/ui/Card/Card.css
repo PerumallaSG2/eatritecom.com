@@ -1,0 +1,251 @@
+/**
+ * EatRite Card Styles
+ * Luxury dark theme card component styles
+ */
+
+/* Base Card Styles */
+.eatrite-card {
+  background: var(--color-surface-primary, #1a1a1a);
+  border: 1px solid var(--color-surface-border, #404040);
+  border-radius: var(--radius-2xl, 1rem);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.7));
+  transition: var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1));
+  overflow: hidden;
+  position: relative;
+}
+
+/* Padding Variants */
+.eatrite-card--sm {
+  padding: var(--spacing-4, 1rem);
+}
+
+.eatrite-card--md {
+  padding: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-card--lg {
+  padding: var(--spacing-8, 2rem);
+}
+
+.eatrite-card--xl {
+  padding: var(--spacing-10, 2.5rem);
+}
+
+/* Card Sections */
+.eatrite-card__header {
+  margin-bottom: var(--spacing-4, 1rem);
+  padding-bottom: var(--spacing-4, 1rem);
+  border-bottom: 1px solid var(--color-surface-divider, #2a2a2a);
+}
+
+.eatrite-card__content {
+  flex: 1;
+}
+
+.eatrite-card__footer {
+  margin-top: var(--spacing-4, 1rem);
+  padding-top: var(--spacing-4, 1rem);
+  border-top: 1px solid var(--color-surface-divider, #2a2a2a);
+}
+
+/* Style Variants */
+
+/* Default Card */
+.eatrite-card--default:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8));
+  border-color: var(--color-surface-tertiary, #333333);
+}
+
+/* Premium Card (with gold accent) */
+.eatrite-card--premium {
+  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  border-color: var(--color-primary-700, #a1742f);
+  box-shadow: 
+    var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8)), 
+    0 0 20px rgba(212, 160, 71, 0.1);
+  position: relative;
+}
+
+.eatrite-card--premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+}
+
+.eatrite-card--premium:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.8)), 
+    var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+/* Interactive Card (clickable) */
+.eatrite-card--interactive {
+  cursor: pointer;
+  transition: 
+    var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1)),
+    border-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.eatrite-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8));
+  border-color: var(--color-primary-800, #85602c);
+}
+
+.eatrite-card--interactive:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.7));
+}
+
+.eatrite-card--interactive:focus-visible {
+  outline: 2px solid var(--color-primary-500, #d4a047);
+  outline-offset: 2px;
+}
+
+/* Flat Card (minimal) */
+.eatrite-card--flat {
+  box-shadow: none;
+  border: 1px solid var(--color-surface-divider, #2a2a2a);
+  background: var(--color-surface-primary, #1a1a1a);
+}
+
+.eatrite-card--flat:hover {
+  border-color: var(--color-surface-border, #404040);
+  transform: none;
+}
+
+/* Special Card Types */
+
+/* Meal Card (for food items) */
+.eatrite-card--meal {
+  overflow: hidden;
+}
+
+.eatrite-card--meal .eatrite-card__content {
+  position: relative;
+}
+
+.eatrite-card--meal .meal-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-lg, 0.5rem);
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+/* Profile Card */
+.eatrite-card--profile {
+  text-align: center;
+}
+
+.eatrite-card--profile .profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-500, #d4a047);
+  margin: 0 auto var(--spacing-4, 1rem);
+  box-shadow: var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+/* Stats Card */
+.eatrite-card--stats {
+  padding: var(--spacing-6, 1.5rem);
+  text-align: center;
+  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+}
+
+.eatrite-card--stats .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-serif, Georgia, serif);
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-2, 0.5rem);
+}
+
+.eatrite-card--stats .stat-label {
+  color: var(--color-text-tertiary, #a3a3a3);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Loading States */
+.eatrite-card--loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.eatrite-card--loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 160, 71, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .eatrite-card--lg {
+    padding: var(--spacing-6, 1.5rem);
+  }
+  
+  .eatrite-card--xl {
+    padding: var(--spacing-6, 1.5rem);
+  }
+  
+  .eatrite-card--meal .meal-image {
+    height: 160px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .eatrite-card {
+    transition: none;
+  }
+  
+  .eatrite-card:hover {
+    transform: none;
+  }
+  
+  .eatrite-card--loading::after {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .eatrite-card {
+    border-width: 2px;
+  }
+  
+  .eatrite-card--premium {
+    border-color: var(--color-primary-400, #e8b85c);
+  }
+  
+  .eatrite-card--interactive:focus-visible {
+    outline-width: 3px;
+  }
+}

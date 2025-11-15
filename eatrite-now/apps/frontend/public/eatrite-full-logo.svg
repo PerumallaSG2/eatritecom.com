@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+    <defs>
+        <linearGradient id="leafGradientFull" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f4d03f"/>
+            <stop offset="30%" stop-color="#d4a047"/>
+            <stop offset="70%" stop-color="#b8903d"/>
+            <stop offset="100%" stop-color="#d4a047"/>
+        </linearGradient>
+        <linearGradient id="leafHighlightFull" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f7dc6f"/>
+            <stop offset="50%" stop-color="#e8c547"/>
+            <stop offset="100%" stop-color="#d4a047"/>
+        </linearGradient>
+        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f4d03f"/>
+            <stop offset="50%" stop-color="#d4a047"/>
+            <stop offset="100%" stop-color="#b8903d"/>
+        </linearGradient>
+        <filter id="leafGlowFull">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    
+    <!-- Black background -->
+    <rect width="300" height="200" fill="#000000"/>
+    
+    <!-- Icon Section (scaled and positioned) -->
+    <g transform="translate(150, 60) scale(0.7)">
+        <!-- Center leaf (vertical) -->
+        <ellipse cx="0" cy="-10" rx="12" ry="35" fill="url(#leafGradientFull)" filter="url(#leafGlowFull)"/>
+        <path d="M0 -45 Q0 -10 0 25" stroke="#b8903d" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <ellipse cx="0" cy="-15" rx="8" ry="25" fill="url(#leafHighlightFull)" opacity="0.6"/>
+        
+        <!-- Left leaf (angled) -->
+        <ellipse cx="-30" cy="20" rx="10" ry="28" transform="rotate(-35 -30 20)" fill="url(#leafGradientFull)" filter="url(#leafGlowFull)"/>
+        <path d="M-40 -5 Q-30 20 -20 45" stroke="#b8903d" stroke-width="1.2" fill="none" opacity="0.7"/>
+        <ellipse cx="-30" cy="20" rx="6" ry="20" transform="rotate(-35 -30 20)" fill="url(#leafHighlightFull)" opacity="0.6"/>
+        
+        <!-- Right leaf (angled) -->
+        <ellipse cx="30" cy="20" rx="10" ry="28" transform="rotate(35 30 20)" fill="url(#leafGradientFull)" filter="url(#leafGlowFull)"/>
+        <path d="M40 -5 Q30 20 20 45" stroke="#b8903d" stroke-width="1.2" fill="none" opacity="0.7"/>
+        <ellipse cx="30" cy="20" rx="6" ry="20" transform="rotate(35 30 20)" fill="url(#leafHighlightFull)" opacity="0.6"/>
+        
+        <!-- Connecting stem -->
+        <ellipse cx="0" cy="50" rx="3" ry="8" fill="url(#leafGradientFull)" opacity="0.8"/>
+    </g>
+    
+    <!-- EATRITE Text -->
+    <text x="150" y="150" text-anchor="middle" fill="url(#textGradient)" 
+          font-family="Georgia, serif" font-size="24" font-weight="bold" 
+          letter-spacing="3px" filter="url(#leafGlowFull)">EATRITE</text>
+</svg>

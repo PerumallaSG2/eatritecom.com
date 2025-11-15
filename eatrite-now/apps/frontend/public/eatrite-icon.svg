@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <defs>
+        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f4d03f"/>
+            <stop offset="30%" stop-color="#d4a047"/>
+            <stop offset="70%" stop-color="#b8903d"/>
+            <stop offset="100%" stop-color="#d4a047"/>
+        </linearGradient>
+        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e8c547"/>
+            <stop offset="50%" stop-color="#d4a047"/>
+            <stop offset="100%" stop-color="#c19b42"/>
+        </linearGradient>
+        <filter id="goldGlow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    
+    <!-- Black background -->
+    <rect width="200" height="200" fill="#000000"/>
+    
+    <!-- Fork handle -->
+    <rect x="96" y="110" width="8" height="70" rx="4" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    
+    <!-- Fork prongs -->
+    <rect x="82" y="40" width="4" height="80" rx="2" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    <rect x="90" y="30" width="4" height="90" rx="2" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    <rect x="98" y="25" width="4" height="95" rx="2" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    <rect x="106" y="30" width="4" height="90" rx="2" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    <rect x="114" y="40" width="4" height="80" rx="2" fill="url(#goldGradient)" filter="url(#goldGlow)"/>
+    
+    <!-- Left leaf -->
+    <ellipse cx="70" cy="125" rx="18" ry="12" transform="rotate(-25 70 125)" fill="url(#leafGradient)" filter="url(#goldGlow)"/>
+    <path d="M58 130 Q70 125 78 118" stroke="#b8903d" stroke-width="1.5" fill="none" opacity="0.8"/>
+    
+    <!-- Right leaf -->
+    <ellipse cx="130" cy="125" rx="18" ry="12" transform="rotate(25 130 125)" fill="url(#leafGradient)" filter="url(#goldGlow)"/>
+    <path d="M142 130 Q130 125 122 118" stroke="#b8903d" stroke-width="1.5" fill="none" opacity="0.8"/>
+    
+    <!-- Connecting stems -->
+    <path d="M88 120 Q96 125 100 120" stroke="url(#goldGradient)" stroke-width="2" fill="none" opacity="0.9"/>
+    <path d="M112 120 Q104 125 100 120" stroke="url(#goldGradient)" stroke-width="2" fill="none" opacity="0.9"/>
+</svg>

@@ -3,17 +3,14 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { initializeDatabase, closeDatabase } from './services/database';
+// Database temporarily disabled for development
 
 // Import routes
-import authRoutes from './routes/auth';
 import categoryRoutes from './routes/categories';
 import mealRoutes from './routes/meals';
 import planRoutes from './routes/plans';
-import subscriptionRoutes from './routes/subscriptions';
 import orderRoutes from './routes/orders';
 import userRoutes from './routes/users';
-import quizRoutes from './routes/quiz';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -73,17 +70,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/meals', mealRoutes);
 app.use('/api/plans', planRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/quiz', quizRoutes);
-
-// Direct submission endpoint for backward compatibility
-app.use('/api/submit', quizRoutes);
 
 // Error handling middleware
 app.use(notFound);
@@ -92,13 +83,13 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
   try {
-    await initializeDatabase();
+    // Database initialization temporarily disabled for development
     
     app.listen(PORT, () => {
-      console.log(`🚀 EatRite Now API server running on port ${PORT}`);
+      console.log(`🚀 EatRite API server running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`� API URL: http://localhost:${PORT}`);
-      console.log(`�📱 CORS: Dynamic localhost detection enabled`);
+      console.log(`📡 API URL: http://localhost:${PORT}`);
+      console.log(`🌐 CORS: Dynamic localhost detection enabled`);
       if (process.env.FRONTEND_URL) {
         console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL}`);
       }
@@ -112,13 +103,13 @@ const startServer = async () => {
 // Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...');
-  await closeDatabase();
+  // Database cleanup temporarily disabled
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('Shutting down gracefully...');
-  await closeDatabase();
+  // Database cleanup temporarily disabled
   process.exit(0);
 });
 

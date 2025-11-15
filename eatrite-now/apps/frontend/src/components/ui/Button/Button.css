@@ -1,0 +1,228 @@
+/**
+ * EatRite Button Styles
+ * Luxury gold and black theme following the brand design system
+ */
+
+/* Base Button Styles */
+.eatrite-btn {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  
+  /* Typography */
+  font-family: var(--font-sans, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-weight: 600;
+  text-decoration: none;
+  user-select: none;
+  
+  /* Interaction */
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1));
+  
+  /* Appearance */
+  border-radius: var(--radius-lg, 0.5rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.eatrite-btn:focus-visible {
+  outline: 2px solid var(--color-primary-500, #d4a047);
+  outline-offset: 2px;
+}
+
+.eatrite-btn--disabled {
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Loading State */
+.eatrite-btn--loading {
+  cursor: wait;
+}
+
+.eatrite-btn__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Icons */
+.eatrite-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eatrite-btn__icon svg {
+  width: 1em;
+  height: 1em;
+}
+
+/* Size Variants */
+.eatrite-btn--sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  min-height: 2rem;
+  gap: 0.25rem;
+}
+
+.eatrite-btn--md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-height: 2.75rem;
+  gap: 0.5rem;
+}
+
+.eatrite-btn--lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  min-height: 3.25rem;
+  gap: 0.5rem;
+}
+
+/* Style Variants */
+
+/* Primary Gold Button */
+.eatrite-btn--primary {
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  color: var(--color-text-inverse, #000000);
+  box-shadow: var(--shadow-gold, 0 0 20px rgba(212, 160, 71, 0.3));
+}
+
+.eatrite-btn--primary:hover:not(.eatrite-btn--disabled) {
+  background: linear-gradient(135deg, #f9d672 0%, #e8b85c 50%, #d4a047 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    var(--shadow-goldLg, 0 0 30px rgba(212, 160, 71, 0.4)), 
+    var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8));
+}
+
+.eatrite-btn--primary:active:not(.eatrite-btn--disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+.eatrite-btn--primary.eatrite-btn--disabled {
+  background: var(--color-surface-tertiary, #333333);
+  color: var(--color-text-quaternary, #737373);
+  box-shadow: none;
+}
+
+/* Secondary Outline Button */
+.eatrite-btn--secondary {
+  background: transparent;
+  color: var(--color-primary-400, #e8b85c);
+  border: 2px solid var(--color-primary-500, #d4a047);
+}
+
+.eatrite-btn--secondary:hover:not(.eatrite-btn--disabled) {
+  background: var(--color-primary-500, #d4a047);
+  color: var(--color-text-inverse, #000000);
+  border-color: var(--color-primary-400, #e8b85c);
+  box-shadow: var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+.eatrite-btn--secondary:active:not(.eatrite-btn--disabled) {
+  border-color: var(--color-primary-600, #c18d39);
+  background: var(--color-primary-600, #c18d39);
+}
+
+.eatrite-btn--secondary.eatrite-btn--disabled {
+  border-color: var(--color-surface-border, #404040);
+  color: var(--color-text-quaternary, #737373);
+}
+
+/* Dark Surface Button */
+.eatrite-btn--dark {
+  background: var(--color-surface-primary, #1a1a1a);
+  color: var(--color-text-primary, #ffffff);
+  border: 1px solid var(--color-surface-border, #404040);
+}
+
+.eatrite-btn--dark:hover:not(.eatrite-btn--disabled) {
+  background: var(--color-surface-secondary, #262626);
+  border-color: var(--color-surface-tertiary, #333333);
+}
+
+.eatrite-btn--dark:active:not(.eatrite-btn--disabled) {
+  background: var(--color-surface-tertiary, #333333);
+}
+
+.eatrite-btn--dark.eatrite-btn--disabled {
+  background: var(--color-interactive-disabled, #262626);
+  border-color: var(--color-interactive-disabled, #262626);
+  color: var(--color-text-quaternary, #737373);
+}
+
+/* Ghost Button */
+.eatrite-btn--ghost {
+  background: transparent;
+  color: var(--color-text-tertiary, #a3a3a3);
+  border: none;
+}
+
+.eatrite-btn--ghost:hover:not(.eatrite-btn--disabled) {
+  background: var(--color-interactive-hover, #404040);
+  color: var(--color-text-secondary, #e5e5e5);
+}
+
+.eatrite-btn--ghost:active:not(.eatrite-btn--disabled) {
+  background: var(--color-interactive-pressed, #333333);
+}
+
+.eatrite-btn--ghost.eatrite-btn--disabled {
+  color: var(--color-text-quaternary, #737373);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .eatrite-btn--lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    min-height: 3rem;
+  }
+  
+  .eatrite-btn--md {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    min-height: 2.5rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .eatrite-btn {
+    transition: none;
+  }
+  
+  .eatrite-btn:hover:not(.eatrite-btn--disabled) {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .eatrite-btn--primary {
+    border: 2px solid var(--color-text-inverse, #000000);
+  }
+  
+  .eatrite-btn--secondary {
+    border-width: 3px;
+  }
+  
+  .eatrite-btn--dark {
+    border-width: 2px;
+  }
+}

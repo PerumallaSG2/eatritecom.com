@@ -1,0 +1,294 @@
+/**
+ * EatRite Input Styles
+ * Luxury dark theme input component styles
+ */
+
+/* Input Container */
+.eatrite-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+/* Input Label */
+.eatrite-input-label {
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--color-text-secondary, #e5e5e5);
+  margin-bottom: var(--spacing-1, 0.25rem);
+}
+
+.eatrite-input-required {
+  color: var(--color-primary-400, #e8b85c);
+  margin-left: var(--spacing-1, 0.25rem);
+}
+
+/* Input Wrapper */
+.eatrite-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Base Input Styles */
+.eatrite-input {
+  width: 100%;
+  font-family: var(--font-sans, Inter, sans-serif);
+  background: var(--color-surface-primary, #1a1a1a);
+  border: 1px solid var(--color-surface-border, #404040);
+  border-radius: var(--radius-md, 0.375rem);
+  color: var(--color-text-primary, #ffffff);
+  transition: 
+    border-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1)),
+    box-shadow var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1)),
+    background-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+  outline: none;
+}
+
+.eatrite-input::placeholder {
+  color: var(--color-text-placeholder, #525252);
+}
+
+.eatrite-input:focus {
+  border-color: var(--color-primary-500, #d4a047);
+  box-shadow: 0 0 0 3px var(--color-interactive-focus, rgba(212, 160, 71, 0.2));
+  background: var(--color-surface-secondary, #262626);
+}
+
+.eatrite-input:disabled {
+  background: var(--color-interactive-disabled, #262626);
+  border-color: var(--color-interactive-disabled, #262626);
+  color: var(--color-text-quaternary, #737373);
+  cursor: not-allowed;
+}
+
+/* Size Variants */
+.eatrite-input--sm {
+  padding: var(--spacing-2, 0.5rem) var(--spacing-3, 0.75rem);
+  font-size: var(--font-size-sm, 0.875rem);
+  min-height: 2rem;
+}
+
+.eatrite-input--md {
+  padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
+  font-size: var(--font-size-base, 1rem);
+  min-height: 2.5rem;
+}
+
+.eatrite-input--lg {
+  padding: var(--spacing-4, 1rem) var(--spacing-5, 1.25rem);
+  font-size: var(--font-size-lg, 1.125rem);
+  min-height: 3rem;
+}
+
+/* Style Variants - Default styles already applied in base */
+
+.eatrite-input--error {
+  border-color: var(--color-semantic-error-main, #737373);
+  background: rgba(115, 115, 115, 0.05);
+}
+
+.eatrite-input--error:focus {
+  border-color: var(--color-semantic-error-main, #737373);
+  box-shadow: 0 0 0 3px rgba(115, 115, 115, 0.1);
+}
+
+.eatrite-input--success {
+  border-color: var(--color-semantic-success-main, #d4a047);
+  background: rgba(212, 160, 71, 0.05);
+}
+
+.eatrite-input--success:focus {
+  border-color: var(--color-semantic-success-main, #d4a047);
+  box-shadow: 0 0 0 3px var(--color-interactive-focus, rgba(212, 160, 71, 0.2));
+}
+
+/* Icon Styles */
+.eatrite-input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary, #a3a3a3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.eatrite-input-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.eatrite-input-icon--left {
+  left: var(--spacing-3, 0.75rem);
+}
+
+.eatrite-input-icon--right {
+  right: var(--spacing-3, 0.75rem);
+}
+
+/* Adjust input padding when icons are present */
+.eatrite-input-wrapper--left-icon .eatrite-input {
+  padding-left: 2.5rem;
+}
+
+.eatrite-input-wrapper--right-icon .eatrite-input {
+  padding-right: 2.5rem;
+}
+
+.eatrite-input-wrapper--left-icon .eatrite-input--sm {
+  padding-left: 2rem;
+}
+
+.eatrite-input-wrapper--right-icon .eatrite-input--sm {
+  padding-right: 2rem;
+}
+
+.eatrite-input-wrapper--left-icon .eatrite-input--lg {
+  padding-left: 3rem;
+}
+
+.eatrite-input-wrapper--right-icon .eatrite-input--lg {
+  padding-right: 3rem;
+}
+
+/* Helper/Error Message */
+.eatrite-input-message {
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.4;
+  margin-top: var(--spacing-1, 0.25rem);
+}
+
+.eatrite-input-message--error {
+  color: var(--color-semantic-error-main, #737373);
+}
+
+.eatrite-input-message:not(.eatrite-input-message--error) {
+  color: var(--color-text-tertiary, #a3a3a3);
+}
+
+/* Special Input Types */
+
+/* Search Input */
+.eatrite-input--search {
+  border-radius: var(--radius-full, 9999px);
+  padding-left: 3rem;
+  background: var(--color-surface-secondary, #262626);
+  border-color: var(--color-surface-tertiary, #333333);
+}
+
+.eatrite-input--search:focus {
+  background: var(--color-surface-primary, #1a1a1a);
+  border-color: var(--color-primary-500, #d4a047);
+}
+
+/* Premium Input (with gold accent) */
+.eatrite-input--premium {
+  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  border-color: var(--color-primary-700, #a1742f);
+  position: relative;
+}
+
+.eatrite-input--premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+}
+
+.eatrite-input--premium:focus {
+  border-color: var(--color-primary-400, #e8b85c);
+  box-shadow: 
+    0 0 0 3px var(--color-interactive-focus, rgba(212, 160, 71, 0.2)),
+    var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+/* Textarea Styles */
+.eatrite-textarea {
+  resize: vertical;
+  min-height: 6rem;
+  padding-top: var(--spacing-3, 0.75rem);
+  padding-bottom: var(--spacing-3, 0.75rem);
+  line-height: 1.5;
+}
+
+.eatrite-textarea--lg {
+  min-height: 8rem;
+}
+
+/* File Input Styles */
+.eatrite-file-input {
+  position: relative;
+  cursor: pointer;
+}
+
+.eatrite-file-input input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.eatrite-file-input-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2, 0.5rem);
+  padding: var(--spacing-6, 1.5rem);
+  border: 2px dashed var(--color-surface-border, #404040);
+  border-radius: var(--radius-lg, 0.5rem);
+  color: var(--color-text-tertiary, #a3a3a3);
+  transition: var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.eatrite-file-input:hover .eatrite-file-input-content {
+  border-color: var(--color-primary-600, #c18d39);
+  color: var(--color-primary-400, #e8b85c);
+}
+
+.eatrite-file-input:focus-within .eatrite-file-input-content {
+  border-color: var(--color-primary-500, #d4a047);
+  box-shadow: 0 0 0 3px var(--color-interactive-focus, rgba(212, 160, 71, 0.2));
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .eatrite-input--lg {
+    padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
+    font-size: var(--font-size-base, 1rem);
+    min-height: 2.75rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .eatrite-input {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .eatrite-input {
+    border-width: 2px;
+  }
+  
+  .eatrite-input:focus {
+    outline: 2px solid var(--color-primary-400, #e8b85c);
+    outline-offset: 2px;
+  }
+  
+  .eatrite-input--error {
+    border-color: #ff6b6b;
+  }
+  
+  .eatrite-input--success {
+    border-color: #51cf66;
+  }
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+    <defs>
+        <linearGradient id="leafGradient32" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f4d03f"/>
+            <stop offset="30%" stop-color="#d4a047"/>
+            <stop offset="70%" stop-color="#b8903d"/>
+            <stop offset="100%" stop-color="#d4a047"/>
+        </linearGradient>
+        <linearGradient id="leafHighlight32" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f7dc6f"/>
+            <stop offset="50%" stop-color="#e8c547"/>
+            <stop offset="100%" stop-color="#d4a047"/>
+        </linearGradient>
+    </defs>
+    
+    <!-- Black background -->
+    <rect width="32" height="32" fill="#000000"/>
+    
+    <!-- Center leaf (vertical) -->
+    <ellipse cx="16" cy="12" rx="2" ry="6" fill="url(#leafGradient32)"/>
+    <ellipse cx="16" cy="11" rx="1.3" ry="4" fill="url(#leafHighlight32)" opacity="0.6"/>
+    
+    <!-- Left leaf (angled) -->
+    <ellipse cx="11" cy="18" rx="1.6" ry="4.5" transform="rotate(-35 11 18)" fill="url(#leafGradient32)"/>
+    <ellipse cx="11" cy="18" rx="1" ry="3" transform="rotate(-35 11 18)" fill="url(#leafHighlight32)" opacity="0.6"/>
+    
+    <!-- Right leaf (angled) -->
+    <ellipse cx="21" cy="18" rx="1.6" ry="4.5" transform="rotate(35 21 18)" fill="url(#leafGradient32)"/>
+    <ellipse cx="21" cy="18" rx="1" ry="3" transform="rotate(35 21 18)" fill="url(#leafHighlight32)" opacity="0.6"/>
+    
+    <!-- Connecting stem -->
+    <ellipse cx="16" cy="23" rx="0.5" ry="1.3" fill="url(#leafGradient32)" opacity="0.8"/>
+</svg>

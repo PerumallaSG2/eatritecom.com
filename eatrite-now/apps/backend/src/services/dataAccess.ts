@@ -17,24 +17,24 @@ export class DataAccessService {
     try {
       const pool = getPool();
       let query = `
-        SELECT cm.*, cc.name as category_name 
-        FROM catalog_meals cm
-        LEFT JOIN catalog_categories cc ON cm.category_id = cc.id
-        WHERE cm.is_active = 1
+        SELECT m.*, c.name as category_name 
+        FROM meals m
+        LEFT JOIN meal_categories c ON m.category_id = c.id
+        WHERE 1=1
       `;
       
       const params: any[] = [];
       
       if (filters.popular) {
-        query += ` AND cm.is_popular = 1`;
+        query += ` AND m.is_popular = 1`;
       }
       
       if (filters.category) {
-        query += ` AND cc.name = @category`;
+        query += ` AND c.name = @category`;
         params.push({ name: 'category', type: sql.NVarChar, value: filters.category });
       }
       
-      query += ` ORDER BY cm.created_at DESC`;
+      query += ` ORDER BY m.name`;
       
       if (filters.limit) {
         query += ` OFFSET 0 ROWS FETCH NEXT @limit ROWS ONLY`;
@@ -47,7 +47,20 @@ export class DataAccessService {
       });
       
       const result = await request.query(query);
-      return result.recordset;
+      
+      // Remove duplicates based on name and price
+      const uniqueMeals = result.recordset.reduce((acc: any[], current: any) => {
+        const existingMeal = acc.find(meal => 
+          meal.name?.trim().toLowerCase() === current.name?.trim().toLowerCase() &&
+          Math.abs((meal.price || 0) - (current.price || 0)) < 0.01
+        );
+        if (!existingMeal) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
+      
+      return uniqueMeals;
     } catch (error) {
       console.error('Error fetching catalog meals:', error);
       throw error;
@@ -61,11 +74,22 @@ export class DataAccessService {
     try {
       const pool = getPool();
       const result = await pool.request().query(`
-        SELECT * FROM catalog_categories 
-        WHERE is_active = 1 
+        SELECT * FROM meal_categories 
         ORDER BY sort_order, name
       `);
-      return result.recordset;
+      
+      // Remove duplicates based on name
+      const uniqueCategories = result.recordset.reduce((acc: any[], current: any) => {
+        const existingCategory = acc.find(category => 
+          category.name?.trim().toLowerCase() === current.name?.trim().toLowerCase()
+        );
+        if (!existingCategory) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
+      
+      return uniqueCategories;
     } catch (error) {
       console.error('Error fetching catalog categories:', error);
       throw error;
@@ -79,11 +103,23 @@ export class DataAccessService {
     try {
       const pool = getPool();
       const result = await pool.request().query(`
-        SELECT * FROM catalog_plans 
-        WHERE is_active = 1 
-        ORDER BY total_price
+        SELECT * FROM meal_plans 
+        ORDER BY total_weekly_price
       `);
-      return result.recordset;
+      
+      // Remove duplicates based on name and meals_per_week
+      const uniquePlans = result.recordset.reduce((acc: any[], current: any) => {
+        const existingPlan = acc.find(plan => 
+          plan.name?.trim().toLowerCase() === current.name?.trim().toLowerCase() &&
+          plan.meals_per_week === current.meals_per_week
+        );
+        if (!existingPlan) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
+      
+      return uniquePlans;
     } catch (error) {
       console.error('Error fetching catalog plans:', error);
       throw error;

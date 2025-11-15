@@ -1,5 +1,5 @@
 import sql from 'mssql';
-import { seedDatabaseWithPool } from './seedData';
+// import { seedDatabaseWithPool } from './seedData';
 
 const config = {
   server: process.env.DB_SERVER || 'localhost',
@@ -25,8 +25,8 @@ export const initializeDatabase = async (): Promise<void> => {
     try {
       const mealCount = await pool.request().query('SELECT COUNT(*) as count FROM meals');
       if (mealCount.recordset[0].count === 0) {
-        console.log('🌱 Database is empty, starting seeding...');
-        await seedDatabaseWithPool(pool);
+        console.log('🌱 Database is empty, would need seeding...');
+        // await seedDatabaseWithPool(pool);
       } else {
         console.log('📊 Database already has data, skipping seeding');
       }
@@ -45,8 +45,6 @@ export const getPool = (): sql.ConnectionPool => {
   }
   return pool;
 };
-
-
 
 export const closeDatabase = async (): Promise<void> => {
   if (pool) {

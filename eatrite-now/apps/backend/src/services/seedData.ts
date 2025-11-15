@@ -1,341 +1,401 @@
-import sql from 'mssql';
+// import sql from 'mssql';
 
-export const seedDatabaseWithPool = async (pool: sql.ConnectionPool): Promise<void> => {
+// export const seedDatabaseWithPool = async (pool: sql.ConnectionPool): Promise<void> => {
   
-  try {
-    console.log('🌱 Starting database seeding...');
+//   try {
+//     console.log('🌱 Starting EatRite database seeding...');
 
-    // Clear existing data safely
-    try {
-      await pool.request().query('DELETE FROM contact_submissions');
-      await pool.request().query('DELETE FROM plans');
-      await pool.request().query('DELETE FROM meals');
-      await pool.request().query('DELETE FROM categories');
-      await pool.request().query('DELETE FROM user_profiles');
-      await pool.request().query('DELETE FROM users');
-      console.log('🧹 Cleared existing data');
-    } catch (error) {
-      console.log('📝 Tables appear to be empty, proceeding with seeding...');
-    }
+//     // Clear existing data safely
+//     try {
+//       await pool.request().query('DELETE FROM order_meals');
+//       await pool.request().query('DELETE FROM orders');
+//       await pool.request().query('DELETE FROM meals');
+//       await pool.request().query('DELETE FROM meal_plans');
+//       await pool.request().query('DELETE FROM meal_categories');
+//       await pool.request().query('DELETE FROM dietary_preferences');
+//       console.log('🧹 Cleared existing data');
+//     } catch (error) {
+//       console.log('📝 Tables appear to be empty, proceeding with seeding...');
+//     }
 
-    // Seed Categories
-    const categories = [
-      {
-        name: 'Breakfast',
-        description: 'Start your day with nutritious breakfast options',
-        image_url: '/images/categories/breakfast.jpg',
-        sort_order: 1
-      },
-      {
-        name: 'Lunch',
-        description: 'Satisfying midday meals to fuel your afternoon',
-        image_url: '/images/categories/lunch.jpg',
-        sort_order: 2
-      },
-      {
-        name: 'Dinner',
-        description: 'Delicious dinner options for the perfect end to your day',
-        image_url: '/images/categories/dinner.jpg',
-        sort_order: 3
-      },
-      {
-        name: 'Healthy Bowls',
-        description: 'Nutrient-packed bowls with fresh ingredients',
-        image_url: '/images/categories/bowls.jpg',
-        sort_order: 4
-      },
-      {
-        name: 'Protein-Rich',
-        description: 'High-protein meals for muscle building and recovery',
-        image_url: '/images/categories/protein.jpg',
-        sort_order: 5
-      },
-      {
-        name: 'Low-Carb',
-        description: 'Delicious low-carb options for your dietary goals',
-        image_url: '/images/categories/low-carb.jpg',
-        sort_order: 6
-      }
-    ];
+//     // Seed Dietary Preferences (Factor75 style)
+//     const dietaryPreferences = [
+//       { name: 'High Protein', description: 'Deliciously satisfying meals with 30+ grams of protein', icon: '💪', sort_order: 1 },
+//       { name: 'Keto', description: 'Keto-friendly meals with around 15 grams of net carbs or less', icon: '🥑', sort_order: 2 },
+//       { name: 'Carb Conscious', description: 'Balanced meals with around 35 grams of total carbs or less', icon: '🌱', sort_order: 3 },
+//       { name: 'Calorie Smart', description: 'Nutritious and perfectly portioned meals with 550 calories or less', icon: '⚖️', sort_order: 4 },
+//       { name: 'Fiber-Filled', description: 'Satisfying meals with 6+ grams of fiber to support your gut', icon: '🌾', sort_order: 5 },
+//       { name: 'Paleo', description: 'Meals following paleo dietary principles', icon: '🥩', sort_order: 6 }
+//     ];
 
-    for (const category of categories) {
-      await pool.request()
-        .input('name', sql.NVarChar, category.name)
-        .input('description', sql.NVarChar, category.description)
-        .input('image_url', sql.NVarChar, category.image_url)
-        .input('sort_order', sql.Int, category.sort_order)
-        .query(`
-          INSERT INTO categories (name, description, image_url, sort_order)
-          VALUES (@name, @description, @image_url, @sort_order)
-        `);
-    }
+//     for (const pref of dietaryPreferences) {
+//       await pool.request()
+//         .input('name', sql.NVarChar, pref.name)
+//         .input('description', sql.NVarChar, pref.description)
+//         .input('icon', sql.NVarChar, pref.icon)
+//         .input('sort_order', sql.Int, pref.sort_order)
+//         .query(`
+//           INSERT INTO dietary_preferences (name, description, icon, sort_order)
+//           VALUES (@name, @description, @icon, @sort_order)
+//         `);
+//     }
 
-    // Get category IDs for meals
-    const categoryResult = await pool.request().query('SELECT id, name FROM categories');
-    const categoryMap: { [key: string]: string } = {};
-    categoryResult.recordset.forEach((cat: any) => {
-      categoryMap[cat.name] = cat.id;
-    });
+//     const mealCategories = [
+//       { name: 'Chef\'s Choice', description: 'Our chef\'s favorite premium meals', image_url: '/images/categories/chefs-choice.jpg', sort_order: 1 },
+//       { name: 'Protein Bowls', description: 'Hearty bowls packed with protein', image_url: '/images/categories/protein-bowls.jpg', sort_order: 2 },
+//       { name: 'Comfort Classics', description: 'Elevated comfort food favorites', image_url: '/images/categories/comfort.jpg', sort_order: 3 },
+//       { name: 'Global Cuisine', description: 'International flavors from around the world', image_url: '/images/categories/global.jpg', sort_order: 4 },
+//       { name: 'Breakfast & Brunch', description: 'Morning meals and brunch favorites', image_url: '/images/categories/breakfast.jpg', sort_order: 5 },
+//       { name: 'Salads & Lighter Fare', description: 'Fresh salads and lighter meal options', image_url: '/images/categories/salads.jpg', sort_order: 6 }
+//     ];
 
-    // Seed Meals
-    const meals = [
-      {
-        name: 'Herb-Crusted Salmon',
-        description: 'Wild-caught salmon with a fresh herb crust, served with roasted vegetables and quinoa',
-        short_description: 'Wild-caught salmon with roasted vegetables',
-        image_url: '/images/meals/salmon.jpg',
-        category_id: categoryMap['Dinner'],
-        ingredients: 'Wild salmon, fresh herbs (dill, parsley, thyme), quinoa, broccoli, carrots, olive oil',
-        allergens: 'Fish',
-        price: 18.95,
-        calories: 520,
-        protein: 34,
-        carbs: 28,
-        fat: 22,
-        fiber: 6,
-        sugar: 5,
-        sodium: 420,
-        prep_time: 25,
-        is_popular: true
-      },
-      {
-        name: 'Korean BBQ Bowl',
-        description: 'Marinated beef bulgogi with jasmine rice, kimchi, and fresh vegetables',
-        short_description: 'Marinated beef with jasmine rice and kimchi',
-        image_url: '/images/meals/korean-bbq.jpg',
-        category_id: categoryMap['Healthy Bowls'],
-        ingredients: 'Beef sirloin, jasmine rice, kimchi, carrots, cucumber, sesame seeds, soy sauce',
-        allergens: 'Soy, Sesame',
-        price: 16.95,
-        calories: 480,
-        protein: 28,
-        carbs: 45,
-        fat: 18,
-        fiber: 4,
-        sugar: 8,
-        sodium: 680,
-        prep_time: 20,
-        is_popular: true
-      },
-      {
-        name: 'Mediterranean Chicken',
-        description: 'Grilled chicken breast with Mediterranean herbs, quinoa, and fresh vegetables',
-        short_description: 'Grilled chicken with quinoa and fresh herbs',
-        image_url: '/images/meals/med-chicken.jpg',
-        category_id: categoryMap['Protein-Rich'],
-        ingredients: 'Chicken breast, quinoa, cherry tomatoes, olives, feta cheese, cucumber, olive oil',
-        allergens: 'Dairy',
-        price: 15.95,
-        calories: 440,
-        protein: 32,
-        carbs: 35,
-        fat: 16,
-        fiber: 5,
-        sugar: 6,
-        sodium: 380,
-        prep_time: 18,
-        is_popular: true
-      },
-      {
-        name: 'Avocado Toast Bowl',
-        description: 'Multigrain toast with smashed avocado, poached egg, and microgreens',
-        short_description: 'Multigrain toast with avocado and egg',
-        image_url: '/images/meals/avocado-toast.jpg',
-        category_id: categoryMap['Breakfast'],
-        ingredients: 'Multigrain bread, avocado, free-range egg, microgreens, cherry tomatoes, olive oil',
-        allergens: 'Gluten, Eggs',
-        price: 12.95,
-        calories: 380,
-        protein: 16,
-        carbs: 28,
-        fat: 24,
-        fiber: 12,
-        sugar: 4,
-        sodium: 320,
-        prep_time: 10
-      },
-      {
-        name: 'Thai Curry Bowl',
-        description: 'Coconut curry with vegetables, jasmine rice, and fresh herbs',
-        short_description: 'Coconut curry with vegetables and rice',
-        image_url: '/images/meals/thai-curry.jpg',
-        category_id: categoryMap['Healthy Bowls'],
-        ingredients: 'Coconut milk, mixed vegetables, jasmine rice, Thai basil, lime, red curry paste',
-        allergens: 'None',
-        price: 14.95,
-        calories: 420,
-        protein: 12,
-        carbs: 52,
-        fat: 18,
-        fiber: 8,
-        sugar: 10,
-        sodium: 540,
-        prep_time: 22
-      },
-      {
-        name: 'Steak & Sweet Potato',
-        description: 'Grass-fed beef steak with roasted sweet potato and green beans',
-        short_description: 'Grass-fed steak with sweet potato',
-        image_url: '/images/meals/steak.jpg',
-        category_id: categoryMap['Protein-Rich'],
-        ingredients: 'Grass-fed beef sirloin, sweet potato, green beans, garlic, rosemary, olive oil',
-        allergens: 'None',
-        price: 22.95,
-        calories: 580,
-        protein: 36,
-        carbs: 32,
-        fat: 26,
-        fiber: 6,
-        sugar: 12,
-        sodium: 390,
-        prep_time: 30
-      },
-      {
-        name: 'Quinoa Power Salad',
-        description: 'Superfood salad with quinoa, kale, berries, and nuts',
-        short_description: 'Superfood salad with quinoa and berries',
-        image_url: '/images/meals/power-salad.jpg',
-        category_id: categoryMap['Lunch'],
-        ingredients: 'Quinoa, kale, blueberries, walnuts, feta cheese, olive oil, balsamic vinegar',
-        allergens: 'Nuts, Dairy',
-        price: 13.95,
-        calories: 360,
-        protein: 14,
-        carbs: 42,
-        fat: 16,
-        fiber: 10,
-        sugar: 14,
-        sodium: 280,
-        prep_time: 12
-      },
-      {
-        name: 'Keto Zucchini Lasagna',
-        description: 'Low-carb lasagna made with zucchini, ground turkey, and cheese',
-        short_description: 'Low-carb zucchini lasagna with turkey',
-        image_url: '/images/meals/zucchini-lasagna.jpg',
-        category_id: categoryMap['Low-Carb'],
-        ingredients: 'Zucchini, ground turkey, mozzarella, ricotta, tomato sauce, Italian herbs',
-        allergens: 'Dairy',
-        price: 17.95,
-        calories: 420,
-        protein: 30,
-        carbs: 12,
-        fat: 28,
-        fiber: 4,
-        sugar: 8,
-        sodium: 650,
-        prep_time: 35
-      }
-    ];
+//     for (const category of mealCategories) {
+//       await pool.request()
+//         .input('name', sql.NVarChar, category.name)
+//         .input('description', sql.NVarChar, category.description)
+//         .input('image_url', sql.NVarChar, category.image_url)
+//         .input('sort_order', sql.Int, category.sort_order)
+//         .query(`
+//           INSERT INTO meal_categories (name, description, image_url, sort_order)
+//           VALUES (@name, @description, @image_url, @sort_order)
+//         `);
+//     }
 
-    for (const meal of meals) {
-      await pool.request()
-        .input('name', sql.NVarChar, meal.name)
-        .input('description', sql.NVarChar, meal.description)
-        .input('short_description', sql.NVarChar, meal.short_description)
-        .input('image_url', sql.NVarChar, meal.image_url)
-        .input('category_id', sql.NVarChar, meal.category_id)
-        .input('ingredients', sql.NVarChar, meal.ingredients)
-        .input('allergens', sql.NVarChar, meal.allergens)
-        .input('price', sql.Decimal(10, 2), meal.price)
-        .input('calories', sql.Int, meal.calories)
-        .input('protein', sql.Int, meal.protein)
-        .input('carbs', sql.Int, meal.carbs)
-        .input('fat', sql.Int, meal.fat)
-        .input('fiber', sql.Int, meal.fiber)
-        .input('sugar', sql.Int, meal.sugar)
-        .input('sodium', sql.Int, meal.sodium)
-        .input('prep_time', sql.Int, meal.prep_time)
-        .input('is_popular', sql.Bit, meal.is_popular || false)
-        .query(`
-          INSERT INTO meals (
-            name, description, short_description, image_url, category_id, 
-            ingredients, allergens, price, calories, protein, carbs, fat, 
-            fiber, sugar, sodium, prep_time, is_popular
-          ) VALUES (
-            @name, @description, @short_description, @image_url, @category_id,
-            @ingredients, @allergens, @price, @calories, @protein, @carbs, @fat,
-            @fiber, @sugar, @sodium, @prep_time, @is_popular
-          )
-        `);
-    }
+//     // Get category IDs for meals
+//     const categoryResult = await pool.request().query('SELECT id, name FROM meal_categories');
+//     const categoryMap: { [key: string]: string } = {};
+//     categoryResult.recordset.forEach((cat: any) => {
+//       categoryMap[cat.name] = cat.id;
+//     });
 
-    // Seed Plans
-    const plans = [
-      {
-        name: 'Starter',
-        description: 'Perfect for trying us out',
-        meals_per_week: 6,
-        price_per_meal: 13.95,
-        total_price: 83.70,
-        discount: 0,
-        features: JSON.stringify([
-          '6 meals per week',
-          'Free shipping',
-          'Flexible scheduling',
-          'Skip or cancel anytime'
-        ])
-      },
-      {
-        name: 'Essential',
-        description: 'Most popular choice',
-        meals_per_week: 8,
-        price_per_meal: 12.95,
-        total_price: 103.60,
-        discount: 7,
-        is_popular: true,
-        features: JSON.stringify([
-          '8 meals per week',
-          'Free shipping',
-          'Flexible scheduling',
-          'Skip or cancel anytime',
-          'Priority customer support'
-        ])
-      },
-      {
-        name: 'Family',
-        description: 'Best value for families',
-        meals_per_week: 12,
-        price_per_meal: 11.95,
-        total_price: 143.40,
-        discount: 14,
-        features: JSON.stringify([
-          '12 meals per week',
-          'Free shipping',
-          'Flexible scheduling',
-          'Skip or cancel anytime',
-          'Priority customer support',
-          'Bulk meal discounts'
-        ])
-      }
-    ];
+//     // Seed Meals (Factor75 inspired)
+//     const meals = [
+//       // Chef's Choice
+//       {
+//         name: 'Truffle Butter Chicken & Mushroom Risotto',
+//         description: 'Succulent chicken breast with truffle butter, creamy mushroom risotto, and garlic-roasted green beans',
+//         short_description: 'Truffle chicken with mushroom risotto',
+//         image_url: 'https://images.unsplash.com/photo-1598511757337-6d6d2feaa82d?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap["Chef's Choice"],
+//         ingredients: 'Chicken breast, truffle butter, arborio rice, mushrooms, green beans, garlic, parmesan',
+//         allergens: 'Dairy',
+//         price: 16.99,
+//         calories: 520,
+//         protein: 35,
+//         carbs: 28,
+//         fat: 24,
+//         fiber: 4,
+//         sodium: 680,
+//         prep_time: 2,
+//         is_popular: true,
+//         is_top_rated: true,
+//         dietary_tags: '["High Protein"]'
+//       },
+//       {
+//         name: 'Chimichurri Steak & Sweet Potato',
+//         description: 'Grass-fed beef sirloin with fresh chimichurri, roasted sweet potato, and seasonal vegetables',
+//         short_description: 'Grass-fed steak with chimichurri',
+//         image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap["Chef's Choice"],
+//         ingredients: 'Grass-fed beef sirloin, sweet potato, chimichurri sauce, zucchini, bell peppers',
+//         allergens: 'None',
+//         price: 18.99,
+//         calories: 580,
+//         protein: 42,
+//         carbs: 32,
+//         fat: 26,
+//         fiber: 6,
+//         sodium: 420,
+//         prep_time: 2,
+//         is_popular: true,
+//         dietary_tags: '["High Protein", "Paleo"]'
+//       },
+//       // Protein Bowls
+//       {
+//         name: 'Korean BBQ Protein Bowl',
+//         description: 'Marinated beef bulgogi with cauliflower rice, kimchi, and sesame vegetables',
+//         short_description: 'Korean beef with cauliflower rice',
+//         image_url: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Protein Bowls'],
+//         ingredients: 'Beef bulgogi, cauliflower rice, kimchi, sesame oil, scallions, carrots',
+//         allergens: 'Soy, Sesame',
+//         price: 15.99,
+//         calories: 480,
+//         protein: 38,
+//         carbs: 15,
+//         fat: 28,
+//         fiber: 6,
+//         sodium: 720,
+//         prep_time: 2,
+//         is_popular: true,
+//         dietary_tags: '["High Protein", "Keto"]'
+//       },
+//       {
+//         name: 'Mediterranean Chicken Bowl',
+//         description: 'Herb-crusted chicken with quinoa, olives, feta, and cucumber-tomato salad',
+//         short_description: 'Mediterranean chicken with quinoa',
+//         image_url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Protein Bowls'],
+//         ingredients: 'Chicken breast, quinoa, feta cheese, olives, cucumbers, tomatoes, herbs',
+//         allergens: 'Dairy',
+//         price: 14.99,
+//         calories: 520,
+//         protein: 35,
+//         carbs: 38,
+//         fat: 20,
+//         fiber: 7,
+//         sodium: 580,
+//         prep_time: 2,
+//         dietary_tags: '["High Protein", "Fiber-Filled"]'
+//       },
+//       // Comfort Classics
+//       {
+//         name: 'Truffle Mac & Cheese with Chicken',
+//         description: 'Creamy truffle mac and cheese topped with herb-roasted chicken breast',
+//         short_description: 'Truffle mac with herb chicken',
+//         image_url: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Comfort Classics'],
+//         ingredients: 'Chicken breast, pasta, truffle oil, three-cheese blend, herbs, breadcrumbs',
+//         allergens: 'Dairy, Gluten',
+//         price: 16.99,
+//         calories: 620,
+//         protein: 32,
+//         carbs: 45,
+//         fat: 32,
+//         fiber: 3,
+//         sodium: 890,
+//         prep_time: 2,
+//         is_top_rated: true,
+//         dietary_tags: '["High Protein"]'
+//       },
+//       {
+//         name: 'BBQ Pulled Pork & Sweet Potato',
+//         description: 'Slow-cooked BBQ pulled pork with roasted sweet potato and coleslaw',
+//         short_description: 'BBQ pork with sweet potato',
+//         image_url: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Comfort Classics'],
+//         ingredients: 'Pulled pork, sweet potato, BBQ sauce, cabbage slaw, onions',
+//         allergens: 'None',
+//         price: 15.99,
+//         calories: 540,
+//         protein: 30,
+//         carbs: 42,
+//         fat: 24,
+//         fiber: 8,
+//         sodium: 680,
+//         prep_time: 2,
+//         dietary_tags: '["High Protein", "Fiber-Filled"]'
+//       },
+//       // Global Cuisine
+//       {
+//         name: 'Thai Green Curry Chicken',
+//         description: 'Authentic Thai green curry with chicken, vegetables, and jasmine rice',
+//         short_description: 'Thai green curry with chicken',
+//         image_url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Global Cuisine'],
+//         ingredients: 'Chicken thigh, coconut milk, green curry paste, jasmine rice, vegetables',
+//         allergens: 'None',
+//         price: 14.99,
+//         calories: 480,
+//         protein: 28,
+//         carbs: 35,
+//         fat: 24,
+//         fiber: 4,
+//         sodium: 820,
+//         prep_time: 2,
+//         is_new: true,
+//         dietary_tags: '["High Protein"]'
+//       },
+//       {
+//         name: 'Moroccan Spiced Salmon',
+//         description: 'Pan-seared salmon with Moroccan spices, couscous, and roasted vegetables',
+//         short_description: 'Moroccan salmon with couscous',
+//         image_url: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Global Cuisine'],
+//         ingredients: 'Atlantic salmon, couscous, Moroccan spices, zucchini, bell peppers',
+//         allergens: 'Fish, Gluten',
+//         price: 17.99,
+//         calories: 520,
+//         protein: 36,
+//         carbs: 32,
+//         fat: 24,
+//         fiber: 5,
+//         sodium: 480,
+//         prep_time: 2,
+//         dietary_tags: '["High Protein"]'
+//       },
+//       // Breakfast & Brunch
+//       {
+//         name: 'Protein Power Breakfast Bowl',
+//         description: 'Scrambled eggs with turkey sausage, roasted potatoes, and avocado',
+//         short_description: 'Protein breakfast bowl',
+//         image_url: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Breakfast & Brunch'],
+//         ingredients: 'Free-range eggs, turkey sausage, roasted potatoes, avocado, bell peppers',
+//         allergens: 'Eggs',
+//         price: 12.99,
+//         calories: 450,
+//         protein: 28,
+//         carbs: 24,
+//         fat: 26,
+//         fiber: 8,
+//         sodium: 620,
+//         prep_time: 2,
+//         is_popular: true,
+//         dietary_tags: '["High Protein", "Keto"]'
+//       },
+//       // Salads & Lighter Fare
+//       {
+//         name: 'Grilled Chicken Caesar Salad',
+//         description: 'Crisp romaine lettuce with grilled chicken, parmesan, and house Caesar dressing',
+//         short_description: 'Grilled chicken Caesar',
+//         image_url: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&h=400&fit=crop&crop=center',
+//         category_id: categoryMap['Salads & Lighter Fare'],
+//         ingredients: 'Grilled chicken, romaine lettuce, parmesan cheese, Caesar dressing, croutons',
+//         allergens: 'Dairy, Gluten',
+//         price: 13.99,
+//         calories: 420,
+//         protein: 32,
+//         carbs: 18,
+//         fat: 24,
+//         fiber: 6,
+//         sodium: 680,
+//         prep_time: 2,
+//         dietary_tags: '["High Protein", "Calorie Smart"]'
+//       }
+//     ];
 
-    for (const plan of plans) {
-      await pool.request()
-        .input('name', sql.NVarChar, plan.name)
-        .input('description', sql.NVarChar, plan.description)
-        .input('meals_per_week', sql.Int, plan.meals_per_week)
-        .input('price_per_meal', sql.Decimal(10, 2), plan.price_per_meal)
-        .input('total_price', sql.Decimal(10, 2), plan.total_price)
-        .input('discount', sql.Decimal(5, 2), plan.discount)
-        .input('is_popular', sql.Bit, plan.is_popular || false)
-        .input('features', sql.NVarChar, plan.features)
-        .query(`
-          INSERT INTO plans (
-            name, description, meals_per_week, price_per_meal, 
-            total_price, discount, is_popular, features
-          ) VALUES (
-            @name, @description, @meals_per_week, @price_per_meal,
-            @total_price, @discount, @is_popular, @features
-          )
-        `);
-    }
+//     for (const meal of meals) {
+//       await pool.request()
+//         .input('name', sql.NVarChar, meal.name)
+//         .input('description', sql.NVarChar, meal.description)
+//         .input('short_description', sql.NVarChar, meal.short_description)
+//         .input('image_url', sql.NVarChar, meal.image_url)
+//         .input('category_id', sql.UniqueIdentifier, meal.category_id)
+//         .input('ingredients', sql.NVarChar, meal.ingredients)
+//         .input('allergens', sql.NVarChar, meal.allergens)
+//         .input('price', sql.Decimal(10, 2), meal.price)
+//         .input('calories', sql.Int, meal.calories)
+//         .input('protein', sql.Int, meal.protein)
+//         .input('carbs', sql.Int, meal.carbs)
+//         .input('fat', sql.Int, meal.fat)
+//         .input('fiber', sql.Int, meal.fiber)
+//         .input('sodium', sql.Int, meal.sodium)
+//         .input('prep_time', sql.Int, meal.prep_time)
+//         .input('is_popular', sql.Bit, meal.is_popular || false)
+//         .input('is_new', sql.Bit, meal.is_new || false)
+//         .input('is_top_rated', sql.Bit, meal.is_top_rated || false)
+//         .input('dietary_tags', sql.NVarChar, meal.dietary_tags || '[]')
+//         .query(`
+//           INSERT INTO meals (
+//             name, description, short_description, image_url, category_id, 
+//             ingredients, allergens, price, calories, protein, carbs, fat, 
+//             fiber, sodium, prep_time, is_popular, is_new, is_top_rated, dietary_tags
+//           ) VALUES (
+//             @name, @description, @short_description, @image_url, @category_id,
+//             @ingredients, @allergens, @price, @calories, @protein, @carbs, @fat,
+//             @fiber, @sodium, @prep_time, @is_popular, @is_new, @is_top_rated, @dietary_tags
+//           )
+//         `);
+//     }
 
-    console.log('✅ Database seeding completed successfully');
-    console.log(`📊 Seeded: ${categories.length} categories, ${meals.length} meals, ${plans.length} plans`);
+//     // Seed Meal Plans (Factor75 inspired)
+//     const mealPlans = [
+//       {
+//         name: '6 Meals',
+//         description: 'Perfect for trying us out',
+//         meals_per_week: 6,
+//         price_per_meal: 15.00,
+//         total_weekly_price: 90.00,
+//         discount_percentage: 0,
+//         features: JSON.stringify([
+//           '6 fresh meals per week',
+//           'Free shipping on orders $79+',
+//           'Flexible delivery options',
+//           'Skip or pause anytime',
+//           '100+ weekly menu options'
+//         ])
+//       },
+//       {
+//         name: '8 Meals',
+//         description: 'Most popular choice',
+//         meals_per_week: 8,
+//         price_per_meal: 13.50,
+//         total_weekly_price: 108.00,
+//         discount_percentage: 10,
+//         is_popular: true,
+//         features: JSON.stringify([
+//           '8 fresh meals per week',
+//           'Free shipping',
+//           'Flexible delivery options',
+//           'Skip or pause anytime',
+//           '100+ weekly menu options',
+//           'Priority customer support'
+//         ])
+//       },
+//       {
+//         name: '10 Meals',
+//         description: 'Great for meal planning',
+//         meals_per_week: 10,
+//         price_per_meal: 12.50,
+//         total_weekly_price: 125.00,
+//         discount_percentage: 17,
+//         features: JSON.stringify([
+//           '10 fresh meals per week',
+//           'Free shipping',
+//           'Flexible delivery options',
+//           'Skip or pause anytime',
+//           '100+ weekly menu options',
+//           'Priority customer support',
+//           'Nutrition coaching access'
+//         ])
+//       },
+//       {
+//         name: '12 Meals',
+//         description: 'Best value for families',
+//         meals_per_week: 12,
+//         price_per_meal: 11.50,
+//         total_weekly_price: 138.00,
+//         discount_percentage: 23,
+//         features: JSON.stringify([
+//           '12 fresh meals per week',
+//           'Free shipping',
+//           'Flexible delivery options',
+//           'Skip or pause anytime',
+//           '100+ weekly menu options',
+//           'Priority customer support',
+//           'Nutrition coaching access',
+//           'Family meal discounts'
+//         ])
+//       }
+//     ];
 
-  } catch (error) {
-    console.error('❌ Error seeding database:', error);
-    throw error;
-  }
-};
+//     for (const plan of mealPlans) {
+//       await pool.request()
+//         .input('name', sql.NVarChar, plan.name)
+//         .input('description', sql.NVarChar, plan.description)
+//         .input('meals_per_week', sql.Int, plan.meals_per_week)
+//         .input('price_per_meal', sql.Decimal(10, 2), plan.price_per_meal)
+//         .input('total_weekly_price', sql.Decimal(10, 2), plan.total_weekly_price)
+//         .input('discount_percentage', sql.Decimal(5, 2), plan.discount_percentage)
+//         .input('is_popular', sql.Bit, plan.is_popular || false)
+//         .input('features', sql.NVarChar, plan.features)
+//         .query(`
+//           INSERT INTO meal_plans (
+//             name, description, meals_per_week, price_per_meal, 
+//             total_weekly_price, discount_percentage, is_popular, features
+//           ) VALUES (
+//             @name, @description, @meals_per_week, @price_per_meal,
+//             @total_weekly_price, @discount_percentage, @is_popular, @features
+//           )
+//         `);
+//     }
+
+//     console.log('✅ EatRite database seeding completed successfully');
+//     console.log(`📊 Seeded: ${dietaryPreferences.length} dietary preferences, ${mealCategories.length} categories, ${meals.length} meals, ${mealPlans.length} plans`);
+
+//   } catch (error) {
+//     console.error('❌ Error seeding database:', error);
+//     throw error;
+//   }
+// };

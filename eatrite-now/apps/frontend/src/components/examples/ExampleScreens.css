@@ -1,0 +1,471 @@
+/**
+ * EatRite Example Screens Styles
+ * Styling for the demo screens showcasing the design system
+ */
+
+/* Base Screen Layout */
+.eatrite-screen {
+  min-height: 100vh;
+  background: var(--gradient-dark, linear-gradient(180deg, #000000 0%, #0a0a0a 100%));
+  color: var(--color-text-primary, #ffffff);
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.eatrite-screen--home {
+  padding-bottom: var(--spacing-16, 4rem);
+}
+
+/* Section Styling */
+.eatrite-section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-12, 3rem);
+}
+
+.eatrite-section-title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.eatrite-section-subtitle {
+  font-size: var(--font-size-lg, 1.125rem);
+  color: var(--color-text-secondary, #e5e5e5);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* === HERO SECTION === */
+.eatrite-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-16, 4rem);
+  align-items: center;
+  min-height: 80vh;
+  padding: var(--spacing-20, 5rem) var(--spacing-8, 2rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.eatrite-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-hero__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4, 1rem);
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.eatrite-hero__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 700;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(212, 160, 71, 0.3);
+  margin: 0;
+}
+
+.eatrite-hero__subtitle {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  color: var(--color-text-secondary, #e5e5e5);
+  margin: 0;
+}
+
+.eatrite-hero__description {
+  font-size: var(--font-size-lg, 1.125rem);
+  line-height: 1.6;
+  color: var(--color-text-tertiary, #a3a3a3);
+  max-width: 500px;
+}
+
+.eatrite-hero__actions {
+  display: flex;
+  gap: var(--spacing-4, 1rem);
+  margin-top: var(--spacing-4, 1rem);
+}
+
+.eatrite-hero__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.eatrite-hero__image-placeholder {
+  width: 400px;
+  height: 400px;
+  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  border: 2px solid var(--color-primary-700, #a1742f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.eatrite-hero__image-placeholder::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  border-radius: 50%;
+  z-index: -1;
+  animation: rotate 8s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* === SEARCH SECTION === */
+.eatrite-search {
+  padding: var(--spacing-8, 2rem) var(--spacing-4, 1rem);
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.eatrite-search__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.eatrite-search__input {
+  width: 100%;
+}
+
+/* === CATEGORIES SECTION === */
+.eatrite-categories {
+  padding: var(--spacing-16, 4rem) var(--spacing-4, 1rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.eatrite-categories__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-8, 2rem);
+}
+
+.eatrite-category-card {
+  text-align: center;
+  padding: var(--spacing-8, 2rem);
+  transition: var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.eatrite-category-card__icon {
+  margin-bottom: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-category-card__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: var(--font-size-2xl, 1.5rem);
+  color: var(--color-primary-400, #e8b85c);
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.eatrite-category-card__description {
+  color: var(--color-text-secondary, #e5e5e5);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2, 0.5rem);
+  background: var(--color-primary-900, #6f5028);
+  color: var(--color-primary-200, #f6e6c4);
+  padding: var(--spacing-2, 0.5rem) var(--spacing-4, 1rem);
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 600;
+}
+
+/* === FEATURED MEALS SECTION === */
+.eatrite-featured {
+  padding: var(--spacing-16, 4rem) var(--spacing-4, 1rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.eatrite-meals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--spacing-8, 2rem);
+}
+
+.eatrite-meal-card {
+  overflow: hidden;
+  transition: var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.eatrite-meal-card__image {
+  height: 200px;
+  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  border-radius: var(--radius-lg, 0.5rem);
+  margin-bottom: var(--spacing-4, 1rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.eatrite-meal-card__badge {
+  position: absolute;
+  top: var(--spacing-3, 0.75rem);
+  left: var(--spacing-3, 0.75rem);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  padding: var(--spacing-1, 0.25rem) var(--spacing-3, 0.75rem);
+  border-radius: var(--radius-full, 9999px);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1, 0.25rem);
+  border: 1px solid var(--color-primary-700, #a1742f);
+}
+
+.eatrite-meal-card__badge span {
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 600;
+  color: var(--color-primary-300, #f0d090);
+}
+
+.eatrite-meal-card__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: var(--font-size-xl, 1.25rem);
+  color: var(--color-text-primary, #ffffff);
+  margin-bottom: var(--spacing-2, 0.5rem);
+}
+
+.eatrite-meal-card__description {
+  color: var(--color-text-secondary, #e5e5e5);
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.eatrite-meal-card__nutrition {
+  display: flex;
+  gap: var(--spacing-4, 1rem);
+  margin-bottom: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-nutrition-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1, 0.25rem);
+  color: var(--color-text-tertiary, #a3a3a3);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.eatrite-meal-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eatrite-price {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: var(--font-size-xl, 1.25rem);
+  font-weight: 700;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === STATS SECTION === */
+.eatrite-stats {
+  padding: var(--spacing-16, 4rem) var(--spacing-4, 1rem);
+  background: rgba(26, 26, 26, 0.3);
+}
+
+.eatrite-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-8, 2rem);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.eatrite-stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4, 1rem);
+  padding: var(--spacing-6, 1.5rem);
+  text-align: left;
+}
+
+.eatrite-stat-card__icon {
+  flex-shrink: 0;
+}
+
+.eatrite-stat-value {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: var(--font-size-4xl, 2.25rem);
+  font-weight: 700;
+  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: var(--spacing-1, 0.25rem);
+}
+
+.eatrite-stat-label {
+  color: var(--color-text-tertiary, #a3a3a3);
+  font-size: var(--font-size-sm, 0.875rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === CTA SECTION === */
+.eatrite-cta {
+  padding: var(--spacing-16, 4rem) var(--spacing-4, 1rem);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.eatrite-cta-card {
+  padding: var(--spacing-12, 3rem);
+  text-align: center;
+}
+
+.eatrite-cta__icon {
+  margin-bottom: var(--spacing-6, 1.5rem);
+}
+
+.eatrite-cta__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(1.875rem, 4vw, 2.5rem);
+  color: var(--color-primary-400, #e8b85c);
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.eatrite-cta__description {
+  font-size: var(--font-size-lg, 1.125rem);
+  color: var(--color-text-secondary, #e5e5e5);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-8, 2rem);
+}
+
+.eatrite-cta__actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-4, 1rem);
+}
+
+/* === MOBILE RESPONSIVE === */
+@media (max-width: 768px) {
+  .eatrite-hero {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-8, 2rem);
+    padding: var(--spacing-12, 3rem) var(--spacing-4, 1rem);
+    text-align: center;
+  }
+  
+  .eatrite-hero__image-placeholder {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .eatrite-hero__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .eatrite-categories__grid,
+  .eatrite-meals-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .eatrite-stats__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4, 1rem);
+  }
+  
+  .eatrite-stat-card {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .eatrite-cta__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .eatrite-meal-card__actions {
+    flex-direction: column;
+    gap: var(--spacing-3, 0.75rem);
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .eatrite-search,
+  .eatrite-categories,
+  .eatrite-featured,
+  .eatrite-stats,
+  .eatrite-cta {
+    padding-left: var(--spacing-3, 0.75rem);
+    padding-right: var(--spacing-3, 0.75rem);
+  }
+  
+  .eatrite-hero {
+    padding: var(--spacing-8, 2rem) var(--spacing-3, 0.75rem);
+  }
+  
+  .eatrite-hero__image-placeholder {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  .eatrite-hero__image-placeholder::before {
+    animation: none;
+  }
+  
+  .eatrite-meal-card,
+  .eatrite-category-card {
+    transition: none;
+  }
+}
+
+/* === HIGH CONTRAST === */
+@media (prefers-contrast: high) {
+  .eatrite-section-title,
+  .eatrite-hero__title,
+  .eatrite-price,
+  .eatrite-stat-value {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: unset;
+    color: #ffcc00;
+  }
+  
+  .eatrite-meal-card__badge,
+  .eatrite-stat {
+    border: 2px solid #ffcc00;
+  }
+}

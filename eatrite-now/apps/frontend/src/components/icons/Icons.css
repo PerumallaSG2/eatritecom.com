@@ -1,0 +1,309 @@
+/**
+ * EatRite Icon Styles
+ * Styling for the icon system with gold accents and luxury feel
+ */
+
+/* Base Icon Styles */
+.eatrite-icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Icon Interactive States */
+.eatrite-icon--interactive {
+  cursor: pointer;
+}
+
+.eatrite-icon--interactive:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(212, 160, 71, 0.5));
+}
+
+.eatrite-icon--interactive:active {
+  transform: scale(0.95);
+}
+
+/* Icon Color Variants */
+.eatrite-icon--gold {
+  stroke: var(--color-primary-500, #d4a047);
+  filter: drop-shadow(0 0 4px rgba(212, 160, 71, 0.3));
+}
+
+.eatrite-icon--white {
+  stroke: var(--color-text-primary, #ffffff);
+}
+
+.eatrite-icon--gray {
+  stroke: var(--color-text-tertiary, #a3a3a3);
+}
+
+.eatrite-icon--green {
+  stroke: var(--color-accent-medium, #10b981);
+}
+
+.eatrite-icon--error {
+  stroke: var(--color-semantic-error-main, #737373);
+}
+
+.eatrite-icon--success {
+  stroke: var(--color-semantic-success-main, #d4a047);
+}
+
+/* Icon Size Variants */
+.eatrite-icon--xs {
+  width: 12px;
+  height: 12px;
+}
+
+.eatrite-icon--sm {
+  width: 16px;
+  height: 16px;
+}
+
+.eatrite-icon--md {
+  width: 24px;
+  height: 24px;
+}
+
+.eatrite-icon--lg {
+  width: 32px;
+  height: 32px;
+}
+
+.eatrite-icon--xl {
+  width: 48px;
+  height: 48px;
+}
+
+.eatrite-icon--2xl {
+  width: 64px;
+  height: 64px;
+}
+
+/* Special Icon Styles */
+
+/* Brand Logo Icon */
+.eatrite-icon--brand {
+  stroke: url(#goldGradient);
+  filter: drop-shadow(0 0 12px rgba(212, 160, 71, 0.4));
+}
+
+/* Navigation Icons */
+.eatrite-icon--nav {
+  transition: all var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.eatrite-icon--nav:hover {
+  stroke: var(--color-primary-400, #e8b85c);
+  filter: drop-shadow(0 0 6px rgba(212, 160, 71, 0.4));
+}
+
+.eatrite-icon--nav.active {
+  stroke: var(--color-primary-500, #d4a047);
+  filter: drop-shadow(0 0 8px rgba(212, 160, 71, 0.5));
+}
+
+/* Button Icons */
+.eatrite-icon--button {
+  flex-shrink: 0;
+}
+
+/* Status Icons */
+.eatrite-icon--status-success {
+  stroke: var(--color-primary-500, #d4a047);
+  background: var(--color-semantic-success-bg, #5c3b14);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.eatrite-icon--status-error {
+  stroke: var(--color-semantic-error-main, #737373);
+  background: var(--color-semantic-error-bg, #262626);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.eatrite-icon--status-warning {
+  stroke: var(--color-semantic-warning-main, #f4c430);
+  background: var(--color-semantic-warning-bg, #7a4f1a);
+  border-radius: 50%;
+  padding: 2px;
+}
+
+/* Loading State for Icons */
+.eatrite-icon--loading {
+  animation: iconPulse 2s infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(212, 160, 71, 0.3));
+  }
+  50% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 8px rgba(212, 160, 71, 0.5));
+  }
+}
+
+/* Icon with Badge */
+.eatrite-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.eatrite-icon-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-primary-500, #d4a047);
+  color: var(--color-text-inverse, #000000);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid var(--color-bg-primary, #000000);
+  box-shadow: var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
+}
+
+/* Icon Groups */
+.eatrite-icon-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+.eatrite-icon-group--stacked {
+  flex-direction: column;
+  gap: var(--spacing-1, 0.25rem);
+}
+
+/* Special Effects */
+
+/* Glow Effect for Premium Icons */
+.eatrite-icon--glow {
+  filter: drop-shadow(0 0 12px rgba(212, 160, 71, 0.6));
+  animation: iconGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes iconGlow {
+  from {
+    filter: drop-shadow(0 0 8px rgba(212, 160, 71, 0.4));
+  }
+  to {
+    filter: drop-shadow(0 0 16px rgba(212, 160, 71, 0.8));
+  }
+}
+
+/* Rotating Icons (for loading states) */
+.eatrite-icon--spin {
+  animation: iconSpin 1s linear infinite;
+}
+
+@keyframes iconSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* SVG Gradient Definitions */
+.eatrite-icon-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Icon in Different Contexts */
+
+/* Icons in Cards */
+.eatrite-card .eatrite-icon {
+  margin-right: var(--spacing-2, 0.5rem);
+}
+
+.eatrite-card--premium .eatrite-icon {
+  stroke: var(--color-primary-400, #e8b85c);
+  filter: drop-shadow(0 0 6px rgba(212, 160, 71, 0.4));
+}
+
+/* Icons in Buttons */
+.eatrite-btn .eatrite-icon {
+  flex-shrink: 0;
+}
+
+.eatrite-btn--primary .eatrite-icon {
+  stroke: var(--color-text-inverse, #000000);
+}
+
+.eatrite-btn--secondary .eatrite-icon {
+  stroke: var(--color-primary-400, #e8b85c);
+}
+
+.eatrite-btn--ghost .eatrite-icon {
+  stroke: var(--color-text-tertiary, #a3a3a3);
+}
+
+/* Icons in Navigation */
+.eatrite-nav .eatrite-icon {
+  margin-right: var(--spacing-2, 0.5rem);
+}
+
+/* Icons in Forms */
+.eatrite-input-icon .eatrite-icon {
+  stroke: var(--color-text-tertiary, #a3a3a3);
+}
+
+.eatrite-input:focus + .eatrite-input-icon .eatrite-icon,
+.eatrite-input-wrapper:focus-within .eatrite-input-icon .eatrite-icon {
+  stroke: var(--color-primary-500, #d4a047);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .eatrite-icon--xl {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .eatrite-icon--2xl {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .eatrite-icon,
+  .eatrite-icon--interactive:hover,
+  .eatrite-icon--loading,
+  .eatrite-icon--glow,
+  .eatrite-icon--spin {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .eatrite-icon--gold {
+    stroke: #ffcc00;
+    filter: none;
+  }
+  
+  .eatrite-icon--gray {
+    stroke: #cccccc;
+  }
+  
+  .eatrite-icon--interactive:hover {
+    stroke: #ffffff;
+    filter: none;
+  }
+}
