@@ -1,392 +1,421 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react'
 import { 
-  Building2, 
   Users, 
   TrendingUp, 
-  Award, 
   Star,
-  Globe,
   Shield,
-  Briefcase,
-  Heart
-} from 'lucide-react';
-import { FadeIn, StaggeredAnimation } from './AnimationComponents';
+  Heart,
+  Check,
+  Phone,
+  Mail,
+  Calendar,
+  Download
+} from 'lucide-react'
 
-interface CorporatePartner {
-  id: string;
-  name: string;
-  logo: string;
-  industry: string;
-  employees: string;
-  partnership: string;
-  testimonial: string;
-  contactPerson: string;
-  role: string;
-  metrics: {
-    satisfaction: number;
-    healthImprovement: string;
-    costSavings: string;
-    participation: string;
-  };
-  caseStudy?: string;
-  partnershipType: 'wellness' | 'catering' | 'benefits' | 'events';
-}
+const CorporatePartnerships = () => {
+  const [selectedIndustry, setSelectedIndustry] = useState('all')
 
-const corporatePartners: CorporatePartner[] = [
-  {
-    id: '1',
-    name: 'Google',
-    logo: '🔍',
-    industry: 'Technology',
-    employees: '150,000+',
-    partnership: 'Employee Wellness Program',
-    testimonial: 'Factor75 has transformed our workplace nutrition. Employee satisfaction with meal options increased by 78%.',
-    contactPerson: 'Sarah Johnson',
-    role: 'Head of Employee Wellness',
-    metrics: {
-      satisfaction: 94,
-      healthImprovement: '65%',
-      costSavings: '$2.3M',
-      participation: '89%'
+  const industries = [
+    { id: 'all', name: 'All Industries', count: 150 },
+    { id: 'technology', name: 'Technology', count: 45 },
+    { id: 'healthcare', name: 'Healthcare', count: 32 },
+    { id: 'finance', name: 'Finance', count: 28 }
+  ]
+
+  const partnershipTiers = [
+    {
+      id: 'starter',
+      name: 'Starter Partnership',
+      description: 'Perfect for small to medium companies',
+      employeeRange: '25-100 employees',
+      price: 'Starting at $15/employee/month',
+      features: [
+        'Weekly meal delivery options',
+        'Basic nutrition tracking',
+        'Employee wellness portal',
+        'Monthly usage reports',
+        'Email support'
+      ],
+      popular: false
     },
-    caseStudy: 'google-wellness-transformation.pdf',
-    partnershipType: 'wellness'
-  },
-  {
-    id: '2',
-    name: 'Goldman Sachs',
-    logo: '🏦',
-    industry: 'Financial Services',
-    employees: '45,000+',
-    partnership: 'Executive Catering & Events',
-    testimonial: 'Professional, healthy, and impressive. Factor75 elevates our client meetings and board presentations.',
-    contactPerson: 'Michael Chen',
-    role: 'Corporate Events Director',
-    metrics: {
-      satisfaction: 96,
-      healthImprovement: '72%',
-      costSavings: '$890K',
-      participation: '92%'
+    {
+      id: 'growth',
+      name: 'Growth Partnership',
+      description: 'Ideal for growing organizations',
+      employeeRange: '100-500 employees',
+      price: 'Starting at $12/employee/month',
+      features: [
+        'Flexible meal delivery schedules',
+        'Advanced nutrition analytics',
+        'Dedicated account manager',
+        'Custom wellness programs',
+        'Priority support',
+        'Quarterly business reviews'
+      ],
+      popular: true
     },
-    partnershipType: 'catering'
-  },
-  {
-    id: '3',
-    name: 'Nike',
-    logo: '👟',
-    industry: 'Athletic Wear',
-    employees: '75,000+',
-    partnership: 'Athlete Performance Program',
-    testimonial: 'Our athletes need peak nutrition. Factor75 delivers the quality and convenience that supports world-class performance.',
-    contactPerson: 'Dr. Amanda Rodriguez',
-    role: 'Sports Nutrition Director',
-    metrics: {
-      satisfaction: 98,
-      healthImprovement: '83%',
-      costSavings: '$1.5M',
-      participation: '95%'
+    {
+      id: 'enterprise',
+      name: 'Enterprise Partnership',
+      description: 'Comprehensive solution for large corporations',
+      employeeRange: '500+ employees',
+      price: 'Custom pricing available',
+      features: [
+        'Fully customized meal programs',
+        'Real-time health impact analytics',
+        'Executive wellness dashboard',
+        'On-site nutrition consultations',
+        '24/7 dedicated support',
+        'Custom integrations & APIs'
+      ],
+      popular: false
+    }
+  ]
+
+  const corporatePartners = [
+    {
+      id: 1,
+      name: 'TechCorp Solutions',
+      logo: '🏢',
+      industry: 'Technology',
+      employees: '450',
+      testimonial: 'EatRite has transformed our workplace wellness culture. Employee satisfaction with our food benefits increased by 85%.',
+      contactPerson: 'Sarah Johnson',
+      role: 'VP of People Operations',
+      metrics: {
+        satisfaction: 94,
+        participation: '87%'
+      }
     },
-    partnershipType: 'wellness'
-  },
-  {
-    id: '4',
-    name: 'Salesforce',
-    logo: '☁️',
-    industry: 'Cloud Software',
-    employees: '70,000+',
-    partnership: 'Remote Work Meal Benefits',
-    testimonial: 'Factor75 helps us support our distributed workforce with healthy meal options, no matter where they work.',
-    contactPerson: 'Lisa Park',
-    role: 'Chief People Officer',
-    metrics: {
-      satisfaction: 91,
-      healthImprovement: '58%',
-      costSavings: '$1.2M',
-      participation: '76%'
+    {
+      id: 2,
+      name: 'Green Energy Inc',
+      logo: '🌿',
+      industry: 'Clean Energy',
+      employees: '280',
+      testimonial: 'The partnership with EatRite aligns perfectly with our sustainability values. Our employees love the variety and quality.',
+      contactPerson: 'Michael Chen',
+      role: 'Chief People Officer',
+      metrics: {
+        satisfaction: 91,
+        participation: '92%'
+      }
     },
-    partnershipType: 'benefits'
-  },
-  {
-    id: '5',
-    name: 'Netflix',
-    logo: '🎬',
-    industry: 'Entertainment',
-    employees: '12,000+',
-    partnership: 'Creative Studio Catering',
-    testimonial: 'Long filming days require sustained energy. Factor75 keeps our cast and crew fueled with healthy, delicious meals.',
-    contactPerson: 'James Wilson',
-    role: 'Production Services VP',
-    metrics: {
-      satisfaction: 93,
-      healthImprovement: '61%',
-      costSavings: '$450K',
-      participation: '88%'
+    {
+      id: 3,
+      name: 'Healthcare Partners',
+      logo: '🏥',
+      industry: 'Healthcare',
+      employees: '720',
+      testimonial: 'As healthcare professionals, we understand nutrition importance. EatRite delivers exactly what our staff needs.',
+      contactPerson: 'Dr. Lisa Rodriguez',
+      role: 'Chief Medical Officer',
+      metrics: {
+        satisfaction: 96,
+        participation: '89%'
+      }
+    }
+  ]
+
+  const partnershipBenefits = [
+    {
+      icon: Users,
+      title: 'Employee Satisfaction',
+      description: 'Boost morale and retention with premium meal benefits',
+      metrics: ['94% average satisfaction', '35% increase in retention']
     },
-    partnershipType: 'catering'
-  },
-  {
-    id: '6',
-    name: 'Tesla',
-    logo: '⚡',
-    industry: 'Electric Vehicles',
-    employees: '100,000+',
-    partnership: 'Manufacturing Site Wellness',
-    testimonial: 'Healthy employees are more productive. Factor75 supports our mission to accelerate sustainable transport with sustainable nutrition.',
-    contactPerson: 'Rachel Green',
-    role: 'Employee Experience Lead',
-    metrics: {
-      satisfaction: 89,
-      healthImprovement: '70%',
-      costSavings: '$1.8M',
-      participation: '82%'
+    {
+      icon: TrendingUp,
+      title: 'Productivity Gains',
+      description: 'Well-fed employees are more focused and productive',
+      metrics: ['23% productivity increase', '50% less lunch absences']
     },
-    partnershipType: 'wellness'
-  }
-];
+    {
+      icon: Shield,
+      title: 'Cost Effectiveness',
+      description: 'Reduce corporate food costs while improving quality',
+      metrics: ['30% cost savings vs catering', 'Tax-deductible benefit']
+    },
+    {
+      icon: Heart,
+      title: 'Health Impact',
+      description: 'Support employee health and wellness goals',
+      metrics: ['25% improvement in health metrics', 'Reduced healthcare costs']
+    }
+  ]
 
-const partnershipTypes = [
-  { type: 'wellness', label: 'Employee Wellness', icon: Heart, count: 3 },
-  { type: 'catering', label: 'Corporate Catering', icon: Briefcase, count: 2 },
-  { type: 'benefits', label: 'Meal Benefits', icon: Star, count: 1 },
-  { type: 'events', label: 'Events & Meetings', icon: Users, count: 0 }
-];
-
-export const CorporatePartnerships: React.FC = () => {
-  const [selectedPartner, setSelectedPartner] = useState<CorporatePartner>(corporatePartners[0]);
-  const [filterType, setFilterType] = useState<string>('all');
-  const [animatedMetrics, setAnimatedMetrics] = useState({
-    satisfaction: 0,
-    totalEmployees: 0,
-    totalSavings: 0
-  });
-
-  useEffect(() => {
-    // Animate metrics
-    const animateValue = (start: number, end: number, setter: (value: number) => void) => {
-      const duration = 2000;
-      const increment = (end - start) / (duration / 16);
-      let current = start;
-      
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= end) {
-          current = end;
-          clearInterval(timer);
-        }
-        setter(Math.round(current));
-      }, 16);
-    };
-
-    setTimeout(() => {
-      animateValue(0, selectedPartner.metrics.satisfaction, (val) => 
-        setAnimatedMetrics(prev => ({ ...prev, satisfaction: val }))
-      );
-      
-      const totalEmployees = corporatePartners.reduce((sum, partner) => 
-        sum + parseInt(partner.employees.replace(/[^\d]/g, '')), 0
-      );
-      animateValue(0, totalEmployees, (val) => 
-        setAnimatedMetrics(prev => ({ ...prev, totalEmployees: val }))
-      );
-      
-      const totalSavings = corporatePartners.reduce((sum, partner) => 
-        sum + parseFloat(partner.metrics.costSavings.replace(/[^\d.]/g, '')), 0
-      );
-      animateValue(0, totalSavings, (val) => 
-        setAnimatedMetrics(prev => ({ ...prev, totalSavings: val }))
-      );
-    }, 500);
-  }, [selectedPartner]);
-
-  const filteredPartners = filterType === 'all' 
+  const filteredPartners = selectedIndustry === 'all' 
     ? corporatePartners 
-    : corporatePartners.filter(partner => partner.partnershipType === filterType);
-
-  const getPartnershipTypeColor = (type: string) => {
-    const colors = {
-      wellness: 'bg-green-100 text-green-700 border-green-200',
-      catering: 'bg-blue-100 text-blue-700 border-blue-200',
-      benefits: 'bg-purple-100 text-purple-700 border-purple-200',
-      events: 'bg-orange-100 text-orange-700 border-orange-200'
-    };
-    return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-700 border-gray-200';
-  };
+    : corporatePartners.filter(partner => partner.industry.toLowerCase().includes(selectedIndustry))
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8">
-        <FadeIn>
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <Building2 className="w-8 h-8" />
-              <h2 className="text-3xl font-bold">Corporate Partnerships</h2>
-              <Shield className="w-8 h-8" />
+    <div className="bg-[#F5EEDC]">
+      {/* Enhanced Hero */}
+      <section className="py-20 bg-gradient-to-br from-[#0F2B1E] to-[#1a4d33] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-semibold mb-6 font-playfair">
+            Corporate Partnership Program
+          </h1>
+          <p className="text-xl text-white/90 max-w-4xl mx-auto mb-12 leading-relaxed">
+            Partner with EatRite to provide premium nutrition benefits that boost employee satisfaction, 
+            productivity, and wellness. Join 150+ companies transforming their workplace culture.
+          </p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#D4B46A] mb-2">150+</div>
+              <div className="text-white/80 text-sm font-medium">Partner Companies</div>
             </div>
-            <p className="text-blue-100 text-lg">
-              Trusted by Fortune 500 companies to nourish their workforce
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#D4B46A] mb-2">45K+</div>
+              <div className="text-white/80 text-sm font-medium">Employees Served</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#D4B46A] mb-2">94%</div>
+              <div className="text-white/80 text-sm font-medium">Satisfaction Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#D4B46A] mb-2">$2.4M+</div>
+              <div className="text-white/80 text-sm font-medium">Corporate Savings</div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="bg-[#D4B46A] hover:bg-[#b8986b] text-[#0F2B1E] font-semibold py-4 px-8 rounded-lg transition-colors duration-200">
+              Get Partnership Details
+            </button>
+            <button className="border-2 border-white/30 hover:border-[#D4B46A] hover:bg-[#D4B46A] hover:text-[#0F2B1E] text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200">
+              Schedule a Call
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Partnership Tiers */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-semibold text-[#0F2B1E] mb-4 font-playfair">
+              Choose Your Partnership Level
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Flexible solutions designed to match your company size and specific wellness objectives
             </p>
           </div>
-        </FadeIn>
-      </div>
 
-      <div className="p-8">
-        {/* Partnership Type Filters */}
-        <FadeIn delay={0.1}>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <button
-              onClick={() => setFilterType('all')}
-              className={`px-6 py-3 rounded-full font-semibold transition-all ${
-                filterType === 'all'
-                  ? 'bg-indigo-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              All Partnerships ({corporatePartners.length})
-            </button>
-            {partnershipTypes.map((type) => {
-              const IconComponent = type.icon;
-              return (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {partnershipTiers.map((tier) => (
+              <div 
+                key={tier.id} 
+                className={`relative bg-white rounded-xl border p-8 hover:shadow-lg transition-all duration-200 ${
+                  tier.popular 
+                    ? 'border-[#D4B46A] shadow-lg scale-105' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                {tier.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-[#D4B46A] text-white px-4 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+                      <Star className="w-3 h-3 fill-current" />
+                      Most Popular
+                    </div>
+                  </div>
+                )}
+
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-[#0F2B1E] mb-2 font-playfair">
+                    {tier.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">{tier.description}</p>
+                  <div className="text-sm text-[#D4B46A] font-medium mb-4 bg-[#F5F2E8] px-3 py-1 rounded-full inline-block">
+                    {tier.employeeRange}
+                  </div>
+                  <div className="text-2xl font-bold text-[#0F2B1E]">{tier.price}</div>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  {tier.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start">
+                      <div className="flex-shrink-0 w-5 h-5 bg-green-50 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                        <Check className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
+                  tier.popular 
+                    ? 'bg-[#0F2B1E] hover:bg-[#1a4d33] text-white' 
+                    : 'bg-gray-50 hover:bg-gray-100 text-[#0F2B1E] border border-gray-200 hover:border-gray-300'
+                }`}>
+                  Get Started
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Success Stories */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+              <h2 className="text-3xl font-semibold text-[#0F2B1E] font-playfair">
+                Partner Success Stories
+              </h2>
+              <p className="text-gray-600 mt-2">Real results from companies just like yours</p>
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {industries.map((industry) => (
                 <button
-                  key={type.type}
-                  onClick={() => setFilterType(type.type)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-full font-semibold transition-all ${
-                    filterType === type.type
-                      ? 'bg-indigo-600 text-white shadow-lg'
+                  key={industry.id}
+                  onClick={() => setSelectedIndustry(industry.id)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    selectedIndustry === industry.id
+                      ? 'bg-[#D4B46A] text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  <IconComponent className="w-5 h-5" />
-                  <span>{type.label} ({type.count})</span>
+                  {industry.name}
+                  <span className="ml-2 text-xs opacity-75">({industry.count})</span>
                 </button>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        </FadeIn>
 
-        {/* Selected Partner Spotlight */}
-        <FadeIn delay={0.2}>
-          <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Partner Info */}
-              <div>
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="text-4xl">{selectedPartner.logo}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredPartners.map((partner) => (
+              <div key={partner.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
+                <div className="flex items-center mb-6">
+                  <div className="text-3xl mr-4 bg-gray-50 w-12 h-12 rounded-lg flex items-center justify-center">
+                    {partner.logo}
+                  </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{selectedPartner.name}</h3>
-                    <p className="text-gray-600">{selectedPartner.industry}</p>
-                    <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mt-2 border ${getPartnershipTypeColor(selectedPartner.partnershipType)}`}>
-                      {selectedPartner.partnership}
-                    </div>
+                    <h3 className="font-semibold text-[#0F2B1E]">{partner.name}</h3>
+                    <p className="text-sm text-gray-600">{partner.industry} • {partner.employees} employees</p>
                   </div>
                 </div>
 
-                <blockquote className="text-lg italic text-gray-700 mb-6">
-                  "{selectedPartner.testimonial}"
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
+                    <div className="text-2xl font-bold text-green-700 mb-1">{partner.metrics.satisfaction}%</div>
+                    <div className="text-xs text-green-600 font-medium">Satisfaction</div>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
+                    <div className="text-2xl font-bold text-blue-700 mb-1">{partner.metrics.participation}</div>
+                    <div className="text-xs text-blue-600 font-medium">Participation</div>
+                  </div>
+                </div>
+
+                <blockquote className="text-sm text-gray-700 italic mb-6 leading-relaxed bg-gray-50 p-4 rounded-lg border-l-4 border-[#D4B46A]">
+                  "{partner.testimonial}"
                 </blockquote>
 
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Users className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold">{selectedPartner.contactPerson}</p>
-                    <p className="text-sm">{selectedPartner.role}</p>
-                  </div>
+                <div className="border-t border-gray-100 pt-4">
+                  <div className="font-semibold text-[#0F2B1E]">{partner.contactPerson}</div>
+                  <div className="text-sm text-gray-600">{partner.role}</div>
                 </div>
               </div>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-                  <div className="text-3xl font-bold text-green-600">{animatedMetrics.satisfaction}%</div>
-                  <div className="text-sm text-gray-600">Employee Satisfaction</div>
-                </div>
-                <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-                  <div className="text-3xl font-bold text-blue-600">{selectedPartner.metrics.healthImprovement}</div>
-                  <div className="text-sm text-gray-600">Health Improvement</div>
-                </div>
-                <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-                  <div className="text-3xl font-bold text-purple-600">{selectedPartner.metrics.costSavings}</div>
-                  <div className="text-sm text-gray-600">Annual Savings</div>
-                </div>
-                <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-                  <div className="text-3xl font-bold text-orange-600">{selectedPartner.metrics.participation}</div>
-                  <div className="text-sm text-gray-600">Participation Rate</div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-        </FadeIn>
+        </div>
+      </section>
 
-        {/* Partner Grid */}
-        <StaggeredAnimation className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
-          {filteredPartners.map((partner) => (
-            <button
-              key={partner.id}
-              onClick={() => setSelectedPartner(partner)}
-              className={`p-6 rounded-xl border-2 transition-all hover:shadow-lg ${
-                selectedPartner.id === partner.id
-                  ? 'border-indigo-500 bg-indigo-50 shadow-lg'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              <div className="text-3xl mb-3">{partner.logo}</div>
-              <h4 className="font-semibold text-gray-900 text-sm">{partner.name}</h4>
-              <p className="text-xs text-gray-500">{partner.employees} employees</p>
-              <div className="flex items-center justify-center mt-2">
-                <Star className="w-3 h-3 text-yellow-500 mr-1" />
-                <span className="text-xs font-semibold">{partner.metrics.satisfaction}%</span>
-              </div>
-            </button>
-          ))}
-        </StaggeredAnimation>
-
-        {/* Overall Stats */}
-        <FadeIn delay={0.4}>
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8">
-            <h4 className="text-xl font-semibold text-center mb-6 text-gray-900">
-              Partnership Impact
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <Globe className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-indigo-600">{corporatePartners.length}</div>
-                <div className="text-sm text-gray-600">Enterprise Partners</div>
-              </div>
-              <div className="text-center">
-                <Users className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-600">{(animatedMetrics.totalEmployees / 1000).toFixed(0)}K+</div>
-                <div className="text-sm text-gray-600">Employees Served</div>
-              </div>
-              <div className="text-center">
-                <TrendingUp className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-purple-600">${animatedMetrics.totalSavings.toFixed(1)}M</div>
-                <div className="text-sm text-gray-600">Total Savings</div>
-              </div>
-              <div className="text-center">
-                <Award className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-orange-600">94%</div>
-                <div className="text-sm text-gray-600">Avg Satisfaction</div>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* CTA */}
-        <FadeIn delay={0.5}>
-          <div className="text-center mt-8">
-            <button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg">
-              Partner with Factor75 for Your Organization
-            </button>
-            <p className="text-gray-600 mt-3">
-              Join industry leaders in revolutionizing workplace nutrition
+      {/* Enhanced Partnership Benefits */}
+      <section className="py-20 bg-[#F5EEDC]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-semibold text-[#0F2B1E] mb-4 font-playfair">
+              Why Companies Choose EatRite
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Measurable benefits that drive real business results and transform workplace culture
             </p>
           </div>
-        </FadeIn>
-      </div>
-    </div>
-  );
-};
 
-export default CorporatePartnerships;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {partnershipBenefits.map((benefit, idx) => (
+              <div key={idx} className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-200">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                  <benefit.icon className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#0F2B1E] mb-3 font-playfair">
+                  {benefit.title}
+                </h3>
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                  {benefit.description}
+                </p>
+                
+                <div className="space-y-2">
+                  {benefit.metrics.map((metric, metricIdx) => (
+                    <div key={metricIdx} className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium border border-green-200">
+                      {metric}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Get Started */}
+      <section className="py-20 bg-gradient-to-br from-[#0F2B1E] to-[#1a4d33] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-semibold mb-6 font-playfair">
+            Ready to Transform Your Workplace?
+          </h2>
+          <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Join industry leaders who have enhanced their employee benefits 
+            with EatRite's premium nutrition solutions. Start your partnership journey today.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <button className="bg-[#D4B46A] hover:bg-[#b8986b] text-[#0F2B1E] font-semibold py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+              <Calendar className="w-5 h-5" />
+              Schedule Partnership Call
+            </button>
+            <button className="border-2 border-white/30 hover:border-[#D4B46A] hover:bg-[#D4B46A] hover:text-[#0F2B1E] text-white font-semibold py-4 px-8 rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+              <Download className="w-5 h-5" />
+              Download Partnership Guide
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <div className="w-12 h-12 bg-[#D4B46A] rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Phone className="w-6 h-6 text-[#0F2B1E]" />
+              </div>
+              <div className="font-semibold text-white mb-2">Call Us</div>
+              <div className="text-white/80">1-800-EATRITE</div>
+              <div className="text-sm text-white/60 mt-2">Mon-Fri 9AM-6PM EST</div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <div className="w-12 h-12 bg-[#D4B46A] rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-6 h-6 text-[#0F2B1E]" />
+              </div>
+              <div className="font-semibold text-white mb-2">Email Us</div>
+              <div className="text-white/80">partnerships@eatrite.com</div>
+              <div className="text-sm text-white/60 mt-2">24-hour response time</div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <div className="w-12 h-12 bg-[#D4B46A] rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Calendar className="w-6 h-6 text-[#0F2B1E]" />
+              </div>
+              <div className="font-semibold text-white mb-2">Book Meeting</div>
+              <div className="text-white/80">Available 24/7 online</div>
+              <div className="text-sm text-white/60 mt-2">Instant confirmation</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default CorporatePartnerships

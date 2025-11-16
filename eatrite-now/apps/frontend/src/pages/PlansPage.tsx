@@ -1,398 +1,300 @@
 import { useState } from 'react'
-import { Star, ChevronRight, Clock, Zap, Heart } from 'lucide-react'
+import { ChevronRight, Check, Calendar } from 'lucide-react'
 
 const PlansPage = () => {
-  const [selectedWeek, setSelectedWeek] = useState('Nov 15-21')
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [selectedSize, setSelectedSize] = useState<number>(8)
   const [selectedPreferences, setSelectedPreferences] = useState<string[]>([])
+  const [currentStep, setCurrentStep] = useState(1)
 
-  const weekOptions = ['Nov 15-21', 'Nov 22-28', 'Nov-Dec 29-05']
-
-  const mealCategories = [
+  const mealPlans = [
     {
-      id: 'calorie-smart',
-      name: 'Calorie Smart',
-      description: '~550kcal or less per serving',
-      icon: '🥗',
-      color: 'bg-green-50 border-green-200 hover:bg-green-100'
+      id: 'chef-signature',
+      name: "Chef's Signature",
+      description: 'Artfully crafted meals featuring diverse global flavors and premium seasonal ingredients',
+      pricePerMeal: 14.95,
+      features: ['Chef-curated weekly selections', 'Premium organic ingredients', 'Global cuisine variety', 'Seasonal specialties'],
+      popular: true,
+      badge: 'Most Popular',
+      icon: '👨‍🍳'
     },
     {
-      id: 'keto',
-      name: 'Keto',
-      description: 'Deliciously low carb, high fat meals',
-      icon: '🥑',
-      color: 'bg-purple-50 border-purple-200 hover:bg-purple-100'
+      id: 'wellness-focused',
+      name: 'Wellness Focused',
+      description: 'Nutritionally optimized meals designed to support your health and wellness goals',
+      pricePerMeal: 13.95,
+      features: ['Nutritionist approved', 'Balanced macronutrients', 'Anti-inflammatory ingredients', 'Portion controlled'],
+      popular: false,
+      badge: null,
+      icon: '🥗'
     },
     {
-      id: 'vegan-veggie',
-      name: 'Vegan + Veggie',
-      description: 'Meat-free meals that make veggies the hero',
-      icon: '🌱',
-      color: 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
+      id: 'performance',
+      name: 'Performance',
+      description: 'High-protein meals engineered for active lifestyles and fitness enthusiasts',
+      pricePerMeal: 15.95,
+      features: ['30g+ protein per meal', 'Pre/post workout options', 'Clean energy sources', 'Recovery nutrients'],
+      popular: false,
+      badge: 'High Protein',
+      icon: '💪'
     },
     {
-      id: 'protein-plus',
-      name: 'Protein +',
-      description: 'Meals with extra protein to keep your strength up',
-      icon: '💪',
-      color: 'bg-orange-50 border-orange-200 hover:bg-orange-100'
-    },
-    {
-      id: 'chefs-choice',
-      name: "Chef's Choice",
-      description: 'Widest variety of clean, chef-crafted meals',
-      icon: '👨‍🍳',
-      color: 'bg-blue-50 border-blue-200 hover:bg-blue-100'
-    },
-    {
-      id: 'snacks-desserts',
-      name: 'Snacks & Desserts',
-      description: 'Satisfy your sweet tooth & cravings',
-      icon: '🍰',
-      color: 'bg-pink-50 border-pink-200 hover:bg-pink-100'
-    },
-    {
-      id: 'shakes-smoothies',
-      name: 'Shakes & Smoothies',
-      description: "To have while you're on-the-go",
-      icon: '🥤',
-      color: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100'
-    },
-    {
-      id: 'extra-proteins',
-      name: 'Extra Proteins',
-      description: 'Add extra proteins to your meal',
-      icon: '🥩',
-      color: 'bg-red-50 border-red-200 hover:bg-red-100'
+      id: 'plant-forward',
+      name: 'Plant Forward',
+      description: 'Vibrant plant-based meals that celebrate fresh vegetables and innovative preparations',
+      pricePerMeal: 12.95,
+      features: ['Plant-based proteins', 'Locally sourced produce', 'Innovative preparations', 'Nutrient dense'],
+      popular: false,
+      badge: 'Plant Based',
+      icon: '🌱'
     }
+  ]
+
+  const planSizes = [
+    { meals: 4, frequency: 'per week', price: 60.00, savings: 0, mostPopular: false },
+    { meals: 6, frequency: 'per week', price: 78.00, savings: 12, mostPopular: false },
+    { meals: 8, frequency: 'per week', price: 96.00, savings: 24, mostPopular: true },
+    { meals: 10, frequency: 'per week', price: 110.00, savings: 40, mostPopular: false },
+    { meals: 12, frequency: 'per week', price: 120.00, savings: 60, mostPopular: false }
   ]
 
   const dietaryPreferences = [
-    { id: 'calorie-smart', name: 'Calorie smart', icon: '🥗' },
-    { id: 'everything', name: 'I eat everything', icon: '🍽️' },
-    { id: 'keto', name: 'Keto', icon: '🥑' },
-    { id: 'high-protein', name: 'High protein', icon: '💪' },
-    { id: 'low-carb', name: 'Low carb', icon: '🚫🍞' },
-    { id: 'glp1-support', name: 'Glp-1 support', icon: '💊' },
-    { id: 'fiber-filled', name: 'Fiber filled', icon: '🌾' },
-    { id: 'flexitarian', name: 'Flexitarian', icon: '🌿' }
-  ]
-
-  const weeklyMenus = [
-    {
-      id: 'chefs-choice',
-      name: "Chef's Choice Weekly Menu",
-      description: 'Expertly curated meals by chefs for a diverse and flavorful dining experience',
-      color: 'bg-gradient-to-r from-blue-600 to-blue-700'
-    },
-    {
-      id: 'keto',
-      name: 'Keto Weekly Menu',
-      description: 'Low-carb, high-fat meals to support ketosis and fat burning',
-      color: 'bg-gradient-to-r from-purple-600 to-purple-700'
-    },
-    {
-      id: 'calorie-smart',
-      name: 'Calorie Smart Weekly Menu',
-      description: "Portion-controlled meals with ~550kcal or less per serving that don't sacrifice flavor",
-      color: 'bg-gradient-to-r from-green-600 to-green-700'
-    },
-    {
-      id: 'high-protein',
-      name: 'High Protein Weekly Menu',
-      description: 'Protein-rich dishes for muscle growth and active lifestyles',
-      color: 'bg-gradient-to-r from-orange-600 to-orange-700'
-    },
-    {
-      id: 'carb-conscious',
-      name: 'Carb Conscious Menu',
-      description: 'Carb-conscious dishes to fuel your goals while keeping Carbs low',
-      color: 'bg-gradient-to-r from-indigo-600 to-indigo-700'
-    },
-    {
-      id: 'glp1-balance',
-      name: 'GLP-1 Balance Menu',
-      description: 'Designed for portion control and calorie-friendly nutrition',
-      color: 'bg-gradient-to-r from-teal-600 to-teal-700'
-    },
-    {
-      id: 'flexitarian',
-      name: 'Flexitarian Weekly Menu',
-      description: 'Flexible options for picky eaters, packed with nutrients and flavor',
-      color: 'bg-gradient-to-r from-pink-600 to-pink-700'
-    },
-    {
-      id: 'fiber-filled',
-      name: 'Fiber Filled Weekly Menu',
-      description: 'A delicious way to enjoy more fiber in every bite.',
-      color: 'bg-gradient-to-r from-emerald-600 to-emerald-700'
-    }
-  ]
-
-  const whyFactorBenefits = [
-    {
-      title: 'MORE TASTINESS',
-      description: 'Choose from a wide variety of menu of 100+ dietitian-designed meals and add-on options each week.',
-      icon: <Star className="h-8 w-8 text-orange-500" />
-    },
-    {
-      title: 'MORE FLEXIBILITY',
-      description: 'We make life on the go even easier—change your delivery date, skip a week, or cancel anytime.',
-      icon: <Clock className="h-8 w-8 text-blue-500" />
-    },
-    {
-      title: 'MORE CONVENIENCE',
-      description: 'Simply heat and eat our meals in two minutes—no shopping or cooking required!',
-      icon: <Zap className="h-8 w-8 text-green-500" />
-    },
-    {
-      title: 'MORE NUTRITION',
-      description: 'Enjoy dietitian-designed meals packed with premium, nutritional quality.',
-      icon: <Heart className="h-8 w-8 text-red-500" />
-    }
+    { id: 'everything', name: 'I eat everything', icon: '🍽️', description: 'No dietary restrictions' },
+    { id: 'calorie-smart', name: 'Calorie smart', icon: '🥗', description: '~550kcal or less per serving' },
+    { id: 'keto', name: 'Keto', icon: '🥑', description: 'Low carb, high fat' },
+    { id: 'high-protein', name: 'High protein', icon: '💪', description: '30g+ protein per meal' },
+    { id: 'low-carb', name: 'Low carb', icon: '🚫🍞', description: 'Reduced carbohydrates' },
+    { id: 'vegetarian', name: 'Vegetarian', icon: '🌿', description: 'Plant-based options' },
+    { id: 'vegan', name: 'Vegan', icon: '🌱', description: '100% plant-based' },
+    { id: 'gluten-free', name: 'Gluten free', icon: '🚫🌾', description: 'No gluten ingredients' }
   ]
 
   const togglePreference = (preferenceId: string) => {
     setSelectedPreferences(prev => 
-      prev.includes(preferenceId)
+      prev.includes(preferenceId) 
         ? prev.filter(id => id !== preferenceId)
         : [...prev, preferenceId]
     )
   }
 
+  const getAccentColor = (color: string) => {
+    const colors = {
+      blue: 'border-blue-200 bg-blue-50 text-blue-700',
+      green: 'border-green-200 bg-green-50 text-green-700',
+      purple: 'border-purple-200 bg-purple-50 text-purple-700',
+      orange: 'border-orange-200 bg-orange-50 text-orange-700'
+    }
+    return colors[color as keyof typeof colors] || colors.blue
+  }
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 py-16">
+      {/* Header */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Factor Menus & Meal Plans
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[#0F2B1E] font-playfair">
+              Choose Your Plan
             </h1>
-            <p className="text-xl text-gray-700 mb-8 max-w-4xl mx-auto">
-              Explore Factor's diverse menus and personalized meal plans tailored to your preferences, 
-              providing a delightful culinary experience with convenience and flexibility.
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Personalized meal plans crafted to support your lifestyle, dietary preferences, 
+              and wellness journey. Fresh, chef-prepared meals delivered weekly.
             </p>
-            <button className="bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-700 transition-colors">
-              Get 50% Off + Free Breakfast for 1 Year
-            </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Meal Plans Section */}
-      <div className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            Check out our meal plans!
-          </h2>
-          <p className="text-lg text-gray-600 mb-12 text-center max-w-4xl mx-auto">
-            Choose from a menu of 100+ dietitian-designed meals and add-on options every week, 
-            tailored to fit your lifestyle—Chef's Choice, Keto, Calorie-Smart, Vegan + Veggie, 
-            and High Protein. And don't forget to treat yourself to our wide variety of add-ons, 
-            such as smoothies, juices, guilt-free desserts, and more!
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mealCategories.map((category) => (
-              <div
-                key={category.id}
-                className={`p-6 rounded-lg border-2 transition-all cursor-pointer ${category.color}`}
-              >
-                <div className="text-4xl mb-4">{category.icon}</div>
-                <h3 className="text-xl font-semibold mb-3">{category.name}</h3>
-                <p className="text-gray-700">{category.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Dietary Preferences Section */}
-      <div className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Dietary Preferences */}
+      <section className="pb-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              What kind of meals do you like?
+            <h2 className="text-3xl font-semibold mb-4 text-[#0F2B1E] font-playfair">
+              Your Dietary Preferences
             </h2>
-            <p className="text-lg text-gray-600">
-              Select from the categories below. You can always change them later!
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Help us personalize your meal selections by choosing your dietary preferences and goals
             </p>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {dietaryPreferences.map((preference) => (
               <button
                 key={preference.id}
                 onClick={() => togglePreference(preference.id)}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                className={`relative p-4 rounded-lg border transition-all duration-200 text-left hover:shadow-sm ${
                   selectedPreferences.includes(preference.id)
-                    ? 'border-orange-500 bg-orange-50'
+                    ? 'border-[#D4B46A] bg-[#F5F2E8] shadow-sm'
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
               >
-                <div className="text-2xl mb-2">{preference.icon}</div>
-                <div className="font-medium">{preference.name}</div>
+                <div className="text-xl mb-3">{preference.icon}</div>
+                <div className="font-medium text-[#0F2B1E] mb-1 text-sm">{preference.name}</div>
+                <div className="text-xs text-gray-500 leading-relaxed">{preference.description}</div>
+                {selectedPreferences.includes(preference.id) && (
+                  <div className="absolute top-3 right-3">
+                    <div className="w-5 h-5 bg-[#D4B46A] rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                )}
               </button>
             ))}
           </div>
-
-          <div className="text-center">
-            <button className="bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
-              Get 50% off + free breakfast for 1 year & view plans
-            </button>
-          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Weekly Menus Section */}
-      <div className="py-16">
+      {/* Meal Plans */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            Check out our weekly menus!
-          </h2>
-
-          {/* Week Selector */}
-          <div className="flex justify-center mb-12">
-            <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden">
-              {weekOptions.map((week) => (
-                <button
-                  key={week}
-                  onClick={() => setSelectedWeek(week)}
-                  className={`px-6 py-2 font-medium ${
-                    selectedWeek === week
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {week}
-                </button>
-              ))}
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold mb-4 text-[#0F2B1E] font-playfair">
+              Select Your Meal Plan
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Choose the culinary experience that best aligns with your taste preferences and nutritional goals
+            </p>
           </div>
 
-          {/* Menu Cards */}
-          <div className="space-y-8">
-            {weeklyMenus.map((menu) => (
-              <div
-                key={menu.id}
-                className="rounded-xl overflow-hidden shadow-lg bg-white"
+          <div className="grid md:grid-cols-2 gap-8">
+            {mealPlans.map((plan) => (
+              <div 
+                key={plan.id} 
+                className={`relative bg-white rounded-xl border transition-all duration-300 hover:shadow-lg ${
+                  plan.popular ? 'border-[#D4B46A] shadow-md' : 'border-gray-200 hover:border-gray-300'
+                }`}
               >
-                <div className={`${menu.color} text-white p-6`}>
-                  <h3 className="text-2xl font-bold mb-2">{menu.name}</h3>
-                  <p className="text-lg opacity-90">{menu.description}</p>
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-sm">Week of {selectedWeek}</span>
-                    <ChevronRight className="h-5 w-5" />
+                {plan.badge && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className={`px-4 py-1 rounded-full text-sm font-medium ${
+                      plan.popular 
+                        ? 'bg-[#D4B46A] text-white' 
+                        : 'bg-gray-600 text-white'
+                    }`}>
+                      {plan.badge}
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-600 mb-4">
-                    Next week's {menu.name.toLowerCase().replace('weekly menu', '').replace('menu', '')} recipes
-                  </p>
-                  <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors">
-                    View Full Menu →
+                )}
+                
+                <div className="p-8">
+                  <div className="flex items-start mb-6">
+                    <div className="text-3xl mr-4 mt-1">{plan.icon}</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-[#0F2B1E] mb-2 font-playfair">
+                        {plan.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {plan.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mb-8 pb-6 border-b border-gray-100">
+                    <div className="text-2xl font-bold text-[#0F2B1E]">
+                      ${plan.pricePerMeal}
+                      <span className="text-base font-normal text-gray-500"> per meal</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center">
+                        <div className="flex-shrink-0 w-4 h-4 rounded-full bg-green-50 flex items-center justify-center mr-3">
+                          <Check className="w-2.5 h-2.5 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 text-sm">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button 
+                    onClick={() => setSelectedPlan(plan.id)}
+                    className={`w-full py-3 px-4 rounded-lg font-medium transition-colors duration-200 ${
+                      selectedPlan === plan.id
+                        ? 'bg-[#0F2B1E] text-white'
+                        : plan.popular
+                        ? 'bg-[#0F2B1E] hover:bg-[#1a4d33] text-white'
+                        : 'bg-gray-50 hover:bg-gray-100 text-[#0F2B1E] border border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    {selectedPlan === plan.id ? 'Selected' : 'Choose Plan'}
                   </button>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <button className="bg-gray-100 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
-              Load more
-            </button>
-          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Why Factor Section */}
-      <div className="bg-gray-50 py-16">
+      {/* Plan Sizes */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            WHY FACTOR?
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold mb-4 text-[#0F2B1E] font-playfair">
+              Choose Your Frequency
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Select the number of meals that best fits your weekly routine and dining preferences
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {whyFactorBenefits.map((benefit, index) => (
-              <div key={index} className="text-center">
-                <div className="mb-4 flex justify-center">
-                  {benefit.icon}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            {planSizes.map((size) => (
+              <button
+                key={size.meals}
+                onClick={() => setSelectedSize(size.meals)}
+                className={`relative text-center p-6 rounded-lg border transition-all duration-200 ${
+                  selectedSize === size.meals
+                    ? 'border-[#D4B46A] bg-[#F5F2E8] shadow-sm'
+                    : size.mostPopular 
+                    ? 'border-[#D4B46A] bg-white shadow-md' 
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                }`}
+              >
+                {size.mostPopular && selectedSize !== size.meals && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-[#D4B46A] text-white px-3 py-1 rounded-full text-xs font-medium">
+                      Popular
+                    </div>
+                  </div>
+                )}
+                
+                <div className="text-2xl font-bold text-[#0F2B1E] mb-1">
+                  {size.meals}
                 </div>
-                <h3 className="text-lg font-bold mb-3 text-gray-900">
-                  {benefit.title}
-                </h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </div>
+                <div className="text-gray-600 mb-4 text-sm">meals {size.frequency}</div>
+                
+                <div className="text-lg font-semibold text-[#0F2B1E] mb-2">
+                  ${size.price}
+                </div>
+                
+                {size.savings > 0 && (
+                  <div className="text-xs text-green-600 font-medium">
+                    Save ${size.savings}
+                  </div>
+                )}
+
+                {selectedSize === size.meals && (
+                  <div className="absolute top-3 right-3">
+                    <div className="w-5 h-5 bg-[#D4B46A] rounded-full flex items-center justify-center">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                )}
+              </button>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* FAQ Section */}
-      <div className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            Learn More About Factor Menus and Plans
-          </h2>
-          <p className="text-lg text-gray-600 mb-12 text-center">
-            Discover answers to all your questions about delivery options, pricing, and the current week's menu offerings at Factor. Get all the information you need regarding meals and plans FAQs.
-          </p>
-
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                How do I select meals from the Factor menu?
-              </h3>
-              <p className="text-gray-600">
-                Once you complete your purchase, you'll gain access to a menu consisting of 100+ dietitian-designed meals and add-on options each week. Regardless of your preferences, you can easily choose and combine recipes to suit your taste.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                Will the Factor meals accommodate my diet based on the plans?
-              </h3>
-              <p className="text-gray-600">
-                Absolutely! Factor has options for everyone, including low carb, vegan & vegetarian, high protein, meals under 550 calories, and more. You can conveniently preview the menu for the upcoming week to ensure it aligns with your specific dietary needs and plans.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                Can I modify my plan or meal preferences?
-              </h3>
-              <p className="text-gray-600">
-                Certainly. We understand that life is unpredictable. If you require more or fewer meals or desire different options on a weekly basis, simply adjust your meal quantity and menu preferences in your account settings and plans.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                How can I access ingredient and nutritional information?
-              </h3>
-              <p className="text-gray-600">
-                Each recipe on our menu includes FDA nutritional information. To view this information for any meal of interest, click on the thumbnail image, and the meal details, including ingredients and nutritional facts, will appear on the screen.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                Will I be locked into a contract?
-              </h3>
-              <p className="text-gray-600">
-                Never. At Factor, we prioritize flexibility. You have the freedom to skip a week, pause your subscription, or cancel your account at any time within your account settings and plans. Just remember to do so before the weekly cutoff to halt your next order.
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <button className="bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-700 transition-colors">
-              Get 50% Off + Free Breakfast for 1 Year
+          <div className="text-center">
+            <button className="bg-[#0F2B1E] hover:bg-[#1a4d33] text-white font-medium py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 mx-auto">
+              Continue to Checkout
+              <ChevronRight className="w-4 h-4" />
             </button>
+            <p className="text-sm text-gray-500 mt-4">
+              Free delivery • Cancel anytime • No commitment
+            </p>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

@@ -15,6 +15,7 @@ import FAQPage from './pages/FAQPage'
 import SupplementsPage from './pages/SupplementsPage'
 import ProfilePage from './pages/ProfilePage'
 import AccountPage from './pages/AccountPage'
+import LoginPage from './pages/LoginPage'
 import NutritionCoachingPage from './pages/NutritionCoachingPage'
 import DietaryProfileSetup from './components/DietaryProfileSetup'
 import B2BPartnershipROIDashboard from './components/B2BPartnershipROIDashboard'
@@ -29,6 +30,7 @@ import HealthAchievementBadges from './components/HealthAchievementBadges'
 import { CartProvider } from './context/CartContext'
 import { UserPreferencesProvider } from './context/UserPreferencesContext'
 import { EatRiteProvider } from './context/EatRiteThemeProvider'
+import { ToastProvider } from './context/ToastContext'
 
 // Placeholder component for routes not yet implemented
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -68,11 +70,23 @@ function App() {
     <EatRiteProvider>
       <UserPreferencesProvider>
         <CartProvider>
-          <div className="min-h-screen">
+          <ToastProvider>
+            <div className="min-h-screen">
             <Routes>
-              {/* Original Homepage with Standard Navigation */}
+              {/* Premium Homepage - World-Class UI Design */}
               <Route path="/" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <HomePage />
+                  </main>
+                  <Footer />
+                </div>
+              } />
+              
+              {/* Original Homepage - Alternative Route */}
+              <Route path="/original" element={
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <HomePage />
@@ -84,12 +98,12 @@ function App() {
               {/* Premium Brand Homepage - Alternative */}
               <Route path="/premium" element={<PremiumHomePage />} />
               
-              /* New Premium EatRite UI System */
+              {/* New Premium EatRite UI System */}
               <Route path="/eatrite-ui" element={<EatRiteUIApp />} />
               
               {/* Core App Pages - With Premium Styling */}
               <Route path="/menu" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <MenuPage />
@@ -98,7 +112,7 @@ function App() {
                 </div>
               } />
               <Route path="/pricing" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PricingPage />
@@ -107,7 +121,7 @@ function App() {
                 </div>
               } />
               <Route path="/plans" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PlansPage />
@@ -124,7 +138,7 @@ function App() {
               
               {/* Feature Pages */}
               <Route path="/dietary-profile" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <DietaryProfileSetup />
@@ -133,7 +147,7 @@ function App() {
                 </div>
               } />
               <Route path="/meal-builder" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <InteractiveMealBuilder />
@@ -142,7 +156,7 @@ function App() {
                 </div>
               } />
               <Route path="/meal-comparison" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <MealComparison availableMeals={[
@@ -184,7 +198,7 @@ function App() {
                 </div>
               } />
               <Route path="/nutrition-calculator" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <NutritionCalculator />
@@ -193,7 +207,7 @@ function App() {
                 </div>
               } />
               <Route path="/ai-recommendations" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <AIPoweredMealRecommendations />
@@ -202,7 +216,7 @@ function App() {
                 </div>
               } />
               <Route path="/order-tracking" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <OrderTracking />
@@ -211,7 +225,7 @@ function App() {
                 </div>
               } />
               <Route path="/health-goals" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PersonalizedHealthGoals />
@@ -220,7 +234,7 @@ function App() {
                 </div>
               } />
               <Route path="/achievements" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <HealthAchievementBadges />
@@ -231,7 +245,7 @@ function App() {
               
               {/* Business Pages */}
               <Route path="/b2b-dashboard" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <B2BPartnershipROIDashboard />
@@ -240,7 +254,7 @@ function App() {
                 </div>
               } />
               <Route path="/corporate-partnerships" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <CorporatePartnerships />
@@ -251,7 +265,7 @@ function App() {
               
               {/* Traditional Pages - With Navbar/Footer */}
               <Route path="/faq" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <FAQPage />
@@ -260,7 +274,7 @@ function App() {
                 </div>
               } />
               <Route path="/supplements" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <SupplementsPage />
@@ -269,7 +283,7 @@ function App() {
                 </div>
               } />
               <Route path="/profile" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <ProfilePage />
@@ -278,7 +292,7 @@ function App() {
                 </div>
               } />
               <Route path="/account" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <AccountPage />
@@ -287,7 +301,7 @@ function App() {
                 </div>
               } />
               <Route path="/business" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PlaceholderPage title="EatRite for Business" />
@@ -296,7 +310,7 @@ function App() {
                 </div>
               } />
               <Route path="/nutrition-coaching" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <NutritionCoachingPage />
@@ -305,7 +319,7 @@ function App() {
                 </div>
               } />
               <Route path="/gift-cards" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PlaceholderPage title="Luxury Gift Cards" />
@@ -314,7 +328,7 @@ function App() {
                 </div>
               } />
               <Route path="/blog" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
+                <div className="min-h-screen flex flex-col bg-white">
                   <Navbar />
                   <main className="flex-grow">
                     <PlaceholderPage title="EatRite Wellness Journal" />
@@ -322,17 +336,11 @@ function App() {
                   <Footer />
                 </div>
               } />
-              <Route path="/login" element={
-                <div className="min-h-screen flex flex-col bg-gradient-dark">
-                  <Navbar />
-                  <main className="flex-grow">
-                    <PlaceholderPage title="Member Access" />
-                  </main>
-                  <Footer />
-                </div>
-              } />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<LoginPage />} />
             </Routes>
-          </div>
+            </div>
+          </ToastProvider>
         </CartProvider>
       </UserPreferencesProvider>
     </EatRiteProvider>

@@ -1,304 +1,282 @@
-import React, { useEffect, useState } from 'react';
-import { ArrowRight, Play, Star, CheckCircle, Sparkles } from 'lucide-react';
-import { 
-  FadeIn, 
-  StaggeredAnimation, 
-  Floating, 
-  MorphButton, 
-  GradientText, 
-  Typewriter 
-} from './AnimationComponents';
-import EatRiteLogo from './EatRiteLogo';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, Play, Star, Zap, Award } from 'lucide-react';
 
 const EnhancedHero: React.FC = () => {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [showTypewriter, setShowTypewriter] = useState(false);
-
-  const testimonials = [
-    { text: "Factor changed my life! Down 15 lbs in 2 months.", author: "Sarah M." },
-    { text: "Finally, healthy meals that actually taste amazing.", author: "Mike R." },
-    { text: "Perfect for my busy lifestyle. No prep, all flavor!", author: "Jessica L." }
-  ];
-
-  const stats = [
-    { value: "2M+", label: "Meals Delivered" },
-    { value: "50K+", label: "Happy Customers" },
-    { value: "4.8★", label: "Average Rating" },
-    { value: "30+", label: "Meal Options" }
-  ];
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowTypewriter(true), 1000);
-    return () => clearTimeout(timer);
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [testimonials.length]);
-
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-green-50 via-white to-blue-50">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0">
-        {/* Floating Shapes */}
-        <Floating intensity="subtle" speed="slow" className="absolute top-20 left-10">
-          <div className="w-32 h-32 bg-gradient-to-r from-green-300/20 to-blue-300/20 rounded-full blur-xl" />
-        </Floating>
-        
-        <Floating intensity="normal" speed="normal" className="absolute top-40 right-20">
-          <div className="w-24 h-24 bg-gradient-to-r from-orange-300/20 to-pink-300/20 rounded-full blur-xl" />
-        </Floating>
-        
-        <Floating intensity="strong" speed="fast" className="absolute bottom-32 left-1/4">
-          <div className="w-20 h-20 bg-gradient-to-r from-purple-300/20 to-blue-300/20 rounded-full blur-xl" />
-        </Floating>
-
-        {/* Sparkle Animation */}
-        <div className="absolute inset-0">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-pulse"
-              style={{
-                top: `${20 + i * 15}%`,
-                left: `${10 + i * 12}%`,
-                animationDelay: `${i * 0.5}s`
-              }}
-            >
-              <Floating intensity="subtle" speed="slow">
-                <Sparkles className="w-4 h-4 text-yellow-400/40" />
-              </Floating>
-            </div>
-          ))}
-        </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0F2B1E] via-[#0A2418] to-[#0F2B1E]">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 opacity-20">
+        <div 
+          className="absolute top-20 left-20 w-32 h-32 bg-[#D4B46A] rounded-full blur-3xl animate-pulse"
+          style={{
+            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
+          }}
+        ></div>
+        <div 
+          className="absolute bottom-32 right-32 w-40 h-40 bg-[#FF6B35] rounded-full blur-3xl animate-pulse"
+          style={{
+            transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * -0.03}px)`,
+            animationDelay: '1s'
+          }}
+        ></div>
+        <div 
+          className="absolute top-1/2 left-1/3 w-24 h-24 bg-[#D4B46A] rounded-full blur-2xl animate-pulse"
+          style={{
+            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
+            animationDelay: '0.5s'
+          }}
+        ></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen">
+      {/* Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Floating Icons */}
+        <div className="absolute top-32 left-16 animate-bounce" style={{ animationDelay: '0s' }}>
+          <Star className="w-6 h-6 text-[#D4B46A]/30" />
+        </div>
+        <div className="absolute top-48 right-24 animate-bounce" style={{ animationDelay: '1s' }}>
+          <Zap className="w-8 h-8 text-[#FF6B35]/30" />
+        </div>
+        <div className="absolute bottom-48 left-32 animate-bounce" style={{ animationDelay: '0.5s' }}>
+          <Award className="w-7 h-7 text-[#D4B46A]/30" />
+        </div>
+        
+        {/* Floating Gradient Orbs */}
+        <div className="absolute top-64 right-16 w-16 h-16 bg-gradient-to-br from-[#D4B46A]/20 to-transparent rounded-full animate-ping"></div>
+        <div className="absolute bottom-64 left-48 w-12 h-12 bg-gradient-to-br from-[#FF6B35]/20 to-transparent rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className="relative z-10 max-w-8xl mx-auto px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-screen py-20">
           
-          {/* Left Content */}
-          <div className="space-y-8">
-            
-            {/* Brand Logo */}
-            <FadeIn direction="down" delay={100}>
-              <div className="flex items-center space-x-4 mb-4">
-                <EatRiteLogo size="xl" className="drop-shadow-2xl" />
-                <div className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
-                  EatRite
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* Badge */}
-            <FadeIn direction="down" delay={200}>
-              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-green-200 shadow-lg">
-                <Star className="w-4 h-4 text-yellow-500 mr-2 fill-current" />
-                <span className="text-sm font-medium text-gray-700">
-                  #1 Rated Meal Delivery Service
-                </span>
-              </div>
-            </FadeIn>
-
-            {/* Main Headline */}
-            <div className="space-y-4">
-              <FadeIn direction="up" delay={400}>
-                <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                  <GradientText gradient="forest" className="block">
-                    Fresh Meals
-                  </GradientText>
-                  <span className="text-gray-900">Delivered</span>
-                </h1>
-              </FadeIn>
-
-              <FadeIn direction="up" delay={600}>
-                <div className="text-2xl lg:text-3xl font-medium text-gray-600 h-16">
-                  {showTypewriter && (
-                    <Typewriter
-                      text="Chef-crafted. Nutritionist-approved. Ready in 2 minutes."
-                      speed={80}
-                      className="text-gray-700"
-                    />
-                  )}
-                </div>
-              </FadeIn>
-            </div>
-
-            {/* Description */}
-            <FadeIn direction="up" delay={800}>
-              <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
-                Skip the meal prep, planning, and cleanup. Get fresh, never-frozen, 
-                fully prepared meals delivered to your door weekly.
+          {/* Left Side - Content */}
+          <div className="space-y-12 max-w-2xl">
+            {/* Large Headline */}
+            <div className="space-y-6">
+              <h1 
+                className="text-6xl lg:text-8xl font-bold leading-tight text-[#F5F2E8] tracking-tight"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Fresh Meals
+                <br />
+                <span className="text-[#D4B46A]">Delivered Daily</span>
+              </h1>
+              
+              {/* Subheading */}
+              <p 
+                className="text-2xl lg:text-3xl text-[#F5F2E8]/90 leading-relaxed font-light max-w-xl"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                Chef-prepared, nutritionist designed meals delivered fresh to your door.
               </p>
-            </FadeIn>
-
-            {/* Features List */}
-            <FadeIn direction="up" delay={1000}>
-              <StaggeredAnimation className="space-y-3" stagger={150}>
-                {[
-                  "Weekly menu of 30+ dietitian-approved meals",
-                  "Fresh ingredients, never frozen",
-                  "2-minute heat & eat convenience",
-                  "Flexible subscriptions, skip or cancel anytime"
-                ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{feature}</span>
-                  </div>
-                ))}
-              </StaggeredAnimation>
-            </FadeIn>
+            </div>
 
             {/* CTA Buttons */}
-            <FadeIn direction="up" delay={1200}>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <MorphButton 
-                  variant="primary" 
-                  size="lg"
-                  className="group"
-                >
-                  <div className="flex items-center justify-center">
-                    <span>Start Your Plan</span>
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </MorphButton>
-                
-                <MorphButton 
-                  variant="secondary" 
-                  size="lg"
-                  className="group bg-white/80 backdrop-blur-sm border border-gray-300 text-gray-700 hover:bg-white"
-                >
-                  <div className="flex items-center justify-center">
-                    <Play className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                    <span>Watch How It Works</span>
-                  </div>
-                </MorphButton>
-              </div>
-            </FadeIn>
+            <div className="flex flex-col sm:flex-row gap-6 pt-8">
+              {/* View Menu Button - Gold */}
+              <button 
+                className="bg-gradient-to-r from-[#D4B46A] to-[#B8964E] hover:from-[#B8964E] hover:to-[#D4B46A] text-[#0F2B1E] font-bold px-10 py-5 rounded-full transition-all duration-500 hover:scale-110 hover:shadow-2xl shadow-xl text-xl flex items-center justify-center group relative overflow-hidden"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <span className="relative z-10">View Menu</span>
+                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-all duration-300 relative z-10" />
+              </button>
+              
+              {/* How It Works Button - Off White */}
+              <button 
+                className="bg-[#F5F2E8] hover:bg-white text-[#0F2B1E] font-bold px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-lg text-xl border-2 border-[#D4B46A]/30 hover:border-[#D4B46A] group relative overflow-hidden"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[#D4B46A]/10 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
+                <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300 relative z-10" />
+                <span className="relative z-10">How It Works</span>
+              </button>
+            </div>
 
-            {/* Stats */}
-            <FadeIn direction="up" delay={1400}>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-8 border-t border-gray-200/50">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl lg:text-3xl font-bold text-green-600">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </FadeIn>
-          </div>
-
-          {/* Right Content - Hero Image */}
-          <div className="relative">
-            <FadeIn direction="left" delay={800}>
-              <div className="relative">
-                {/* Main Image Container */}
-                <div className="relative z-10 bg-white rounded-3xl shadow-2xl overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                  <img
-                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=700&fit=crop&auto=format&q=80"
-                    alt="Fresh prepared meals"
-                    className="w-full h-96 lg:h-[500px] object-cover"
-                  />
-                  
-                  {/* Overlay Elements */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                  
-                  {/* Floating Rating Badge */}
-                  <Floating intensity="subtle" className="absolute top-4 right-4">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-full px-3 py-2 shadow-lg">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-bold">4.9</span>
-                      </div>
-                    </div>
-                  </Floating>
-
-                  {/* Meal Info Card */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                      <h3 className="font-bold text-gray-900 mb-1">Mediterranean Salmon</h3>
-                      <p className="text-sm text-gray-600 mb-2">
-                        with Lemon Herb Quinoa & Roasted Vegetables
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-bold text-green-600">$12.50</span>
-                        <div className="text-xs text-gray-500">
-                          510 cal • 36g protein
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Decorative Elements */}
-                <Floating intensity="normal" className="absolute -top-4 -left-4 z-0">
-                  <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-blue-500 rounded-full opacity-20 blur-lg" />
-                </Floating>
-                
-                <Floating intensity="strong" className="absolute -bottom-6 -right-6 z-0">
-                  <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full opacity-20 blur-lg" />
-                </Floating>
-              </div>
-            </FadeIn>
-
-            {/* Testimonial Carousel */}
-            <FadeIn direction="up" delay={1600}>
-              <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50">
-                <div className="transition-all duration-500 ease-in-out">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="flex space-x-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                    <span className="text-sm font-medium text-gray-700">5.0</span>
-                  </div>
-                  
-                  <blockquote className="text-gray-700 italic mb-3">
-                    "{testimonials[currentTestimonial].text}"
-                  </blockquote>
-                  
-                  <cite className="text-sm font-semibold text-green-600">
-                    — {testimonials[currentTestimonial].author}
-                  </cite>
-                </div>
-                
-                {/* Testimonial Indicators */}
-                <div className="flex space-x-2 mt-4">
-                  {testimonials.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentTestimonial(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentTestimonial ? 'bg-green-500' : 'bg-gray-300'
-                      }`}
-                    />
+            {/* Trust Indicators */}
+            <div className="flex items-center gap-8 pt-6">
+              <div className="flex items-center gap-2 text-[#D4B46A]">
+                <div className="flex -space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
+                <span className="text-[#F5F2E8] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  4.9/5 from 12K+ reviews
+                </span>
               </div>
-            </FadeIn>
+              <div className="h-8 w-px bg-[#D4B46A]/30"></div>
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-[#D4B46A]" />
+                <span className="text-[#F5F2E8]/80 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Award-winning cuisine
+                </span>
+              </div>
+            </div>
+
+            {/* Additional descriptive text */}
+            <div className="pt-8 border-t border-[#D4B46A]/20">
+              <p 
+                className="text-lg text-[#F5F2E8]/80 leading-relaxed"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                Skip the meal prep and grocery shopping. Our expert chefs craft every meal with premium ingredients, while our nutritionists ensure perfect balance for your health goals.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Side - Image */}
+          <div className="relative flex items-center justify-center">
+            <div className="relative">
+              {/* Main Plate Image */}
+              <div className="relative z-10 bg-white rounded-3xl shadow-2xl overflow-hidden p-8 transform hover:scale-105 transition-transform duration-500">
+                {/* Placeholder for high-quality food image */}
+                <div className="w-96 h-96 lg:w-[500px] lg:h-[500px] bg-gradient-to-br from-[#F5EEDC] to-[#F5F2E8] rounded-2xl flex items-center justify-center shadow-inner">
+                  <div className="text-center space-y-4">
+                    {/* Food Image Placeholder - Replace with actual image */}
+                    <div className="w-80 h-80 bg-gradient-to-br from-orange-100 via-green-50 to-red-50 rounded-full mx-auto shadow-2xl relative overflow-hidden">
+                      {/* Simulated Chicken Breast */}
+                      <div className="absolute top-20 left-20 w-40 h-24 bg-gradient-to-br from-yellow-200 to-orange-200 rounded-full transform rotate-12 shadow-lg"></div>
+                      {/* Simulated Risotto */}
+                      <div className="absolute bottom-24 left-16 w-44 h-20 bg-gradient-to-br from-yellow-100 to-amber-100 rounded-full shadow-md"></div>
+                      {/* Simulated Spinach */}
+                      <div className="absolute top-32 right-20 w-20 h-16 bg-gradient-to-br from-green-300 to-green-400 rounded-full transform -rotate-12 shadow-md"></div>
+                      {/* Simulated Cherry Tomatoes */}
+                      <div className="absolute bottom-32 right-24 w-8 h-8 bg-gradient-to-br from-red-400 to-red-500 rounded-full shadow-md"></div>
+                      <div className="absolute bottom-28 right-16 w-6 h-6 bg-gradient-to-br from-red-400 to-red-500 rounded-full shadow-md"></div>
+                    </div>
+                    
+                    <div className="text-center space-y-2">
+                      <h3 
+                        className="text-2xl font-bold text-[#0F2B1E]"
+                        style={{ fontFamily: 'Playfair Display, serif' }}
+                      >
+                        Herb-Crusted Chicken
+                      </h3>
+                      <p 
+                        className="text-[#0F2B1E]/70"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        Over risotto with spinach & cherry tomatoes
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Price Tag */}
+                <div className="absolute -top-4 -right-4 z-20">
+                  <div className="relative group">
+                    <div className="bg-gradient-to-r from-[#FF6B35] to-[#FF8A5C] text-white px-6 py-3 rounded-full shadow-2xl transform rotate-12 hover:rotate-6 transition-all duration-500 hover:scale-110 group-hover:shadow-3xl animate-pulse">
+                      <span 
+                        className="text-xl font-bold tracking-wide"
+                        style={{ fontFamily: 'Playfair Display, serif' }}
+                      >
+                        $11.50
+                      </span>
+                      <span className="text-sm opacity-90 block -mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        per meal
+                      </span>
+                    </div>
+                    
+                    {/* Glow Effect */}
+                    <div className="absolute inset-0 bg-[#FF6B35] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity duration-500 -z-10 transform rotate-12 group-hover:rotate-6"></div>
+                    
+                    {/* Special Offer Badge */}
+                    <div className="absolute -top-2 -left-2 bg-[#D4B46A] text-[#0F2B1E] text-xs font-bold px-2 py-1 rounded-full transform -rotate-12 animate-bounce">
+                      NEW
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rich Shadow Elements */}
+              <div className="absolute -bottom-6 -right-6 w-96 h-96 lg:w-[500px] lg:h-[500px] bg-[#D4B46A]/20 rounded-3xl blur-2xl z-0"></div>
+              <div className="absolute -top-6 -left-6 w-96 h-96 lg:w-[500px] lg:h-[500px] bg-[#FF6B35]/10 rounded-3xl blur-3xl z-0"></div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <FadeIn direction="up" delay={2000}>
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex flex-col items-center space-y-2 text-gray-400">
-            <div className="w-px h-8 bg-gradient-to-b from-transparent to-gray-400" />
-            <div className="animate-bounce">
-              <div className="w-2 h-2 bg-gray-400 rounded-full" />
+      {/* Elegant Scroll Indicator */}
+      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
+        <div className="flex flex-col items-center space-y-3 text-[#D4B46A]/60">
+          <div className="text-sm font-medium tracking-wider uppercase" style={{ fontFamily: 'Inter, sans-serif' }}>
+            Scroll
+          </div>
+          <div className="w-px h-12 bg-gradient-to-b from-[#D4B46A]/60 to-transparent"></div>
+          <div className="w-2 h-2 bg-[#D4B46A]/60 rounded-full animate-bounce"></div>
+        </div>
+      </div>
+      
+      {/* Stats Bar */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-[#D4B46A]/20 via-[#D4B46A]/30 to-[#D4B46A]/20 backdrop-blur-sm border-t border-[#D4B46A]/40">
+        <div className="max-w-8xl mx-auto px-8 lg:px-12 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            {/* 50K+ Customers */}
+            <div className="space-y-2">
+              <div 
+                className="text-4xl lg:text-5xl font-bold text-[#D4B46A] tracking-wide"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                50K+
+              </div>
+              <div 
+                className="text-lg lg:text-xl font-semibold text-[#0A2418] tracking-wide"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Customers
+              </div>
+            </div>
+
+            {/* 4.8★ Rating */}
+            <div className="space-y-2">
+              <div 
+                className="text-4xl lg:text-5xl font-bold text-[#D4B46A] tracking-wide flex items-center justify-center gap-2"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                4.8
+                <span className="text-yellow-400">★</span>
+              </div>
+              <div 
+                className="text-lg lg:text-xl font-semibold text-[#0A2418] tracking-wide"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Rating
+              </div>
+            </div>
+
+            {/* 500+ Meals Created */}
+            <div className="space-y-2">
+              <div 
+                className="text-4xl lg:text-5xl font-bold text-[#D4B46A] tracking-wide"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                500+
+              </div>
+              <div 
+                className="text-lg lg:text-xl font-semibold text-[#0A2418] tracking-wide"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Meals Created
+              </div>
             </div>
           </div>
         </div>
-      </FadeIn>
+      </div>
     </div>
   );
 };

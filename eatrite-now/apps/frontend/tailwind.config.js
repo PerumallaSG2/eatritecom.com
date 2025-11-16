@@ -25,9 +25,22 @@ export default {
         'mono': ['"JetBrains Mono"', '"Fira Code"', 'Monaco', 'monospace'],
       },
 
-      // EatRite Premium Brand Colors
+      // EatRite Premium Brand Colors - World-Class UI
       colors: {
-        // Brand Primary Colors
+        // Fresh, Modern Color Palette
+        // Primary: Deep natural green for health & freshness
+        primary: {
+          DEFAULT: '#2E7D32',
+          light: '#4CAF50', 
+          dark: '#1B5E20',
+        },
+        // Secondary Accent: Warm coral/orange for appetite, energy, CTAs
+        accent: {
+          DEFAULT: '#FF8A65',
+          light: '#FFAB91',
+          dark: '#FF5722',
+        },
+        // Legacy Brand Colors
         brand: {
           gold: '#D4B46A',
           'dark-green': '#0F2B1E',

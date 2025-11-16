@@ -1,676 +1,324 @@
-/**
- * Enhanced HomePage with EatRite Design System Integration
- * Showcases the luxury design system components
- */
-
-import { useEffect, useState } from 'react'
-import { buildApiUrl } from '../config/api'
-import { mealImages, sampleMeals } from '../utils/images'
-import { useCart } from '../context/CartContext'
-import EatRiteIcons from '../components/icons/EatRiteIcons'
-import { EatRiteButton } from '../components/ui/Button/EatRiteButton'
-import { EatRiteCard } from '../components/ui/Card/EatRiteCard'
-import { EatRiteInput } from '../components/ui/Input/EatRiteInput'
-import EatRiteHomeScreen from '../components/examples/EatRiteHomeScreen'
-import { FadeIn, StaggeredAnimation } from '../components/AnimationComponents'
-
-// Keep all your existing advanced components
-import ROICalculator from '../components/ROICalculator'
-import InteractiveMealBuilder from '../components/InteractiveMealBuilder'
-import TransformationGallery from '../components/TransformationGallery'
-import LiveNutritionScore from '../components/LiveNutritionScore'
-import LiveCustomerActivity from '../components/LiveCustomerActivity'
-import CelebrityEndorsements from '../components/CelebrityEndorsements'
-import CorporatePartnerships from '../components/CorporatePartnerships'
-import RealTimeReviews from '../components/RealTimeReviews'
-import CustomerMilestoneTracking from '../components/CustomerMilestoneTracking'
-import HealthAchievementBadges from '../components/HealthAchievementBadges'
-import MealStreakCounters from '../components/MealStreakCounters'
-import ProgressVisualization from '../components/ProgressVisualization'
-import AIPoweredMealRecommendations from '../components/AIPoweredMealRecommendations'
-import DynamicPricingEngine from '../components/DynamicPricingEngine'
-import PersonalizedHealthGoals from '../components/PersonalizedHealthGoals'
-import SmartSubstitutionSuggestions from '../components/SmartSubstitutionSuggestions'
-import ExecutiveSummaryDashboard from '../components/ExecutiveSummaryDashboard'
-
-interface Meal {
-  id: string
-  name: string
-  description: string
-  short_description: string
-  calories: number
-  protein: number
-  price: number
-  image_url: string
-  is_popular: boolean
-  is_new?: boolean
-  is_top_rated?: boolean
-  dietary_tags?: string
-}
+import React from 'react'
+import { Link } from 'react-router-dom'
+import EnhancedHero from '../components/EnhancedHero'
+import PopularMeals from '../components/PopularMeals'
+import MealFilters from '../components/MealFilters'
+import { PageLoader } from '../components/Loading'
+import { useToast } from '../context/ToastContext'
+import { CheckCircle, Star, Clock, Shield, Award, Zap, Heart, TrendingUp } from 'lucide-react'
 
 const HomePage = () => {
-  const { addToCart } = useCart()
-  const [popularMeals, setPopularMeals] = useState<Meal[]>([])
-  const [loading, setLoading] = useState(true)
-  const [showDesignSystemDemo, setShowDesignSystemDemo] = useState(false)
+  const { showToast } = useToast()
 
-  useEffect(() => {
-    const fetchPopularMeals = async () => {
-      try {
-        const response = await fetch(buildApiUrl('/api/meals?popular=true&limit=3'))
-        if (response.ok) {
-          const meals = await response.json()
-          setPopularMeals(meals)
-        } else {
-          setPopularMeals(sampleMeals)
-        }
-      } catch (error) {
-        console.error('Error fetching popular meals:', error)
-        setPopularMeals(sampleMeals)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPopularMeals()
-  }, [])
-
-  // Toggle between original homepage and design system demo
-  if (showDesignSystemDemo) {
-    return (
-      <div className="min-h-screen">
-        {/* Toggle Button */}
-        <div className="fixed top-20 right-4 z-50">
-          <EatRiteButton
-            variant="secondary"
-            size="sm"
-            onClick={() => setShowDesignSystemDemo(false)}
-          >
-            Back to Homepage
-          </EatRiteButton>
-        </div>
-        
-        <EatRiteHomeScreen />
-      </div>
-    )
+  const handleFilterChange = (filters: any) => {
+    console.log('Filters applied:', filters)
+    showToast('info', 'Filters Applied', 'Your meal preferences have been updated')
   }
 
   return (
     <div className="min-h-screen">
-      {/* Design System Demo Toggle */}
-      <div className="fixed top-20 right-4 z-50">
-        <EatRiteButton
-          variant="primary"
-          size="sm"
-          onClick={() => setShowDesignSystemDemo(true)}
-          leftIcon={<EatRiteIcons.Star size="sm" />}
-        >
-          View Design System
-        </EatRiteButton>
-      </div>
+      {/* Enhanced Hero Section */}
+      <EnhancedHero />
+      
+      {/* Meal Filters - Optional */}
+      <MealFilters 
+        onFilterChange={handleFilterChange}
+        className="border-b border-[#D4B46A]/20"
+      />
+      
+      {/* Popular Meals Section with all enhancements */}
+      <PopularMeals />
 
-      {/* Promotional Banner - EatRite Luxury */}
-      <section className="bg-secondary text-accent text-center p-lg border-b border-gold">
-        <div className="container">
-          <FadeIn>
-            <p className="text-sm font-medium tracking-wider flex items-center justify-center gap-sm">
-              <EatRiteIcons.Star size="sm" color="gold" />
-              <span className="text-accent">50% OFF</span> Your First Luxury Box + 
-              <span className="text-accent"> Free Premium Meals</span> for 1 Year*
-              <EatRiteIcons.Star size="sm" color="gold" />
+      {/* How It Works Section */}
+      <section className="py-20 bg-gradient-to-br from-[#F5F2E8] to-[#F5EEDC]">
+        <div className="max-w-8xl mx-auto px-8 lg:px-12">
+          <div className="text-center mb-16">
+            <h2 
+              className="text-5xl lg:text-6xl font-bold text-[#0F2B1E] mb-6 tracking-tight"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              How It Works
+            </h2>
+            <p 
+              className="text-xl lg:text-2xl text-[#0A2418]/80 max-w-3xl mx-auto leading-relaxed"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              From selection to your table in three simple steps
             </p>
-          </FadeIn>
-        </div>
-      </section>
+          </div>
 
-      {/* Hero Section - EatRite Luxury Experience */}
-      <section className="page section relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient(135deg, var(--surface-primary), var(--surface-secondary))"></div>
-        
-        <div className="relative z-10 container text-center">
-          <FadeIn>
-            <div className="section-header">
-              <EatRiteIcons.ThreeLeaves size="xl" color="gold" className="mx-auto mb-2xl animate-pulse-gold" />
-              <h1 className="heading-1 text-5xl">
-                EatRite
-              </h1>
-              <h2 className="heading-2 text-secondary">
-                Luxury Nutrition, Delivered
-              </h2>
-            </div>
-            
-            <p className="text-xl text-tertiary m-3xl max-w-4xl mx-auto">
-              Experience premium, chef-crafted meals designed to nourish your body 
-              and elevate your lifestyle. Pure ingredients, exceptional taste.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-2xl justify-center items-center m-4xl">
-              <EatRiteButton
-                variant="primary"
-                size="lg"
-                leftIcon={<EatRiteIcons.Leaf size="md" />}
-                as="a"
-                href="/plans"
-              >
-                Start Your Journey
-              </EatRiteButton>
-              
-              <EatRiteButton
-                variant="secondary"
-                size="lg"
-                as="a"
-                href="/menu"
-              >
-                Explore Menu
-              </EatRiteButton>
-            </div>
-
-            {/* Search Section with Luxury Design */}
-            <div className="max-w-2xl mx-auto">
-              <EatRiteInput
-                placeholder="Search gourmet meals, ingredients, or dietary preferences..."
-                size="lg"
-                leftIcon={<EatRiteIcons.Search size="md" />}
-                rightIcon={<EatRiteIcons.Filter size="md" />}
-              />
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Popular Meals - Luxury Collection */}
-      {!loading && popularMeals.length > 0 && (
-        <section className="section bg-secondary">
-          <div className="container">
-            <FadeIn>
-              <div className="text-center section-header">
-                <h2 className="heading-2">
-                  Chef's Premium Selection
-                </h2>
-                <p className="text-xl text-secondary max-w-3xl mx-auto">
-                  Discover our most celebrated meals, crafted with luxury ingredients and 
-                  perfected by world-class chefs
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Step 1 */}
+            <div className="text-center space-y-6 group">
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-r from-[#D4B46A] to-[#B8964E] text-[#0F2B1E] rounded-3xl flex items-center justify-center font-bold text-3xl mx-auto shadow-2xl group-hover:scale-110 transition-transform duration-300" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  1
+                </div>
+                <div className="absolute inset-0 bg-[#D4B46A] rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+              </div>
+              <div>
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Star className="w-8 h-8 text-[#D4B46A]" />
+                  <h3 
+                    className="text-3xl font-bold text-[#0F2B1E]" 
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    Choose Your Meals
+                  </h3>
+                </div>
+                <p className="text-[#0F2B1E]/70 leading-relaxed text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Pick from 50+ weekly options crafted by our expert chefs. Filter by dietary preferences, taste profiles, and nutritional goals.
                 </p>
               </div>
-            </FadeIn>
-            
-            <StaggeredAnimation>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2xl">
-                {popularMeals.map((meal) => (
-                  <EatRiteCard 
-                    key={meal.id}
-                    variant="premium" 
-                    className="card card-highlight overflow-hidden"
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center space-y-6 group">
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-r from-[#D4B46A] to-[#B8964E] text-[#0F2B1E] rounded-3xl flex items-center justify-center font-bold text-3xl mx-auto shadow-2xl group-hover:scale-110 transition-transform duration-300" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  2
+                </div>
+                <div className="absolute inset-0 bg-[#D4B46A] rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+              </div>
+              <div>
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Award className="w-8 h-8 text-[#D4B46A]" />
+                  <h3 
+                    className="text-3xl font-bold text-[#0F2B1E]" 
+                    style={{ fontFamily: 'Playfair Display, serif' }}
                   >
-                    <div className="relative">
-                      <div className="h-48 bg-tertiary rounded-card m-lg overflow-hidden">
-                        <img 
-                          src={meal.image_url || mealImages.grilledChicken} 
-                          alt={meal.name}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                        />
-                        
-                        {meal.is_popular && (
-                          <div className="absolute top-3 left-3">
-                            <div className="chip selected flex items-center gap-xs">
-                              <EatRiteIcons.Star size="sm" />
-                              Chef's Choice
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="heading-4 text-accent m-md">
-                        {meal.name}
-                      </h3>
-                      <p className="text-tertiary text-sm m-lg">
-                        {meal.short_description || meal.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between m-lg">
-                        <div className="flex items-center gap-lg text-sm">
-                          <div className="flex items-center gap-xs text-tertiary">
-                            <EatRiteIcons.Activity size="sm" color="gold" />
-                            {meal.calories} cal
-                          </div>
-                          <div className="flex items-center gap-xs text-tertiary">
-                            <EatRiteIcons.Target size="sm" color="gold" />
-                            {meal.protein}g protein
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="heading-3 text-accent">
-                          ${meal.price}
-                        </span>
-                        <EatRiteButton
-                          variant="primary"
-                          size="sm"
-                          onClick={() => addToCart(meal)}
-                          leftIcon={<EatRiteIcons.Plus size="sm" />}
-                        >
-                          Add to Cart
-                        </EatRiteButton>
-                      </div>
-                    </div>
-                  </EatRiteCard>
+                    We Prepare
+                  </h3>
+                </div>
+                <p className="text-[#0F2B1E]/70 leading-relaxed text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Freshly cooked by award-winning chefs every morning using premium, locally-sourced ingredients. No preservatives, just pure nutrition.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center space-y-6 group">
+              <div className="relative">
+                <div className="w-24 h-24 bg-gradient-to-r from-[#D4B46A] to-[#B8964E] text-[#0F2B1E] rounded-3xl flex items-center justify-center font-bold text-3xl mx-auto shadow-2xl group-hover:scale-110 transition-transform duration-300" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  3
+                </div>
+                <div className="absolute inset-0 bg-[#D4B46A] rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+              </div>
+              <div>
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Zap className="w-8 h-8 text-[#D4B46A]" />
+                  <h3 
+                    className="text-3xl font-bold text-[#0F2B1E]" 
+                    style={{ fontFamily: 'Playfair Display, serif' }}
+                  >
+                    Delivered Fresh
+                  </h3>
+                </div>
+                <p className="text-[#0F2B1E]/70 leading-relaxed text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Arrives chilled & ready to heat at your doorstep. Temperature-controlled delivery ensures optimal freshness and taste.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features & Benefits */}
+      <section className="py-20 bg-white">
+        <div className="max-w-8xl mx-auto px-8 lg:px-12">
+          <div className="text-center mb-16">
+            <h2 
+              className="text-5xl lg:text-6xl font-bold text-[#0F2B1E] mb-6 tracking-tight"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              Why Choose EatRite?
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Feature 1 */}
+            <div className="text-center space-y-6 p-8 bg-gradient-to-b from-[#F5EEDC] to-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#0F2B1E] to-[#0A2418] rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <Shield className="w-10 h-10 text-[#D4B46A]" />
+              </div>
+              <h3 
+                className="text-2xl font-bold text-[#0F2B1E]" 
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Premium Quality
+              </h3>
+              <p className="text-[#0F2B1E]/70 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Sourced from the finest farms and prepared with meticulous attention to detail.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="text-center space-y-6 p-8 bg-gradient-to-b from-[#F5EEDC] to-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#0F2B1E] to-[#0A2418] rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <Heart className="w-10 h-10 text-[#D4B46A]" />
+              </div>
+              <h3 
+                className="text-2xl font-bold text-[#0F2B1E]" 
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Health Focused
+              </h3>
+              <p className="text-[#0F2B1E]/70 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Nutritionist-designed meals that support your wellness goals without compromising taste.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="text-center space-y-6 p-8 bg-gradient-to-b from-[#F5EEDC] to-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#0F2B1E] to-[#0A2418] rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <Clock className="w-10 h-10 text-[#D4B46A]" />
+              </div>
+              <h3 
+                className="text-2xl font-bold text-[#0F2B1E]" 
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Time Saving
+              </h3>
+              <p className="text-[#0F2B1E]/70 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Skip meal planning, shopping, and prep. More time for what matters most to you.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="text-center space-y-6 p-8 bg-gradient-to-b from-[#F5EEDC] to-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#0F2B1E] to-[#0A2418] rounded-2xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <TrendingUp className="w-10 h-10 text-[#D4B46A]" />
+              </div>
+              <h3 
+                className="text-2xl font-bold text-[#0F2B1E]" 
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Results Driven
+              </h3>
+              <p className="text-[#0F2B1E]/70 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Track your progress with our integrated health monitoring and achievement system.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof & Testimonials */}
+      <section className="py-20 bg-gradient-to-r from-[#0F2B1E] to-[#0A2418]">
+        <div className="max-w-8xl mx-auto px-8 lg:px-12">
+          <div className="text-center mb-16">
+            <h2 
+              className="text-5xl lg:text-6xl font-bold text-[#F5F2E8] mb-6 tracking-tight"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              Loved by Thousands
+            </h2>
+            <p 
+              className="text-xl lg:text-2xl text-[#D4B46A] max-w-3xl mx-auto leading-relaxed"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Join our community of health-conscious food lovers
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-gradient-to-b from-[#F5F2E8] to-white p-8 rounded-2xl shadow-2xl">
+              <div className="flex items-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-            </StaggeredAnimation>
-          </div>
-        </section>
-      )}
-
-      {/* Stats Section with Design System */}
-      <section className="py-20 bg-eatrite-black-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Trusted Excellence
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Numbers that speak to our commitment to luxury and quality
+              <p className="text-[#0F2B1E] mb-6 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                "EatRite completely transformed my relationship with food. The meals are restaurant-quality and I've never felt healthier!"
               </p>
-            </div>
-          </FadeIn>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <EatRiteCard variant="flat" className="text-center">
-              <div className="mb-4">
-                <EatRiteIcons.ChefHat size="lg" color="gold" className="mx-auto" />
-              </div>
-              <div className="font-serif text-4xl font-bold text-gradient-gold mb-2">500+</div>
-              <div className="text-eatrite-text-tertiary text-sm uppercase tracking-wide">Premium Meals</div>
-            </EatRiteCard>
-
-            <EatRiteCard variant="flat" className="text-center">
-              <div className="mb-4">
-                <EatRiteIcons.Heart size="lg" color="gold" className="mx-auto" />
-              </div>
-              <div className="font-serif text-4xl font-bold text-gradient-gold mb-2">50K+</div>
-              <div className="text-eatrite-text-tertiary text-sm uppercase tracking-wide">Happy Customers</div>
-            </EatRiteCard>
-
-            <EatRiteCard variant="flat" className="text-center">
-              <div className="mb-4">
-                <EatRiteIcons.Truck size="lg" color="gold" className="mx-auto" />
-              </div>
-              <div className="font-serif text-4xl font-bold text-gradient-gold mb-2">24/7</div>
-              <div className="text-eatrite-text-tertiary text-sm uppercase tracking-wide">Fresh Delivery</div>
-            </EatRiteCard>
-
-            <EatRiteCard variant="flat" className="text-center">
-              <div className="mb-4">
-                <EatRiteIcons.Star size="lg" color="gold" className="mx-auto" />
-              </div>
-              <div className="font-serif text-4xl font-bold text-gradient-gold mb-2">4.9★</div>
-              <div className="text-eatrite-text-tertiary text-sm uppercase tracking-wide">Average Rating</div>
-            </EatRiteCard>
-          </div>
-        </div>
-      </section>
-
-      {/* Keep all your existing advanced sections */}
-      
-      {/* Interactive Value Proposition Section */}
-      <section className="py-20 bg-gradient-to-br from-eatrite-black-900 via-eatrite-black-850 to-eatrite-black-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Discover Your Personalized Luxury
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Experience the power of personalized nutrition with our premium interactive tools
-              </p>
-            </div>
-          </FadeIn>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <ROICalculator />
-            <InteractiveMealBuilder />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <TransformationGallery />
-            <LiveNutritionScore />
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof & Trust Signals */}
-      <section className="py-20 bg-eatrite-black-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Trusted by Elite Clientele Worldwide
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Join our exclusive community of discerning customers and industry partners
-              </p>
-            </div>
-          </FadeIn>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <LiveCustomerActivity />
-            <CelebrityEndorsements />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <CorporatePartnerships />
-            <RealTimeReviews />
-          </div>
-        </div>
-      </section>
-
-      {/* Gamification & Achievement System */}
-      <section className="py-20 bg-gradient-to-br from-eatrite-black-950 via-eatrite-black-900 to-eatrite-black-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Track Your Wellness Journey
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Celebrate your achievements and stay motivated with our luxury wellness features
-              </p>
-            </div>
-          </FadeIn>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <CustomerMilestoneTracking />
-            <HealthAchievementBadges />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <MealStreakCounters />
-            <ProgressVisualization />
-          </div>
-        </div>
-      </section>
-
-      {/* Dynamic Personalization Engine */}
-      <section className="py-20 bg-eatrite-black-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                AI-Powered Luxury Personalization
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Experience next-generation personalization with our premium AI technology
-              </p>
-            </div>
-          </FadeIn>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <AIPoweredMealRecommendations />
-            <DynamicPricingEngine />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <PersonalizedHealthGoals />
-            <SmartSubstitutionSuggestions />
-          </div>
-        </div>
-      </section>
-
-      {/* Business Intelligence Dashboard */}
-      <section className="py-20 bg-gradient-to-br from-eatrite-black-800 via-eatrite-black-900 to-eatrite-black-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Business Intelligence & Impact
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Real-time insights into our business performance and customer success
-              </p>
-            </div>
-          </FadeIn>
-          
-          <ExecutiveSummaryDashboard />
-        </div>
-      </section>
-
-      {/* Enhanced Pricing Plans with Design System */}
-      <section className="py-20 bg-eatrite-black-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-gradient-gold mb-6">
-                Select Your Luxury Experience
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Premium meal plans crafted for the discerning palate. Complete flexibility, 
-                cancel anytime.
-              </p>
-            </div>
-          </FadeIn>
-          
-          <StaggeredAnimation>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Discovery Plan */}
-              <EatRiteCard variant="premium" className="text-center p-8 hover:shadow-gold transition-all">
-                <div className="mb-6">
-                  <EatRiteIcons.Leaf size="lg" color="gold" className="mx-auto mb-4" />
-                  <h3 className="font-serif text-2xl font-bold text-eatrite-gold-400 mb-2">
-                    Discovery
-                  </h3>
-                  <p className="text-eatrite-text-tertiary">Perfect for trying our luxury cuisine</p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#D4B46A] rounded-full flex items-center justify-center text-[#0F2B1E] font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  S
                 </div>
-                
-                <div className="mb-8">
-                  <div className="font-serif text-5xl font-bold text-gradient-gold mb-2">$60</div>
-                  <div className="text-eatrite-text-tertiary">$15.00 per gourmet meal</div>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Complimentary white-glove delivery</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Skip or pause anytime</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Premium organic ingredients</span>
-                  </div>
-                </div>
-                
-                <EatRiteButton variant="primary" size="lg" className="w-full">
-                  Begin Discovery
-                </EatRiteButton>
-              </EatRiteCard>
-              
-              {/* Connoisseur Plan - Most Popular */}
-              <EatRiteCard variant="premium" className="text-center p-8 relative transform scale-105 border-2 border-eatrite-gold-500 shadow-gold">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-gold text-eatrite-text-inverse px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider shadow-gold-sm">
-                    Most Elite
-                  </span>
-                </div>
-                
-                <div className="mb-6">
-                  <EatRiteIcons.ThreeLeaves size="lg" color="gold" className="mx-auto mb-4" />
-                  <h3 className="font-serif text-2xl font-bold text-eatrite-gold-300 mb-2">
-                    Connoisseur
-                  </h3>
-                  <p className="text-eatrite-text-tertiary">Optimal luxury dining experience</p>
-                </div>
-                
-                <div className="mb-8">
-                  <div className="font-serif text-5xl font-bold text-gradient-gold mb-2">$108</div>
-                  <div className="text-eatrite-text-tertiary">$13.50 per gourmet meal</div>
-                  <div className="text-eatrite-gold-400 text-sm font-medium mt-2">
-                    Save $12 vs Discovery plan
-                  </div>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Complimentary white-glove delivery</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Skip or pause anytime</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Premium organic ingredients</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Star size="sm" color="gold" />
-                    <span className="text-eatrite-gold-400 font-medium">Optimal value per meal</span>
-                  </div>
-                </div>
-                
-                <EatRiteButton variant="primary" size="lg" className="w-full animate-glow">
-                  Choose Connoisseur
-                </EatRiteButton>
-              </EatRiteCard>
-              
-              {/* Epicurean Plan */}
-              <EatRiteCard variant="premium" className="text-center p-8 hover:shadow-gold transition-all">
-                <div className="mb-6">
-                  <EatRiteIcons.ChefHat size="lg" color="gold" className="mx-auto mb-4" />
-                  <h3 className="font-serif text-2xl font-bold text-eatrite-gold-400 mb-2">
-                    Epicurean
-                  </h3>
-                  <p className="text-eatrite-text-tertiary">Ultimate culinary indulgence</p>
-                </div>
-                
-                <div className="mb-8">
-                  <div className="font-serif text-5xl font-bold text-gradient-gold mb-2">$144</div>
-                  <div className="text-eatrite-text-tertiary">$12.00 per gourmet meal</div>
-                  <div className="text-eatrite-gold-400 text-sm font-medium mt-2">
-                    Save $36 vs Discovery plan
-                  </div>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Complimentary white-glove delivery</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Skip or pause anytime</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Check size="sm" color="gold" />
-                    <span className="text-eatrite-text-secondary">Premium organic ingredients</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <EatRiteIcons.Star size="sm" color="gold" />
-                    <span className="text-eatrite-gold-400 font-medium">Maximum luxury savings</span>
-                  </div>
-                </div>
-                
-                <EatRiteButton variant="primary" size="lg" className="w-full">
-                  Select Epicurean
-                </EatRiteButton>
-              </EatRiteCard>
-            </div>
-          </StaggeredAnimation>
-          
-          {/* Enhanced Plan Features */}
-          <FadeIn>
-            <div className="mt-20 text-center">
-              <h3 className="font-serif text-3xl font-bold text-gradient-gold mb-12">
-                Every Plan Includes Premium Benefits
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-                <div className="text-center">
-                  <EatRiteCard variant="flat" className="p-6 h-full flex flex-col items-center">
-                    <EatRiteIcons.Truck size="lg" color="gold" className="mb-4" />
-                    <h4 className="font-serif font-semibold text-eatrite-gold-400 mb-2">
-                      White-Glove Delivery
-                    </h4>
-                    <p className="text-sm text-eatrite-text-tertiary">
-                      Complimentary premium delivery service
-                    </p>
-                  </EatRiteCard>
-                </div>
-                
-                <div className="text-center">
-                  <EatRiteCard variant="flat" className="p-6 h-full flex flex-col items-center">
-                    <EatRiteIcons.Clock size="lg" color="gold" className="mb-4" />
-                    <h4 className="font-serif font-semibold text-eatrite-gold-400 mb-2">
-                      Complete Flexibility
-                    </h4>
-                    <p className="text-sm text-eatrite-text-tertiary">
-                      Skip, pause, or modify anytime
-                    </p>
-                  </EatRiteCard>
-                </div>
-                
-                <div className="text-center">
-                  <EatRiteCard variant="flat" className="p-6 h-full flex flex-col items-center">
-                    <EatRiteIcons.Heart size="lg" color="gold" className="mb-4" />
-                    <h4 className="font-serif font-semibold text-eatrite-gold-400 mb-2">
-                      No Commitment
-                    </h4>
-                    <p className="text-sm text-eatrite-text-tertiary">
-                      Cancel anytime, no questions asked
-                    </p>
-                  </EatRiteCard>
-                </div>
-                
-                <div className="text-center">
-                  <EatRiteCard variant="flat" className="p-6 h-full flex flex-col items-center">
-                    <EatRiteIcons.Leaf size="lg" color="gold" className="mb-4" />
-                    <h4 className="font-serif font-semibold text-eatrite-gold-400 mb-2">
-                      Chef's Quality
-                    </h4>
-                    <p className="text-sm text-eatrite-text-tertiary">
-                      Michelin-inspired gourmet cuisine
-                    </p>
-                  </EatRiteCard>
+                <div>
+                  <p className="font-bold text-[#0F2B1E]" style={{ fontFamily: 'Playfair Display, serif' }}>Sarah Chen</p>
+                  <p className="text-sm text-[#0F2B1E]/60" style={{ fontFamily: 'Inter, sans-serif' }}>Marketing Executive</p>
                 </div>
               </div>
             </div>
-          </FadeIn>
+
+            {/* Testimonial 2 */}
+            <div className="bg-gradient-to-b from-[#F5F2E8] to-white p-8 rounded-2xl shadow-2xl">
+              <div className="flex items-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-[#0F2B1E] mb-6 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                "As a busy parent, EatRite is a lifesaver. Healthy, delicious meals without the hassle. My kids love them too!"
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#D4B46A] rounded-full flex items-center justify-center text-[#0F2B1E] font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  M
+                </div>
+                <div>
+                  <p className="font-bold text-[#0F2B1E]" style={{ fontFamily: 'Playfair Display, serif' }}>Mike Rodriguez</p>
+                  <p className="text-sm text-[#0F2B1E]/60" style={{ fontFamily: 'Inter, sans-serif' }}>Father of Two</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-gradient-to-b from-[#F5F2E8] to-white p-8 rounded-2xl shadow-2xl">
+              <div className="flex items-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-[#0F2B1E] mb-6 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                "The convenience and quality are unmatched. I've lost 15 pounds and feel amazing. EatRite is worth every penny!"
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#D4B46A] rounded-full flex items-center justify-center text-[#0F2B1E] font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  A
+                </div>
+                <div>
+                  <p className="font-bold text-[#0F2B1E]" style={{ fontFamily: 'Playfair Display, serif' }}>Alex Johnson</p>
+                  <p className="text-sm text-[#0F2B1E]/60" style={{ fontFamily: 'Inter, sans-serif' }}>Fitness Enthusiast</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* CTA Section with Design System */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <EatRiteCard variant="premium" className="p-12 text-center">
-            <div className="mb-8">
-              <EatRiteIcons.ThreeLeaves size="xl" color="gold" className="mx-auto mb-6 animate-glow" />
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-eatrite-gold-400 mb-6">
-                Ready to Transform Your Nutrition?
-              </h2>
-              <p className="text-xl text-eatrite-text-secondary leading-relaxed max-w-2xl mx-auto">
-                Join thousands who've discovered the perfect balance of luxury, health, and convenience.
-              </p>
-            </div>
-            
+      {/* Final CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-[#F5EEDC] to-[#F5F2E8]">
+        <div className="max-w-6xl mx-auto text-center px-8 lg:px-12">
+          <div className="bg-white rounded-3xl p-12 shadow-2xl">
+            <h2 
+              className="text-4xl lg:text-6xl font-bold text-[#0F2B1E] mb-6 tracking-tight" 
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              Ready to Transform Your Health?
+            </h2>
+            <p className="text-xl lg:text-2xl text-[#0F2B1E]/70 mb-10 leading-relaxed max-w-4xl mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Join thousands who have discovered the luxury of effortless, healthy eating. Start your journey today with our chef-crafted meals.
+            </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <EatRiteButton 
-                variant="primary" 
-                size="lg"
-                leftIcon={<EatRiteIcons.ArrowRight size="md" />}
-                as="a"
-                href="/plans"
+              <Link
+                to="/plans"
+                className="bg-gradient-to-r from-[#FF6B35] to-[#E55A2B] hover:from-[#E55A2B] hover:to-[#FF6B35] text-white px-12 py-5 rounded-2xl font-bold text-xl transition-all duration-300 inline-flex items-center justify-center shadow-2xl hover:shadow-3xl hover:scale-105 gap-3"
+                style={{ fontFamily: 'Playfair Display, serif' }}
               >
-                Start Your Plan
-              </EatRiteButton>
-              <EatRiteButton variant="ghost" size="lg">
-                Learn More
-              </EatRiteButton>
+                <CheckCircle className="w-6 h-6" />
+                Get Started Today
+              </Link>
+              <Link
+                to="/menu"
+                className="bg-[#0F2B1E] hover:bg-[#0A2418] text-[#F5F2E8] px-12 py-5 rounded-2xl font-bold text-xl transition-all duration-300 inline-flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-105"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Explore Menu
+              </Link>
             </div>
-          </EatRiteCard>
+          </div>
         </div>
       </section>
     </div>
