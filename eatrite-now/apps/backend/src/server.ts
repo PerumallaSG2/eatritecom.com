@@ -83,8 +83,7 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
   try {
-    // Database initialization temporarily disabled for development
-    
+    // Start server first
     app.listen(PORT, () => {
       console.log(`🚀 EatRite API server running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -94,6 +93,16 @@ const startServer = async () => {
         console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL}`);
       }
     });
+
+    // Try to initialize database connection (non-blocking)
+    try {
+      const { initializeDatabase } = await import('./services/database');
+      await initializeDatabase();
+      console.log('🎉 Database integration ready!');
+    } catch (dbError) {
+      console.log('⚠️  Database not available - using fallback mode');
+      console.log('ℹ️  To enable database features, ensure SQL Server is running on localhost:1433');
+    }
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);
@@ -103,13 +112,23 @@ const startServer = async () => {
 // Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...');
-  // Database cleanup temporarily disabled
+  try {
+    const { closeDatabase } = await import('./services/database');
+    await closeDatabase();
+  } catch (error) {
+    console.error('Error closing database:', error);
+  }
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('Shutting down gracefully...');
-  // Database cleanup temporarily disabled
+  try {
+    const { closeDatabase } = await import('./services/database');
+    await closeDatabase();
+  } catch (error) {
+    console.error('Error closing database:', error);
+  }
   process.exit(0);
 });
 
