@@ -1,5 +1,4 @@
 /* Import EatRite Premium Design System */
-@import './styles/premium-design-system.css';
 @import './styles/globals.css';
 
 @tailwind base;
