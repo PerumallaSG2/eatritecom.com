@@ -10,44 +10,41 @@ export const SimplifiedHero = () => {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-dark"></div>
-      
+
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <FadeIn>
           {/* Simplified branding */}
           <div className="mb-8">
-            <EatRiteIcons.ThreeLeaves size="lg" color="gold" className="mx-auto mb-4" />
+            <EatRiteIcons.ThreeLeaves
+              size="lg"
+              color="gold"
+              className="mx-auto mb-4"
+            />
             <h1 className="font-serif text-5xl md:text-6xl font-bold text-gradient-gold mb-4 leading-tight">
               EatRite
             </h1>
           </div>
-          
+
           {/* Clear value proposition */}
           <h2 className="text-2xl md:text-3xl text-eatrite-text-primary mb-6 font-medium">
             Chef-Crafted Meals, Delivered Fresh
           </h2>
-          
+
           <p className="text-lg text-eatrite-text-secondary mb-8 max-w-2xl mx-auto">
             Premium ingredients, nutritionist-approved recipes, zero prep time.
-            <span className="text-eatrite-gold-400 font-medium"> Starting at $12.99/meal.</span>
+            <span className="text-eatrite-gold-400 font-medium">
+              {' '}
+              Starting at $12.99/meal.
+            </span>
           </p>
-          
+
           {/* Simplified CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <EatRiteButton
-              variant="primary"
-              size="lg"
-              as="a"
-              href="/menu"
-            >
+            <EatRiteButton variant="primary" size="lg" as="a" href="/menu">
               View Our Meals
             </EatRiteButton>
-            
-            <EatRiteButton
-              variant="ghost"
-              size="lg"
-              as="a"
-              href="/plans"
-            >
+
+            <EatRiteButton variant="ghost" size="lg" as="a" href="/plans">
               See Pricing
             </EatRiteButton>
           </div>

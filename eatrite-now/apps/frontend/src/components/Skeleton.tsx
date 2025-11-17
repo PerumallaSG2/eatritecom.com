@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 interface SkeletonProps {
-  className?: string;
-  width?: string;
-  height?: string;
-  rounded?: boolean;
-  animate?: boolean;
+  className?: string
+  width?: string
+  height?: string
+  rounded?: boolean
+  animate?: boolean
 }
 
 const Skeleton: React.FC<SkeletonProps> = ({
@@ -13,7 +13,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   width = '100%',
   height = '1rem',
   rounded = false,
-  animate = true
+  animate = true,
 }) => {
   return (
     <div
@@ -22,14 +22,16 @@ const Skeleton: React.FC<SkeletonProps> = ({
       } ${className}`}
       style={{ width, height }}
     />
-  );
-};
-
-interface MealCardSkeletonProps {
-  count?: number;
+  )
 }
 
-export const MealCardSkeleton: React.FC<MealCardSkeletonProps> = ({ count = 1 }) => {
+interface MealCardSkeletonProps {
+  count?: number
+}
+
+export const MealCardSkeleton: React.FC<MealCardSkeletonProps> = ({
+  count = 1,
+}) => {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
@@ -40,7 +42,7 @@ export const MealCardSkeleton: React.FC<MealCardSkeletonProps> = ({ count = 1 })
           {/* Image Skeleton */}
           <div className="relative aspect-[4/3]">
             <Skeleton height="100%" className="rounded-none" />
-            
+
             {/* Badge Skeletons */}
             <div className="absolute top-3 left-3">
               <Skeleton width="60px" height="24px" rounded />
@@ -67,7 +69,7 @@ export const MealCardSkeleton: React.FC<MealCardSkeletonProps> = ({ count = 1 })
 
             {/* Nutrition Skeleton */}
             <div className="grid grid-cols-3 gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3].map(i => (
                 <div key={i} className="text-center">
                   <Skeleton height="1rem" className="mb-1" />
                   <Skeleton height="0.75rem" width="60%" className="mx-auto" />
@@ -81,8 +83,8 @@ export const MealCardSkeleton: React.FC<MealCardSkeletonProps> = ({ count = 1 })
         </div>
       ))}
     </>
-  );
-};
+  )
+}
 
 interface SearchSkeletonProps {}
 
@@ -98,7 +100,7 @@ export const SearchSkeleton: React.FC<SearchSkeletonProps> = () => {
 
         {/* Quick Filters Skeleton */}
         <div className="flex gap-2 mb-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+          {[1, 2, 3, 4, 5, 6].map(i => (
             <Skeleton key={i} width="80px" height="2rem" rounded />
           ))}
         </div>
@@ -110,8 +112,8 @@ export const SearchSkeleton: React.FC<SearchSkeletonProps> = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 interface HeroSkeletonProps {}
 
@@ -128,7 +130,7 @@ export const HeroSkeleton: React.FC<HeroSkeletonProps> = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Skeleton;
+export default Skeleton

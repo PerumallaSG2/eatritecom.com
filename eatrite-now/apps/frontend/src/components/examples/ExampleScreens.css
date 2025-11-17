@@ -6,7 +6,10 @@
 /* Base Screen Layout */
 .eatrite-screen {
   min-height: 100vh;
-  background: var(--gradient-dark, linear-gradient(180deg, #000000 0%, #0a0a0a 100%));
+  background: var(
+    --gradient-dark,
+    linear-gradient(180deg, #000000 0%, #0a0a0a 100%)
+  );
   color: var(--color-text-primary, #ffffff);
   padding: 0;
   overflow-x: hidden;
@@ -26,7 +29,10 @@
   font-family: var(--font-serif, Georgia, serif);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -69,7 +75,10 @@
   font-family: var(--font-serif, Georgia, serif);
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 700;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,7 +117,10 @@
 .eatrite-hero__image-placeholder {
   width: 400px;
   height: 400px;
-  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  background: var(
+    --gradient-surface,
+    linear-gradient(135deg, #1a1a1a 0%, #262626 100%)
+  );
   border: 2px solid var(--color-primary-700, #a1742f);
   border-radius: 50%;
   display: flex;
@@ -125,15 +137,22 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   border-radius: 50%;
   z-index: -1;
   animation: rotate 8s linear infinite;
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* === SEARCH SECTION === */
@@ -220,7 +239,10 @@
 
 .eatrite-meal-card__image {
   height: 200px;
-  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  background: var(
+    --gradient-surface,
+    linear-gradient(135deg, #1a1a1a 0%, #262626 100%)
+  );
   border-radius: var(--radius-lg, 0.5rem);
   margin-bottom: var(--spacing-4, 1rem);
   position: relative;
@@ -285,7 +307,10 @@
   font-family: var(--font-serif, Georgia, serif);
   font-size: var(--font-size-xl, 1.25rem);
   font-weight: 700;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -321,7 +346,10 @@
   font-family: var(--font-serif, Georgia, serif);
   font-size: var(--font-size-4xl, 2.25rem);
   font-weight: 700;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -381,37 +409,37 @@
     padding: var(--spacing-12, 3rem) var(--spacing-4, 1rem);
     text-align: center;
   }
-  
+
   .eatrite-hero__image-placeholder {
     width: 280px;
     height: 280px;
   }
-  
+
   .eatrite-hero__actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .eatrite-categories__grid,
   .eatrite-meals-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .eatrite-stats__grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-4, 1rem);
   }
-  
+
   .eatrite-stat-card {
     justify-content: center;
     text-align: center;
   }
-  
+
   .eatrite-cta__actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .eatrite-meal-card__actions {
     flex-direction: column;
     gap: var(--spacing-3, 0.75rem);
@@ -428,11 +456,11 @@
     padding-left: var(--spacing-3, 0.75rem);
     padding-right: var(--spacing-3, 0.75rem);
   }
-  
+
   .eatrite-hero {
     padding: var(--spacing-8, 2rem) var(--spacing-3, 0.75rem);
   }
-  
+
   .eatrite-hero__image-placeholder {
     width: 220px;
     height: 220px;
@@ -444,7 +472,7 @@
   .eatrite-hero__image-placeholder::before {
     animation: none;
   }
-  
+
   .eatrite-meal-card,
   .eatrite-category-card {
     transition: none;
@@ -463,7 +491,7 @@
     -webkit-text-fill-color: unset;
     color: #ffcc00;
   }
-  
+
   .eatrite-meal-card__badge,
   .eatrite-stat {
     border: 2px solid #ffcc00;

@@ -10,14 +10,14 @@ export const enhancedTheme = {
       200: '#bbf7d0',
       300: '#86efac',
       400: '#4ade80',
-      500: '#22c55e',  // Main brand green
+      500: '#22c55e', // Main brand green
       600: '#16a34a',
       700: '#15803d',
       800: '#166534',
       900: '#14532d',
-      950: '#052e16'
+      950: '#052e16',
     },
-    
+
     // Secondary Colors - Sophisticated Blue
     secondary: {
       50: '#eff6ff',
@@ -30,7 +30,7 @@ export const enhancedTheme = {
       700: '#1d4ed8',
       800: '#1e40af',
       900: '#1e3a8a',
-      950: '#172554'
+      950: '#172554',
     },
 
     // Accent Colors - Warm Orange
@@ -40,12 +40,12 @@ export const enhancedTheme = {
       200: '#fed7aa',
       300: '#fdba74',
       400: '#fb923c',
-      500: '#f97316',  // Main accent color
+      500: '#f97316', // Main accent color
       600: '#ea580c',
       700: '#c2410c',
       800: '#9a3412',
       900: '#7c2d12',
-      950: '#431407'
+      950: '#431407',
     },
 
     // Success Colors - Fresh Green
@@ -60,7 +60,7 @@ export const enhancedTheme = {
       700: '#047857',
       800: '#065f46',
       900: '#064e3b',
-      950: '#022c22'
+      950: '#022c22',
     },
 
     // Warning Colors - Amber
@@ -75,7 +75,7 @@ export const enhancedTheme = {
       700: '#b45309',
       800: '#92400e',
       900: '#78350f',
-      950: '#451a03'
+      950: '#451a03',
     },
 
     // Error Colors - Red
@@ -90,7 +90,7 @@ export const enhancedTheme = {
       700: '#b91c1c',
       800: '#991b1b',
       900: '#7f1d1d',
-      950: '#450a0a'
+      950: '#450a0a',
     },
 
     // Neutral Colors - Sophisticated Grays
@@ -105,15 +105,15 @@ export const enhancedTheme = {
       700: '#404040',
       800: '#262626',
       900: '#171717',
-      950: '#0a0a0a'
-    }
+      950: '#0a0a0a',
+    },
   },
 
   typography: {
     fontFamilies: {
       display: ['Inter', 'system-ui', 'sans-serif'],
       body: ['Inter', 'system-ui', 'sans-serif'],
-      mono: ['JetBrains Mono', 'Consolas', 'monospace']
+      mono: ['JetBrains Mono', 'Consolas', 'monospace'],
     },
 
     fontSizes: {
@@ -129,7 +129,7 @@ export const enhancedTheme = {
       '6xl': ['3.75rem', { lineHeight: '1' }],
       '7xl': ['4.5rem', { lineHeight: '1' }],
       '8xl': ['6rem', { lineHeight: '1' }],
-      '9xl': ['8rem', { lineHeight: '1' }]
+      '9xl': ['8rem', { lineHeight: '1' }],
     },
 
     fontWeights: {
@@ -141,8 +141,8 @@ export const enhancedTheme = {
       semibold: '600',
       bold: '700',
       extrabold: '800',
-      black: '900'
-    }
+      black: '900',
+    },
   },
 
   spacing: {
@@ -180,7 +180,7 @@ export const enhancedTheme = {
     64: '16rem',
     72: '18rem',
     80: '20rem',
-    96: '24rem'
+    96: '24rem',
   },
 
   borderRadius: {
@@ -192,7 +192,7 @@ export const enhancedTheme = {
     xl: '0.75rem',
     '2xl': '1rem',
     '3xl': '1.5rem',
-    full: '9999px'
+    full: '9999px',
   },
 
   shadows: {
@@ -203,7 +203,7 @@ export const enhancedTheme = {
     xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
     '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
     inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
-    none: '0 0 #0000'
+    none: '0 0 #0000',
   },
 
   gradients: {
@@ -214,7 +214,7 @@ export const enhancedTheme = {
     sunset: 'linear-gradient(135deg, #f97316 0%, #dc2626 50%, #be185d 100%)',
     ocean: 'linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%)',
     forest: 'linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)',
-    aurora: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%)'
+    aurora: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%)',
   },
 
   animations: {
@@ -226,19 +226,19 @@ export const enhancedTheme = {
       300: '300ms',
       500: '500ms',
       700: '700ms',
-      1000: '1000ms'
+      1000: '1000ms',
     },
-    
+
     timingFunction: {
       linear: 'linear',
       in: 'cubic-bezier(0.4, 0, 1, 1)',
       out: 'cubic-bezier(0, 0, 0.2, 1)',
       'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
-      'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-      'elastic': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-    }
-  }
-};
+      bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+      elastic: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    },
+  },
+}
 
 // Design Tokens for Common Patterns
 export const designTokens = {
@@ -269,7 +269,7 @@ export const designTokens = {
       hover:from-orange-600 hover:to-orange-700 
       transition-all duration-200 
       transform hover:scale-105 active:scale-95
-    `
+    `,
   },
 
   // Card Styles
@@ -294,7 +294,7 @@ export const designTokens = {
       border border-white/20 
       hover:bg-white/90 
       transition-all duration-300
-    `
+    `,
   },
 
   // Input Styles
@@ -314,7 +314,7 @@ export const designTokens = {
       focus:bg-white focus:ring-2 focus:ring-green-500 
       transition-all duration-200 
       placeholder-gray-400
-    `
+    `,
   },
 
   // Typography Styles
@@ -334,30 +334,32 @@ export const designTokens = {
     caption: `
       text-sm text-gray-500 
       leading-normal
-    `
-  }
-};
+    `,
+  },
+}
 
 // Utility Functions for Theme
 export const getColorValue = (colorPath: string) => {
-  const keys = colorPath.split('.');
-  let value: any = enhancedTheme.colors;
-  
-  for (const key of keys) {
-    value = value[key];
-    if (!value) return null;
-  }
-  
-  return value;
-};
+  const keys = colorPath.split('.')
+  let value: any = enhancedTheme.colors
 
-export const createGradient = (gradientName: keyof typeof enhancedTheme.gradients) => {
-  return enhancedTheme.gradients[gradientName];
-};
+  for (const key of keys) {
+    value = value[key]
+    if (!value) return null
+  }
+
+  return value
+}
+
+export const createGradient = (
+  gradientName: keyof typeof enhancedTheme.gradients
+) => {
+  return enhancedTheme.gradients[gradientName]
+}
 
 export const getSpacing = (size: keyof typeof enhancedTheme.spacing) => {
-  return enhancedTheme.spacing[size];
-};
+  return enhancedTheme.spacing[size]
+}
 
 // CSS Variables for Dynamic Theming
 export const cssVariables = `
@@ -389,4 +391,4 @@ export const cssVariables = `
     --shadow-xl: ${enhancedTheme.shadows.xl};
     --shadow-2xl: ${enhancedTheme.shadows['2xl']};
   }
-`;
+`

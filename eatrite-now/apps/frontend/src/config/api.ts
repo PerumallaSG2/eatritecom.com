@@ -6,15 +6,15 @@ const getApiBaseUrl = (): string => {
     if (import.meta.env.VITE_API_URL) {
       return import.meta.env.VITE_API_URL
     }
-    
+
     // Default to backend port (usually 4005)
     const backendPort = '4005' // Backend typically runs on 4005
     const protocol = window.location.protocol
     const hostname = window.location.hostname
-    
+
     return `${protocol}//${hostname}:${backendPort}`
   }
-  
+
   // In production, use relative path or environment variable
   return import.meta.env.VITE_API_URL || '/api'
 }
@@ -23,7 +23,9 @@ export const API_BASE_URL = getApiBaseUrl()
 
 // Helper function to build API URLs
 export const buildApiUrl = (endpoint: string): string => {
-  const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL
+  const baseUrl = API_BASE_URL.endsWith('/')
+    ? API_BASE_URL.slice(0, -1)
+    : API_BASE_URL
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
   return `${baseUrl}${cleanEndpoint}`
 }

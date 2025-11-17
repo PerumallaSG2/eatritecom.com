@@ -3,39 +3,39 @@
  * Luxury loading screen with premium branding
  */
 
-import React, { useEffect, useState } from 'react';
-import { EatRiteIcon } from '../eatrite/EatRiteComponentLibrary';
-import { EatRiteDesignTokens } from '../../styles/design-system/eatrite-design-tokens';
+import React, { useEffect, useState } from 'react'
+import { EatRiteIcon } from '../eatrite/EatRiteComponentLibrary'
+import { EatRiteDesignTokens } from '../../styles/design-system/eatrite-design-tokens'
 
 interface SplashScreenProps {
-  onLoadingComplete: () => void;
-  duration?: number;
+  onLoadingComplete: () => void
+  duration?: number
 }
 
 export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
   onLoadingComplete,
-  duration = 3000
+  duration = 3000,
 }) => {
-  const [progress, setProgress] = useState(0);
-  const [fadeOut, setFadeOut] = useState(false);
+  const [progress, setProgress] = useState(0)
+  const [fadeOut, setFadeOut] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress((prev) => {
+      setProgress(prev => {
         if (prev >= 100) {
-          clearInterval(interval);
+          clearInterval(interval)
           setTimeout(() => {
-            setFadeOut(true);
-            setTimeout(onLoadingComplete, 500);
-          }, 500);
-          return 100;
+            setFadeOut(true)
+            setTimeout(onLoadingComplete, 500)
+          }, 500)
+          return 100
         }
-        return prev + 2;
-      });
-    }, duration / 50);
+        return prev + 2
+      })
+    }, duration / 50)
 
-    return () => clearInterval(interval);
-  }, [duration, onLoadingComplete]);
+    return () => clearInterval(interval)
+  }, [duration, onLoadingComplete])
 
   const splashStyles: React.CSSProperties = {
     position: 'fixed',
@@ -51,7 +51,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     zIndex: 9999,
     opacity: fadeOut ? 0 : 1,
     transition: 'opacity 0.5s ease-out',
-  };
+  }
 
   const logoContainerStyles: React.CSSProperties = {
     display: 'flex',
@@ -59,7 +59,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     alignItems: 'center',
     marginBottom: EatRiteDesignTokens.spacing['4xl'],
     animation: 'fadeInScale 1.5s ease-out',
-  };
+  }
 
   const logoTextStyles: React.CSSProperties = {
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
@@ -72,7 +72,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     marginTop: EatRiteDesignTokens.spacing.xl,
     textAlign: 'center',
     letterSpacing: '-0.02em',
-  };
+  }
 
   const taglineStyles: React.CSSProperties = {
     color: EatRiteDesignTokens.colors.text.secondary,
@@ -82,7 +82,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     marginTop: EatRiteDesignTokens.spacing.md,
     maxWidth: '300px',
     lineHeight: 1.6,
-  };
+  }
 
   const progressContainerStyles: React.CSSProperties = {
     width: '200px',
@@ -91,7 +91,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     borderRadius: EatRiteDesignTokens.borderRadius.full,
     overflow: 'hidden',
     marginTop: EatRiteDesignTokens.spacing['3xl'],
-  };
+  }
 
   const progressBarStyles: React.CSSProperties = {
     height: '100%',
@@ -100,7 +100,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     width: `${progress}%`,
     transition: 'width 0.1s ease-out',
     boxShadow: EatRiteDesignTokens.shadows.goldGlow.sm,
-  };
+  }
 
   const loadingTextStyles: React.CSSProperties = {
     color: EatRiteDesignTokens.colors.text.tertiary,
@@ -110,7 +110,7 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
     marginTop: EatRiteDesignTokens.spacing.lg,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-  };
+  }
 
   return (
     <>
@@ -139,28 +139,24 @@ export const EatRiteSplashScreen: React.FC<SplashScreenProps> = ({
           animation: pulse 2s ease-in-out infinite;
         }
       `}</style>
-      
+
       <div style={splashStyles}>
         <div style={logoContainerStyles}>
           <div className="logo-pulse">
             <EatRiteIcon size="2xl" color="gold" />
           </div>
           <h1 style={logoTextStyles}>EatRite</h1>
-          <p style={taglineStyles}>
-            Premium Nutrition & Wellness Platform
-          </p>
+          <p style={taglineStyles}>Premium Nutrition & Wellness Platform</p>
         </div>
 
         <div style={progressContainerStyles}>
           <div style={progressBarStyles} />
         </div>
 
-        <p style={loadingTextStyles}>
-          Loading Your Wellness Journey...
-        </p>
+        <p style={loadingTextStyles}>Loading Your Wellness Journey...</p>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default EatRiteSplashScreen;
+export default EatRiteSplashScreen

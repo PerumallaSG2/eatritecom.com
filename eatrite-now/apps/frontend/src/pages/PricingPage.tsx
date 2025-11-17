@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Check, Star, ArrowRight } from 'lucide-react'
 
 const PricingPage = () => {
-  const [billingCycle, setBillingCycle] = useState<'weekly' | 'monthly'>('weekly')
+  const [billingCycle, setBillingCycle] = useState<'weekly' | 'monthly'>(
+    'weekly'
+  )
 
   const pricingPlans = [
     {
@@ -11,8 +13,8 @@ const PricingPage = () => {
       description: 'Perfect for discovering healthy eating habits',
       mealsPerWeek: 4,
       pricePerMeal: 13.95,
-      totalWeekly: 55.80,
-      totalMonthly: 223.20,
+      totalWeekly: 55.8,
+      totalMonthly: 223.2,
       popular: false,
       savings: null,
       features: [
@@ -20,10 +22,10 @@ const PricingPage = () => {
         'Fresh, premium ingredients',
         'Free delivery on $70+ orders',
         'Nutritionist-approved recipes',
-        'Flexible delivery scheduling'
+        'Flexible delivery scheduling',
       ],
       badge: null,
-      highlight: false
+      highlight: false,
     },
     {
       id: 'balanced',
@@ -31,8 +33,8 @@ const PricingPage = () => {
       description: 'Most chosen by health-conscious professionals',
       mealsPerWeek: 8,
       pricePerMeal: 11.95,
-      totalWeekly: 95.60,
-      totalMonthly: 382.40,
+      totalWeekly: 95.6,
+      totalMonthly: 382.4,
       popular: true,
       savings: 'Save $16/week',
       features: [
@@ -41,10 +43,10 @@ const PricingPage = () => {
         'Complimentary delivery nationwide',
         'Dedicated nutrition support',
         'Priority customer service',
-        'Access to seasonal specialties'
+        'Access to seasonal specialties',
       ],
       badge: 'Most Popular',
-      highlight: true
+      highlight: true,
     },
     {
       id: 'family',
@@ -52,8 +54,8 @@ const PricingPage = () => {
       description: 'Ultimate value for families and meal enthusiasts',
       mealsPerWeek: 12,
       pricePerMeal: 10.95,
-      totalWeekly: 131.40,
-      totalMonthly: 525.60,
+      totalWeekly: 131.4,
+      totalMonthly: 525.6,
       popular: false,
       savings: 'Save $36/week',
       features: [
@@ -63,11 +65,11 @@ const PricingPage = () => {
         'Personal nutrition consultation',
         'White-glove customer support',
         'Custom meal modifications',
-        'Exclusive member perks'
+        'Exclusive member perks',
       ],
       badge: 'Best Value',
-      highlight: false
-    }
+      highlight: false,
+    },
   ]
 
   const addOnServices = [
@@ -77,7 +79,11 @@ const PricingPage = () => {
       description: 'One-on-one sessions with certified nutritionists',
       price: 49.99,
       period: 'per session',
-      features: ['Personalized meal planning', 'Health goal tracking', 'Weekly check-ins']
+      features: [
+        'Personalized meal planning',
+        'Health goal tracking',
+        'Weekly check-ins',
+      ],
     },
     {
       id: 'premium-ingredients',
@@ -85,7 +91,11 @@ const PricingPage = () => {
       description: 'Organic, grass-fed, and sustainably sourced ingredients',
       price: 4.99,
       period: 'per meal',
-      features: ['Certified organic produce', 'Grass-fed proteins', 'Sustainable sourcing']
+      features: [
+        'Certified organic produce',
+        'Grass-fed proteins',
+        'Sustainable sourcing',
+      ],
     },
     {
       id: 'express-delivery',
@@ -93,27 +103,31 @@ const PricingPage = () => {
       description: 'Same-day or next-day delivery in select cities',
       price: 9.99,
       period: 'per delivery',
-      features: ['Same-day delivery', 'Premium packaging', 'SMS notifications']
-    }
+      features: ['Same-day delivery', 'Premium packaging', 'SMS notifications'],
+    },
   ]
 
   const faqs = [
     {
       question: 'How does pricing work?',
-      answer: 'Our pricing is simple and transparent. You pay per meal with no hidden fees. Larger plans offer better value with lower per-meal costs.'
+      answer:
+        'Our pricing is simple and transparent. You pay per meal with no hidden fees. Larger plans offer better value with lower per-meal costs.',
     },
     {
       question: 'Can I change my plan anytime?',
-      answer: 'Yes! You can upgrade, downgrade, or pause your subscription at any time through your account dashboard.'
+      answer:
+        'Yes! You can upgrade, downgrade, or pause your subscription at any time through your account dashboard.',
     },
     {
       question: 'Are there any additional fees?',
-      answer: 'No hidden fees! Delivery is free on orders over $70. The only additional costs are optional add-on services.'
+      answer:
+        'No hidden fees! Delivery is free on orders over $70. The only additional costs are optional add-on services.',
     },
     {
       question: 'What if I want to skip a week?',
-      answer: 'You can skip weeks or pause your subscription anytime. We understand life gets busy!'
-    }
+      answer:
+        'You can skip weeks or pause your subscription anytime. We understand life gets busy!',
+    },
   ]
 
   return (
@@ -126,8 +140,8 @@ const PricingPage = () => {
               Transparent Pricing
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Choose the plan that fits your lifestyle. Premium, chef-prepared meals 
-              delivered fresh with complete flexibility to change anytime.
+              Choose the plan that fits your lifestyle. Premium, chef-prepared
+              meals delivered fresh with complete flexibility to change anytime.
             </p>
           </div>
 
@@ -137,8 +151,8 @@ const PricingPage = () => {
               <button
                 onClick={() => setBillingCycle('weekly')}
                 className={`px-8 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  billingCycle === 'weekly' 
-                    ? 'bg-white text-[#0F2B1E] shadow-sm' 
+                  billingCycle === 'weekly'
+                    ? 'bg-white text-[#0F2B1E] shadow-sm'
                     : 'text-gray-600 hover:text-[#0F2B1E]'
                 }`}
               >
@@ -147,8 +161,8 @@ const PricingPage = () => {
               <button
                 onClick={() => setBillingCycle('monthly')}
                 className={`px-8 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  billingCycle === 'monthly' 
-                    ? 'bg-white text-[#0F2B1E] shadow-sm' 
+                  billingCycle === 'monthly'
+                    ? 'bg-white text-[#0F2B1E] shadow-sm'
                     : 'text-gray-600 hover:text-[#0F2B1E]'
                 }`}
               >
@@ -163,12 +177,12 @@ const PricingPage = () => {
       <section className="pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan) => (
-              <div 
-                key={plan.id} 
+            {pricingPlans.map(plan => (
+              <div
+                key={plan.id}
                 className={`relative bg-white rounded-xl border transition-all duration-300 hover:shadow-lg ${
-                  plan.highlight 
-                    ? 'border-[#D4B46A] shadow-md scale-105' 
+                  plan.highlight
+                    ? 'border-[#D4B46A] shadow-md scale-105'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -188,7 +202,7 @@ const PricingPage = () => {
                       {plan.name}
                     </h3>
                     <p className="text-gray-600 mb-6">{plan.description}</p>
-                    
+
                     {plan.savings && (
                       <div className="inline-block bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-4">
                         {plan.savings}
@@ -197,13 +211,15 @@ const PricingPage = () => {
 
                     <div className="mb-6">
                       <div className="text-4xl font-bold text-[#0F2B1E] mb-1">
-                        ${billingCycle === 'weekly' ? plan.totalWeekly : plan.totalMonthly}
+                        $
+                        {billingCycle === 'weekly'
+                          ? plan.totalWeekly
+                          : plan.totalMonthly}
                       </div>
-                      <div className="text-gray-500">
-                        per {billingCycle}
-                      </div>
+                      <div className="text-gray-500">per {billingCycle}</div>
                       <div className="text-sm text-gray-400 mt-1">
-                        ${plan.pricePerMeal} per meal • {plan.mealsPerWeek} meals/week
+                        ${plan.pricePerMeal} per meal • {plan.mealsPerWeek}{' '}
+                        meals/week
                       </div>
                     </div>
                   </div>
@@ -215,13 +231,15 @@ const PricingPage = () => {
                         <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center mt-0.5 mr-3">
                           <Check className="w-3 h-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700 text-sm leading-relaxed">{feature}</span>
+                        <span className="text-gray-700 text-sm leading-relaxed">
+                          {feature}
+                        </span>
                       </div>
                     ))}
                   </div>
 
                   {/* CTA Button */}
-                  <button 
+                  <button
                     className={`w-full py-3 px-4 rounded-lg font-medium transition-colors duration-200 ${
                       plan.highlight
                         ? 'bg-[#0F2B1E] hover:bg-[#1a4d33] text-white'
@@ -245,20 +263,24 @@ const PricingPage = () => {
               Enhance Your Experience
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Optional services to personalize and elevate your healthy eating journey
+              Optional services to personalize and elevate your healthy eating
+              journey
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {addOnServices.map((service) => (
-              <div key={service.id} className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-md transition-shadow duration-200">
+            {addOnServices.map(service => (
+              <div
+                key={service.id}
+                className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-md transition-shadow duration-200"
+              >
                 <h3 className="text-lg font-semibold text-[#0F2B1E] mb-3">
                   {service.name}
                 </h3>
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed">
                   {service.description}
                 </p>
-                
+
                 <div className="mb-6 pb-6 border-b border-gray-100">
                   <div className="text-2xl font-bold text-[#0F2B1E]">
                     ${service.price}
@@ -268,7 +290,10 @@ const PricingPage = () => {
 
                 <div className="space-y-2 mb-8">
                   {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center justify-center text-sm">
+                    <div
+                      key={idx}
+                      className="flex items-center justify-center text-sm"
+                    >
                       <div className="w-1 h-1 bg-[#D4B46A] rounded-full mr-2"></div>
                       <span className="text-gray-600">{feature}</span>
                     </div>
@@ -298,13 +323,14 @@ const PricingPage = () => {
 
           <div className="space-y-6">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-sm transition-shadow duration-200">
+              <div
+                key={idx}
+                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-sm transition-shadow duration-200"
+              >
                 <h3 className="text-lg font-medium text-[#0F2B1E] mb-3">
                   {faq.question}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {faq.answer}
-                </p>
+                <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -318,8 +344,8 @@ const PricingPage = () => {
             Ready to Begin?
           </h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Join thousands who have transformed their relationship with food through our 
-            thoughtfully prepared, nutritionist-approved meals.
+            Join thousands who have transformed their relationship with food
+            through our thoughtfully prepared, nutritionist-approved meals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-[#0F2B1E] hover:bg-[#1a4d33] text-white font-medium py-3 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
@@ -330,9 +356,12 @@ const PricingPage = () => {
               Browse Sample Menus
             </button>
           </div>
-          
+
           <div className="mt-8 text-sm text-gray-500">
-            <p>✓ No commitment required • ✓ Cancel anytime • ✓ Free delivery included</p>
+            <p>
+              ✓ No commitment required • ✓ Cancel anytime • ✓ Free delivery
+              included
+            </p>
           </div>
         </div>
       </section>

@@ -15,28 +15,28 @@ export const MobilePricingCards = () => {
       perMeal: 15,
       meals: 4,
       badge: null,
-      description: 'Perfect for trying our cuisine'
+      description: 'Perfect for trying our cuisine',
     },
     {
-      id: 'connoisseur', 
+      id: 'connoisseur',
       name: 'Connoisseur',
       price: 108,
       perMeal: 13.5,
       meals: 8,
       badge: 'Most Popular',
       description: 'Optimal value and variety',
-      savings: 12
+      savings: 12,
     },
     {
       id: 'epicurean',
-      name: 'Epicurean', 
+      name: 'Epicurean',
       price: 144,
       perMeal: 12,
       meals: 12,
       badge: null,
       description: 'Maximum luxury experience',
-      savings: 36
-    }
+      savings: 36,
+    },
   ]
 
   return (
@@ -53,10 +53,10 @@ export const MobilePricingCards = () => {
 
         {/* Mobile-first stacked layout */}
         <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
-          {plans.map((plan) => (
-            <EatRiteCard 
+          {plans.map(plan => (
+            <EatRiteCard
               key={plan.id}
-              variant={plan.badge ? "premium" : "default"}
+              variant={plan.badge ? 'premium' : 'default'}
               className={`
                 relative p-6 text-center
                 ${plan.badge ? 'md:scale-105 border-2 border-eatrite-gold-500' : ''}
@@ -97,27 +97,35 @@ export const MobilePricingCards = () => {
               <div className="space-y-3 mb-8 text-left">
                 <div className="flex items-center gap-2 text-sm">
                   <EatRiteIcons.Check size="sm" color="gold" />
-                  <span className="text-eatrite-text-secondary">Free delivery</span>
+                  <span className="text-eatrite-text-secondary">
+                    Free delivery
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <EatRiteIcons.Check size="sm" color="gold" />
-                  <span className="text-eatrite-text-secondary">Skip anytime</span>
+                  <span className="text-eatrite-text-secondary">
+                    Skip anytime
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <EatRiteIcons.Check size="sm" color="gold" />
-                  <span className="text-eatrite-text-secondary">Premium ingredients</span>
+                  <span className="text-eatrite-text-secondary">
+                    Premium ingredients
+                  </span>
                 </div>
                 {plan.badge && (
                   <div className="flex items-center gap-2 text-sm">
                     <EatRiteIcons.Star size="sm" color="gold" />
-                    <span className="text-eatrite-gold-400 font-medium">Best value</span>
+                    <span className="text-eatrite-gold-400 font-medium">
+                      Best value
+                    </span>
                   </div>
                 )}
               </div>
 
               {/* Large touch-friendly button */}
-              <EatRiteButton 
-                variant={plan.badge ? "primary" : "secondary"}
+              <EatRiteButton
+                variant={plan.badge ? 'primary' : 'secondary'}
                 size="lg"
                 className="w-full min-h-[48px]"
               >

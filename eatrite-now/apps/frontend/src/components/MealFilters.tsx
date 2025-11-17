@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
-import { Search, Filter, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
+import React, { useState } from 'react'
+import { Search, Filter, SlidersHorizontal, X, ChevronDown } from 'lucide-react'
 
 interface MealFiltersProps {
-  onFilterChange: (filters: FilterState) => void;
-  className?: string;
+  onFilterChange: (filters: FilterState) => void
+  className?: string
 }
 
 interface FilterState {
-  search: string;
-  dietary: string[];
-  priceRange: [number, number];
-  sortBy: 'popular' | 'price' | 'rating' | 'name';
-  calories: [number, number];
+  search: string
+  dietary: string[]
+  priceRange: [number, number]
+  sortBy: 'popular' | 'price' | 'rating' | 'name'
+  calories: [number, number]
 }
 
-const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '' }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const MealFilters: React.FC<MealFiltersProps> = ({
+  onFilterChange,
+  className = '',
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false)
   const [filters, setFilters] = useState<FilterState>({
     search: '',
     dietary: [],
     priceRange: [10, 30],
     sortBy: 'popular',
-    calories: [200, 800]
-  });
+    calories: [200, 800],
+  })
 
   const dietaryOptions = [
     { id: 'keto', label: 'Keto-Friendly', color: 'bg-purple-500' },
@@ -30,28 +33,28 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
     { id: 'high-protein', label: 'High-Protein', color: 'bg-red-500' },
     { id: 'dairy-free', label: 'Dairy-Free', color: 'bg-blue-500' },
     { id: 'vegan', label: 'Vegan', color: 'bg-emerald-500' },
-    { id: 'paleo', label: 'Paleo', color: 'bg-orange-500' }
-  ];
+    { id: 'paleo', label: 'Paleo', color: 'bg-orange-500' },
+  ]
 
   const sortOptions = [
     { value: 'popular', label: 'Most Popular' },
     { value: 'price', label: 'Price: Low to High' },
     { value: 'rating', label: 'Highest Rated' },
-    { value: 'name', label: 'Name A-Z' }
-  ];
+    { value: 'name', label: 'Name A-Z' },
+  ]
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
-    const updated = { ...filters, ...newFilters };
-    setFilters(updated);
-    onFilterChange(updated);
-  };
+    const updated = { ...filters, ...newFilters }
+    setFilters(updated)
+    onFilterChange(updated)
+  }
 
   const toggleDietaryFilter = (dietary: string) => {
     const newDietary = filters.dietary.includes(dietary)
       ? filters.dietary.filter(d => d !== dietary)
-      : [...filters.dietary, dietary];
-    updateFilters({ dietary: newDietary });
-  };
+      : [...filters.dietary, dietary]
+    updateFilters({ dietary: newDietary })
+  }
 
   const clearFilters = () => {
     const resetFilters = {
@@ -59,14 +62,16 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
       dietary: [],
       priceRange: [10, 30] as [number, number],
       sortBy: 'popular' as const,
-      calories: [200, 800] as [number, number]
-    };
-    setFilters(resetFilters);
-    onFilterChange(resetFilters);
-  };
+      calories: [200, 800] as [number, number],
+    }
+    setFilters(resetFilters)
+    onFilterChange(resetFilters)
+  }
 
   return (
-    <div className={`bg-gradient-to-r from-[#F5F2E8] to-[#F5EEDC] border-b border-[#D4B46A]/30 ${className}`}>
+    <div
+      className={`bg-gradient-to-r from-[#F5F2E8] to-[#F5EEDC] border-b border-[#D4B46A]/30 ${className}`}
+    >
       <div className="max-w-8xl mx-auto px-8 lg:px-12 py-8">
         {/* Main Filter Bar */}
         <div className="flex items-center gap-6 mb-6">
@@ -77,7 +82,7 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
               type="text"
               placeholder="Search meals, ingredients, or cuisines..."
               value={filters.search}
-              onChange={(e) => updateFilters({ search: e.target.value })}
+              onChange={e => updateFilters({ search: e.target.value })}
               className="w-full pl-12 pr-4 py-4 bg-white border border-[#D4B46A]/30 rounded-full focus:outline-none focus:ring-2 focus:ring-[#D4B46A]/50 focus:border-[#D4B46A] transition-all duration-300 text-lg"
               style={{ fontFamily: 'Inter, sans-serif' }}
             />
@@ -87,7 +92,11 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
           <div className="relative">
             <select
               value={filters.sortBy}
-              onChange={(e) => updateFilters({ sortBy: e.target.value as FilterState['sortBy'] })}
+              onChange={e =>
+                updateFilters({
+                  sortBy: e.target.value as FilterState['sortBy'],
+                })
+              }
               className="appearance-none bg-white border border-[#D4B46A]/30 rounded-full px-6 py-4 pr-12 focus:outline-none focus:ring-2 focus:ring-[#D4B46A]/50 cursor-pointer text-lg font-medium text-[#0F2B1E]"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
@@ -108,9 +117,14 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
           >
             <SlidersHorizontal className="w-5 h-5" />
             <span>Filters</span>
-            {(filters.dietary.length > 0 || filters.priceRange[0] !== 10 || filters.priceRange[1] !== 30) && (
+            {(filters.dietary.length > 0 ||
+              filters.priceRange[0] !== 10 ||
+              filters.priceRange[1] !== 30) && (
               <span className="bg-[#FF6B35] text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
-                {filters.dietary.length + (filters.priceRange[0] !== 10 || filters.priceRange[1] !== 30 ? 1 : 0)}
+                {filters.dietary.length +
+                  (filters.priceRange[0] !== 10 || filters.priceRange[1] !== 30
+                    ? 1
+                    : 0)}
               </span>
             )}
           </button>
@@ -120,10 +134,9 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
         {isExpanded && (
           <div className="bg-white rounded-2xl p-8 shadow-2xl border border-[#D4B46A]/20 animate-in slide-in-from-top duration-300">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              
               {/* Dietary Filters */}
               <div className="space-y-4">
-                <h3 
+                <h3
                   className="text-xl font-bold text-[#0F2B1E] mb-4"
                   style={{ fontFamily: 'Playfair Display, serif' }}
                 >
@@ -140,8 +153,10 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                           : 'bg-[#F5EEDC] text-[#0F2B1E] hover:bg-[#D4B46A]/20'
                       }`}
                     >
-                      <div className={`w-3 h-3 rounded-full ${option.color}`}></div>
-                      <span 
+                      <div
+                        className={`w-3 h-3 rounded-full ${option.color}`}
+                      ></div>
+                      <span
                         className="text-sm font-medium"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                       >
@@ -154,7 +169,7 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
 
               {/* Price Range */}
               <div className="space-y-4">
-                <h3 
+                <h3
                   className="text-xl font-bold text-[#0F2B1E] mb-4"
                   style={{ fontFamily: 'Playfair Display, serif' }}
                 >
@@ -162,7 +177,10 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                 </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-[#0A2418]/70" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <span
+                      className="text-sm text-[#0A2418]/70"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
                       ${filters.priceRange[0]} - ${filters.priceRange[1]}
                     </span>
                     <button
@@ -179,33 +197,47 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                       min="10"
                       max="50"
                       value={filters.priceRange[1]}
-                      onChange={(e) => updateFilters({ 
-                        priceRange: [filters.priceRange[0], parseInt(e.target.value)] 
-                      })}
+                      onChange={e =>
+                        updateFilters({
+                          priceRange: [
+                            filters.priceRange[0],
+                            parseInt(e.target.value),
+                          ],
+                        })
+                      }
                       className="w-full h-2 bg-[#F5EEDC] rounded-lg appearance-none cursor-pointer slider"
                     />
                   </div>
                   <div className="grid grid-cols-4 gap-2">
-                    {['$10-15', '$15-20', '$20-25', '$25+'].map((range, index) => (
-                      <button
-                        key={range}
-                        onClick={() => {
-                          const ranges = [[10, 15], [15, 20], [20, 25], [25, 50]];
-                          updateFilters({ priceRange: ranges[index] as [number, number] });
-                        }}
-                        className="p-2 text-xs bg-[#F5EEDC] hover:bg-[#D4B46A]/20 rounded-lg transition-colors font-medium"
-                        style={{ fontFamily: 'Inter, sans-serif' }}
-                      >
-                        {range}
-                      </button>
-                    ))}
+                    {['$10-15', '$15-20', '$20-25', '$25+'].map(
+                      (range, index) => (
+                        <button
+                          key={range}
+                          onClick={() => {
+                            const ranges = [
+                              [10, 15],
+                              [15, 20],
+                              [20, 25],
+                              [25, 50],
+                            ]
+                            updateFilters({
+                              priceRange: ranges[index] as [number, number],
+                            })
+                          }}
+                          className="p-2 text-xs bg-[#F5EEDC] hover:bg-[#D4B46A]/20 rounded-lg transition-colors font-medium"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                        >
+                          {range}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Calories Range */}
               <div className="space-y-4">
-                <h3 
+                <h3
                   className="text-xl font-bold text-[#0F2B1E] mb-4"
                   style={{ fontFamily: 'Playfair Display, serif' }}
                 >
@@ -213,7 +245,10 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                 </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-[#0A2418]/70" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <span
+                      className="text-sm text-[#0A2418]/70"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
                       {filters.calories[0]} - {filters.calories[1]} cal
                     </span>
                     <button
@@ -228,13 +263,18 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                     {[
                       { label: 'Light', range: [200, 400] },
                       { label: 'Moderate', range: [400, 600] },
-                      { label: 'Hearty', range: [600, 800] }
-                    ].map((option) => (
+                      { label: 'Hearty', range: [600, 800] },
+                    ].map(option => (
                       <button
                         key={option.label}
-                        onClick={() => updateFilters({ calories: option.range as [number, number] })}
+                        onClick={() =>
+                          updateFilters({
+                            calories: option.range as [number, number],
+                          })
+                        }
                         className={`p-3 rounded-lg transition-all duration-300 hover:scale-105 text-sm font-medium ${
-                          filters.calories[0] === option.range[0] && filters.calories[1] === option.range[1]
+                          filters.calories[0] === option.range[0] &&
+                          filters.calories[1] === option.range[1]
                             ? 'bg-[#0F2B1E] text-white'
                             : 'bg-[#F5EEDC] text-[#0F2B1E] hover:bg-[#D4B46A]/20'
                         }`}
@@ -256,13 +296,15 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
               <div className="flex items-center gap-2 text-sm text-[#0A2418]/70">
                 <Filter className="w-4 h-4" />
                 <span style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {filters.dietary.length > 0 || filters.search || filters.priceRange[0] !== 10 || filters.priceRange[1] !== 30
+                  {filters.dietary.length > 0 ||
+                  filters.search ||
+                  filters.priceRange[0] !== 10 ||
+                  filters.priceRange[1] !== 30
                     ? 'Active filters applied'
-                    : 'No filters applied'
-                  }
+                    : 'No filters applied'}
                 </span>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <button
                   onClick={clearFilters}
@@ -272,7 +314,7 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                   <X className="w-4 h-4" />
                   Clear All
                 </button>
-                
+
                 <button
                   onClick={() => setIsExpanded(false)}
                   className="bg-[#D4B46A] hover:bg-[#B8964E] text-[#0F2B1E] font-bold px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg"
@@ -289,7 +331,7 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
         {!isExpanded && filters.dietary.length > 0 && (
           <div className="flex flex-wrap gap-3 mt-4">
             {filters.dietary.map(dietary => {
-              const option = dietaryOptions.find(opt => opt.id === dietary);
+              const option = dietaryOptions.find(opt => opt.id === dietary)
               return option ? (
                 <div
                   key={dietary}
@@ -305,13 +347,13 @@ const MealFilters: React.FC<MealFiltersProps> = ({ onFilterChange, className = '
                     <X className="w-3 h-3" />
                   </button>
                 </div>
-              ) : null;
+              ) : null
             })}
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MealFilters;
+export default MealFilters

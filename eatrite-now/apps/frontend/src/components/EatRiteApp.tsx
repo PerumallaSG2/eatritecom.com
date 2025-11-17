@@ -3,57 +3,57 @@
  * Premium nutrition platform with complete screen integration
  */
 
-import React, { useState, useEffect } from 'react';
-import { EatRiteDesignTokens } from '../styles/design-system/eatrite-design-tokens';
+import React, { useState, useEffect } from 'react'
+import { EatRiteDesignTokens } from '../styles/design-system/eatrite-design-tokens'
 
 // Import all screen components
-import SplashScreen from './screens/SplashScreen';
-import OnboardingFlow from './screens/OnboardingFlow';
-import AuthenticationScreens from './screens/AuthenticationScreens';
-import HomeDashboard from './screens/HomeDashboard';
-import MealBuilder from './screens/MealBuilder';
-import SupplementsCatalog from './screens/SupplementsCatalog';
-import UserProfile from './screens/UserProfile';
-import { 
-  EatRiteButton, 
+import SplashScreen from './screens/SplashScreen'
+import OnboardingFlow from './screens/OnboardingFlow'
+import AuthenticationScreens from './screens/AuthenticationScreens'
+import HomeDashboard from './screens/HomeDashboard'
+import MealBuilder from './screens/MealBuilder'
+import SupplementsCatalog from './screens/SupplementsCatalog'
+import UserProfile from './screens/UserProfile'
+import {
+  EatRiteButton,
   EatRiteIcon,
   UserIcon,
   LeafIcon,
   ProteinIcon,
-  CartIcon
-} from './eatrite/EatRiteComponentLibrary';
+  CartIcon,
+} from './eatrite/EatRiteComponentLibrary'
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
-type AppScreen = 
+type AppScreen =
   | 'splash'
-  | 'onboarding' 
+  | 'onboarding'
   | 'auth'
   | 'dashboard'
   | 'meal-builder'
   | 'supplements'
-  | 'profile';
+  | 'profile'
 
 interface AppState {
-  currentScreen: AppScreen;
-  isAuthenticated: boolean;
-  hasCompletedOnboarding: boolean;
+  currentScreen: AppScreen
+  isAuthenticated: boolean
+  hasCompletedOnboarding: boolean
   user: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    subscriptionTier: 'basic' | 'premium' | 'elite';
-  } | null;
-  cartItems: string[];
+    id: string
+    firstName: string
+    lastName: string
+    email: string
+    subscriptionTier: 'basic' | 'premium' | 'elite'
+  } | null
+  cartItems: string[]
   notifications: Array<{
-    id: string;
-    type: 'success' | 'error' | 'info' | 'warning';
-    message: string;
-    timestamp: Date;
-  }>;
+    id: string
+    type: 'success' | 'error' | 'info' | 'warning'
+    message: string
+    timestamp: Date
+  }>
 }
 
 // ============================================================================
@@ -68,18 +68,18 @@ export const EatRiteApp: React.FC = () => {
     user: null,
     cartItems: [],
     notifications: [],
-  });
+  })
 
   // Simulate app initialization
   useEffect(() => {
     const initializeApp = async () => {
       // Simulate loading time for splash screen
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      await new Promise(resolve => setTimeout(resolve, 3000))
+
       // Check authentication status (simulate)
-      const isLoggedIn = localStorage.getItem('eatrite_auth_token');
-      const hasOnboarded = localStorage.getItem('eatrite_onboarding_complete');
-      
+      const isLoggedIn = localStorage.getItem('eatrite_auth_token')
+      const hasOnboarded = localStorage.getItem('eatrite_onboarding_complete')
+
       if (isLoggedIn && hasOnboarded) {
         setAppState(prev => ({
           ...prev,
@@ -93,55 +93,61 @@ export const EatRiteApp: React.FC = () => {
             email: 'sarah.johnson@email.com',
             subscriptionTier: 'premium',
           },
-        }));
+        }))
       } else if (isLoggedIn) {
         setAppState(prev => ({
           ...prev,
           currentScreen: 'onboarding',
           isAuthenticated: true,
-        }));
+        }))
       } else {
         setAppState(prev => ({
           ...prev,
           currentScreen: 'auth',
-        }));
+        }))
       }
-    };
+    }
 
-    initializeApp();
-  }, []);
+    initializeApp()
+  }, [])
 
   // Navigation handlers
   const navigateToScreen = (screen: AppScreen) => {
-    setAppState(prev => ({ ...prev, currentScreen: screen }));
-  };
+    setAppState(prev => ({ ...prev, currentScreen: screen }))
+  }
 
   const handleAuthentication = (user: any) => {
-    localStorage.setItem('eatrite_auth_token', 'sample_token');
+    localStorage.setItem('eatrite_auth_token', 'sample_token')
     setAppState(prev => ({
       ...prev,
       isAuthenticated: true,
       user,
       currentScreen: prev.hasCompletedOnboarding ? 'dashboard' : 'onboarding',
-    }));
-    
-    showNotification('success', 'Welcome to EatRite! You have successfully signed in.');
-  };
+    }))
+
+    showNotification(
+      'success',
+      'Welcome to EatRite! You have successfully signed in.'
+    )
+  }
 
   const handleOnboardingComplete = (preferences: any) => {
-    localStorage.setItem('eatrite_onboarding_complete', 'true');
+    localStorage.setItem('eatrite_onboarding_complete', 'true')
     setAppState(prev => ({
       ...prev,
       hasCompletedOnboarding: true,
       currentScreen: 'dashboard',
-    }));
-    
-    showNotification('success', 'Your profile has been set up! Welcome to your personalized nutrition journey.');
-  };
+    }))
+
+    showNotification(
+      'success',
+      'Your profile has been set up! Welcome to your personalized nutrition journey.'
+    )
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem('eatrite_auth_token');
-    localStorage.removeItem('eatrite_onboarding_complete');
+    localStorage.removeItem('eatrite_auth_token')
+    localStorage.removeItem('eatrite_onboarding_complete')
     setAppState(prev => ({
       ...prev,
       currentScreen: 'auth',
@@ -149,41 +155,44 @@ export const EatRiteApp: React.FC = () => {
       hasCompletedOnboarding: false,
       user: null,
       cartItems: [],
-    }));
-    
-    showNotification('info', 'You have been logged out successfully.');
-  };
+    }))
+
+    showNotification('info', 'You have been logged out successfully.')
+  }
 
   const handleAddToCart = (itemId: string) => {
     setAppState(prev => ({
       ...prev,
       cartItems: [...prev.cartItems, itemId],
-    }));
-    
-    showNotification('success', 'Item added to cart!');
-  };
+    }))
 
-  const showNotification = (type: AppState['notifications'][0]['type'], message: string) => {
+    showNotification('success', 'Item added to cart!')
+  }
+
+  const showNotification = (
+    type: AppState['notifications'][0]['type'],
+    message: string
+  ) => {
     const notification = {
       id: Date.now().toString(),
       type,
       message,
       timestamp: new Date(),
-    };
-    
+    }
+
     setAppState(prev => ({
       ...prev,
       notifications: [...prev.notifications, notification],
-    }));
+    }))
 
     // Auto-remove notification after 5 seconds
     setTimeout(() => {
       setAppState(prev => ({
         ...prev,
         notifications: prev.notifications.filter(n => n.id !== notification.id),
-      }));
-    }, 5000);
-  };
+      }))
+    }, 5000)
+  }
 
   // App container styles
   const appStyles: React.CSSProperties = {
@@ -192,21 +201,22 @@ export const EatRiteApp: React.FC = () => {
     color: EatRiteDesignTokens.colors.text.primary,
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.body,
     position: 'relative',
-  };
+  }
 
   return (
     <div style={appStyles}>
       {/* Main Screen Content */}
-      {appState.currentScreen === 'splash' && (
-        <SplashScreen />
-      )}
+      {appState.currentScreen === 'splash' && <SplashScreen />}
 
       {appState.currentScreen === 'auth' && (
         <AuthenticationScreens
           onLogin={handleAuthentication}
           onSignup={handleAuthentication}
-          onForgotPassword={(email) => {
-            showNotification('info', `Password reset instructions have been sent to ${email}`);
+          onForgotPassword={email => {
+            showNotification(
+              'info',
+              `Password reset instructions have been sent to ${email}`
+            )
           }}
         />
       )}
@@ -220,7 +230,7 @@ export const EatRiteApp: React.FC = () => {
 
       {appState.currentScreen === 'dashboard' && (
         <>
-          <Navigation 
+          <Navigation
             currentScreen={appState.currentScreen}
             onNavigate={navigateToScreen}
             onLogout={handleLogout}
@@ -229,11 +239,11 @@ export const EatRiteApp: React.FC = () => {
           />
           <HomeDashboard
             userName={appState.user?.firstName}
-            onMealClick={(meal) => {
-              showNotification('info', `Viewing details for ${meal.name}`);
+            onMealClick={meal => {
+              showNotification('info', `Viewing details for ${meal.name}`)
             }}
-            onSupplementClick={(supplement) => {
-              showNotification('info', `Viewing ${supplement.name}`);
+            onSupplementClick={supplement => {
+              showNotification('info', `Viewing ${supplement.name}`)
             }}
             onViewAllMeals={() => navigateToScreen('meal-builder')}
             onViewAllSupplements={() => navigateToScreen('supplements')}
@@ -243,7 +253,7 @@ export const EatRiteApp: React.FC = () => {
 
       {appState.currentScreen === 'meal-builder' && (
         <>
-          <Navigation 
+          <Navigation
             currentScreen={appState.currentScreen}
             onNavigate={navigateToScreen}
             onLogout={handleLogout}
@@ -251,12 +261,15 @@ export const EatRiteApp: React.FC = () => {
             cartItemCount={appState.cartItems.length}
           />
           <MealBuilder
-            onSaveMeal={(meal) => {
-              showNotification('success', `"${meal.name}" has been saved to your meal plans!`);
+            onSaveMeal={meal => {
+              showNotification(
+                'success',
+                `"${meal.name}" has been saved to your meal plans!`
+              )
             }}
-            onAddToCart={(meal) => {
-              handleAddToCart(meal.name);
-              showNotification('success', `"${meal.name}" added to cart!`);
+            onAddToCart={meal => {
+              handleAddToCart(meal.name)
+              showNotification('success', `"${meal.name}" added to cart!`)
             }}
           />
         </>
@@ -264,7 +277,7 @@ export const EatRiteApp: React.FC = () => {
 
       {appState.currentScreen === 'supplements' && (
         <>
-          <Navigation 
+          <Navigation
             currentScreen={appState.currentScreen}
             onNavigate={navigateToScreen}
             onLogout={handleLogout}
@@ -273,11 +286,14 @@ export const EatRiteApp: React.FC = () => {
           />
           <SupplementsCatalog
             onAddToCart={(supplement, quantity) => {
-              handleAddToCart(supplement.id);
-              showNotification('success', `${quantity}x ${supplement.name} added to cart!`);
+              handleAddToCart(supplement.id)
+              showNotification(
+                'success',
+                `${quantity}x ${supplement.name} added to cart!`
+              )
             }}
-            onViewDetails={(supplement) => {
-              showNotification('info', `Viewing details for ${supplement.name}`);
+            onViewDetails={supplement => {
+              showNotification('info', `Viewing details for ${supplement.name}`)
             }}
             cartItems={appState.cartItems}
           />
@@ -286,7 +302,7 @@ export const EatRiteApp: React.FC = () => {
 
       {appState.currentScreen === 'profile' && (
         <>
-          <Navigation 
+          <Navigation
             currentScreen={appState.currentScreen}
             onNavigate={navigateToScreen}
             onLogout={handleLogout}
@@ -294,17 +310,26 @@ export const EatRiteApp: React.FC = () => {
             cartItemCount={appState.cartItems.length}
           />
           <UserProfile
-            onSaveProfile={(profile) => {
-              showNotification('success', 'Profile updated successfully!');
+            onSaveProfile={profile => {
+              showNotification('success', 'Profile updated successfully!')
             }}
-            onSaveHealthProfile={(healthProfile) => {
-              showNotification('success', 'Health profile updated successfully!');
+            onSaveHealthProfile={healthProfile => {
+              showNotification(
+                'success',
+                'Health profile updated successfully!'
+              )
             }}
-            onSaveNutritionGoals={(goals) => {
-              showNotification('success', 'Nutrition goals updated successfully!');
+            onSaveNutritionGoals={goals => {
+              showNotification(
+                'success',
+                'Nutrition goals updated successfully!'
+              )
             }}
             onDeleteAccount={() => {
-              showNotification('warning', 'Account deletion requires confirmation via email.');
+              showNotification(
+                'warning',
+                'Account deletion requires confirmation via email.'
+              )
             }}
           />
         </>
@@ -315,25 +340,27 @@ export const EatRiteApp: React.FC = () => {
 
       {/* Cart Indicator (when authenticated) */}
       {appState.isAuthenticated && appState.cartItems.length > 0 && (
-        <CartIndicator 
+        <CartIndicator
           itemCount={appState.cartItems.length}
-          onCartClick={() => showNotification('info', 'Cart functionality coming soon!')}
+          onCartClick={() =>
+            showNotification('info', 'Cart functionality coming soon!')
+          }
         />
       )}
     </div>
-  );
-};
+  )
+}
 
 // ============================================================================
 // NAVIGATION COMPONENT
 // ============================================================================
 
 interface NavigationProps {
-  currentScreen: AppScreen;
-  onNavigate: (screen: AppScreen) => void;
-  onLogout: () => void;
-  user: AppState['user'];
-  cartItemCount: number;
+  currentScreen: AppScreen
+  onNavigate: (screen: AppScreen) => void
+  onLogout: () => void
+  user: AppState['user']
+  cartItemCount: number
 }
 
 const Navigation: React.FC<NavigationProps> = ({
@@ -351,7 +378,7 @@ const Navigation: React.FC<NavigationProps> = ({
     borderBottom: `1px solid rgba(212, 180, 106, 0.2)`,
     padding: EatRiteDesignTokens.spacing.lg,
     boxShadow: EatRiteDesignTokens.shadows.depth.md,
-  };
+  }
 
   const navContentStyles: React.CSSProperties = {
     maxWidth: '1200px',
@@ -359,23 +386,25 @@ const Navigation: React.FC<NavigationProps> = ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-  };
+  }
 
   const logoStyles: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: EatRiteDesignTokens.spacing.md,
     cursor: 'pointer',
-  };
+  }
 
   const navLinksStyles: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: EatRiteDesignTokens.spacing.xl,
-  };
+  }
 
   const navLinkStyles = (isActive: boolean): React.CSSProperties => ({
-    color: isActive ? EatRiteDesignTokens.colors.primary.gold : EatRiteDesignTokens.colors.text.secondary,
+    color: isActive
+      ? EatRiteDesignTokens.colors.primary.gold
+      : EatRiteDesignTokens.colors.text.secondary,
     fontSize: EatRiteDesignTokens.typography.scale.body.size,
     fontWeight: isActive ? 600 : 400,
     cursor: 'pointer',
@@ -383,13 +412,13 @@ const Navigation: React.FC<NavigationProps> = ({
     display: 'flex',
     alignItems: 'center',
     gap: EatRiteDesignTokens.spacing.sm,
-  });
+  })
 
   const userSectionStyles: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: EatRiteDesignTokens.spacing.md,
-  };
+  }
 
   return (
     <nav style={navStyles}>
@@ -397,12 +426,14 @@ const Navigation: React.FC<NavigationProps> = ({
         {/* Logo */}
         <div style={logoStyles} onClick={() => onNavigate('dashboard')}>
           <EatRiteIcon size="md" color="gold" />
-          <span style={{
-            fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
-            fontSize: EatRiteDesignTokens.typography.scale.h4.size,
-            fontWeight: EatRiteDesignTokens.typography.scale.h4.weight,
-            color: EatRiteDesignTokens.colors.primary.gold,
-          }}>
+          <span
+            style={{
+              fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
+              fontSize: EatRiteDesignTokens.typography.scale.h4.size,
+              fontWeight: EatRiteDesignTokens.typography.scale.h4.weight,
+              color: EatRiteDesignTokens.colors.primary.gold,
+            }}
+          >
             EatRite
           </span>
         </div>
@@ -413,23 +444,32 @@ const Navigation: React.FC<NavigationProps> = ({
             style={navLinkStyles(currentScreen === 'dashboard')}
             onClick={() => onNavigate('dashboard')}
           >
-            <LeafIcon size="sm" color={currentScreen === 'dashboard' ? 'gold' : 'inherit'} />
+            <LeafIcon
+              size="sm"
+              color={currentScreen === 'dashboard' ? 'gold' : 'inherit'}
+            />
             Dashboard
           </div>
-          
+
           <div
             style={navLinkStyles(currentScreen === 'meal-builder')}
             onClick={() => onNavigate('meal-builder')}
           >
-            <ProteinIcon size="sm" color={currentScreen === 'meal-builder' ? 'gold' : 'inherit'} />
+            <ProteinIcon
+              size="sm"
+              color={currentScreen === 'meal-builder' ? 'gold' : 'inherit'}
+            />
             Meal Builder
           </div>
-          
+
           <div
             style={navLinkStyles(currentScreen === 'supplements')}
             onClick={() => onNavigate('supplements')}
           >
-            <ProteinIcon size="sm" color={currentScreen === 'supplements' ? 'gold' : 'inherit'} />
+            <ProteinIcon
+              size="sm"
+              color={currentScreen === 'supplements' ? 'gold' : 'inherit'}
+            />
             Supplements
           </div>
         </div>
@@ -440,21 +480,23 @@ const Navigation: React.FC<NavigationProps> = ({
           <div style={{ position: 'relative', cursor: 'pointer' }}>
             <CartIcon size="md" color="inherit" />
             {cartItemCount > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: '-8px',
-                right: '-8px',
-                backgroundColor: EatRiteDesignTokens.colors.semantic.error,
-                color: EatRiteDesignTokens.colors.surface.offWhite,
-                borderRadius: '50%',
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: EatRiteDesignTokens.typography.scale.caption.size,
-                fontWeight: 700,
-              }}>
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-8px',
+                  right: '-8px',
+                  backgroundColor: EatRiteDesignTokens.colors.semantic.error,
+                  color: EatRiteDesignTokens.colors.surface.offWhite,
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: EatRiteDesignTokens.typography.scale.caption.size,
+                  fontWeight: 700,
+                }}
+              >
                 {cartItemCount}
               </span>
             )}
@@ -465,33 +507,34 @@ const Navigation: React.FC<NavigationProps> = ({
             style={navLinkStyles(currentScreen === 'profile')}
             onClick={() => onNavigate('profile')}
           >
-            <UserIcon size="sm" color={currentScreen === 'profile' ? 'gold' : 'inherit'} />
+            <UserIcon
+              size="sm"
+              color={currentScreen === 'profile' ? 'gold' : 'inherit'}
+            />
             {user?.firstName || 'Profile'}
           </div>
 
           {/* Logout */}
-          <EatRiteButton
-            variant="outline"
-            size="sm"
-            onClick={onLogout}
-          >
+          <EatRiteButton variant="outline" size="sm" onClick={onLogout}>
             Logout
           </EatRiteButton>
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
 // ============================================================================
 // NOTIFICATION SYSTEM
 // ============================================================================
 
 interface NotificationSystemProps {
-  notifications: AppState['notifications'];
+  notifications: AppState['notifications']
 }
 
-const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
+const NotificationSystem: React.FC<NotificationSystemProps> = ({
+  notifications,
+}) => {
   const containerStyles: React.CSSProperties = {
     position: 'fixed',
     top: EatRiteDesignTokens.spacing.xl,
@@ -500,9 +543,11 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
     display: 'flex',
     flexDirection: 'column',
     gap: EatRiteDesignTokens.spacing.md,
-  };
+  }
 
-  const getNotificationStyles = (type: AppState['notifications'][0]['type']): React.CSSProperties => {
+  const getNotificationStyles = (
+    type: AppState['notifications'][0]['type']
+  ): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
       padding: EatRiteDesignTokens.spacing.lg,
       borderRadius: EatRiteDesignTokens.borderRadius.lg,
@@ -512,7 +557,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
       fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
       fontWeight: 500,
       animation: 'slideIn 0.3s ease-out',
-    };
+    }
 
     const typeStyles = {
       success: {
@@ -531,13 +576,13 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
         backgroundColor: EatRiteDesignTokens.colors.semantic.info,
         color: EatRiteDesignTokens.colors.surface.offWhite,
       },
-    };
+    }
 
-    return { ...baseStyles, ...typeStyles[type] };
-  };
+    return { ...baseStyles, ...typeStyles[type] }
+  }
 
   if (notifications.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -557,7 +602,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
         `}
       </style>
       <div style={containerStyles}>
-        {notifications.map((notification) => (
+        {notifications.map(notification => (
           <div
             key={notification.id}
             style={getNotificationStyles(notification.type)}
@@ -567,19 +612,22 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
         ))}
       </div>
     </>
-  );
-};
+  )
+}
 
 // ============================================================================
 // CART INDICATOR
 // ============================================================================
 
 interface CartIndicatorProps {
-  itemCount: number;
-  onCartClick: () => void;
+  itemCount: number
+  onCartClick: () => void
 }
 
-const CartIndicator: React.FC<CartIndicatorProps> = ({ itemCount, onCartClick }) => {
+const CartIndicator: React.FC<CartIndicatorProps> = ({
+  itemCount,
+  onCartClick,
+}) => {
   const indicatorStyles: React.CSSProperties = {
     position: 'fixed',
     bottom: EatRiteDesignTokens.spacing.xl,
@@ -596,7 +644,7 @@ const CartIndicator: React.FC<CartIndicatorProps> = ({ itemCount, onCartClick })
     boxShadow: EatRiteDesignTokens.shadows.goldGlow.lg,
     zIndex: 1000,
     transition: `transform ${EatRiteDesignTokens.animations.duration.normal}`,
-  };
+  }
 
   const countStyles: React.CSSProperties = {
     position: 'absolute',
@@ -612,25 +660,23 @@ const CartIndicator: React.FC<CartIndicatorProps> = ({ itemCount, onCartClick })
     justifyContent: 'center',
     fontSize: EatRiteDesignTokens.typography.scale.caption.size,
     fontWeight: 700,
-  };
+  }
 
   return (
     <div
       style={indicatorStyles}
       onClick={onCartClick}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'scale(1.1)';
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'scale(1.1)'
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'scale(1)';
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'scale(1)'
       }}
     >
       <CartIcon size="lg" color="inherit" />
-      <div style={countStyles}>
-        {itemCount}
-      </div>
+      <div style={countStyles}>{itemCount}</div>
     </div>
-  );
-};
+  )
+}
 
-export default EatRiteApp;
+export default EatRiteApp

@@ -3,16 +3,17 @@
  * Luxury components matching the gold-on-dark-green brand aesthetic
  */
 
-import React from 'react';
-import { eatRiteBrandColors } from './brand-tokens';
+import React from 'react'
+import { eatRiteBrandColors } from './brand-tokens'
 
 // 🔘 PREMIUM BUTTON COMPONENTS
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'tertiary';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'tertiary'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  isLoading?: boolean
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const PremiumButton: React.FC<ButtonProps> = ({
@@ -31,7 +32,7 @@ export const PremiumButton: React.FC<ButtonProps> = ({
     font-semibold transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent
     disabled:opacity-50 disabled:cursor-not-allowed
-  `;
+  `
 
   const variantStyles = {
     primary: `
@@ -56,22 +57,24 @@ export const PremiumButton: React.FC<ButtonProps> = ({
       border border-transparent
       hover:bg-[${eatRiteBrandColors.button.tertiary.hover}]
       focus:ring-[${eatRiteBrandColors.border.secondary}]
-    `
-  };
+    `,
+  }
 
   const sizeStyles = {
     sm: `h-9 px-4 text-sm rounded-md`,
     md: `h-11 px-6 text-base rounded-lg`,
     lg: `h-13 px-8 text-lg rounded-lg`,
-    xl: `h-15 px-10 text-xl rounded-xl`
-  };
+    xl: `h-15 px-10 text-xl rounded-xl`,
+  }
 
   const combinedClassName = `
     ${baseStyles}
     ${variantStyles[variant]}
     ${sizeStyles[size]}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return (
     <button
@@ -89,14 +92,14 @@ export const PremiumButton: React.FC<ButtonProps> = ({
         </>
       )}
     </button>
-  );
-};
+  )
+}
 
 // 📄 PREMIUM CARD COMPONENT
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'elevated' | 'outlined';
-  padding?: 'sm' | 'md' | 'lg' | 'xl';
-  goldAccent?: boolean;
+  variant?: 'default' | 'elevated' | 'outlined'
+  padding?: 'sm' | 'md' | 'lg' | 'xl'
+  goldAccent?: boolean
 }
 
 export const PremiumCard: React.FC<CardProps> = ({
@@ -110,7 +113,7 @@ export const PremiumCard: React.FC<CardProps> = ({
   const baseStyles = `
     rounded-xl transition-all duration-300
     border
-  `;
+  `
 
   const variantStyles = {
     default: `
@@ -127,22 +130,24 @@ export const PremiumCard: React.FC<CardProps> = ({
       bg-[${eatRiteBrandColors.surface.primary}]
       border-[${eatRiteBrandColors.border.primary}]
       shadow-md hover:shadow-lg
-    `
-  };
+    `,
+  }
 
   const paddingStyles = {
     sm: 'p-4',
     md: 'p-6',
     lg: 'p-8',
-    xl: 'p-10'
-  };
+    xl: 'p-10',
+  }
 
-  const accentStyles = goldAccent ? `
+  const accentStyles = goldAccent
+    ? `
     relative
     before:absolute before:top-0 before:left-0 before:w-1 before:h-full 
     before:bg-gradient-to-b before:from-[${eatRiteBrandColors.primary.gold}] 
     before:to-transparent before:rounded-l-xl
-  ` : '';
+  `
+    : ''
 
   const combinedClassName = `
     ${baseStyles}
@@ -150,22 +155,25 @@ export const PremiumCard: React.FC<CardProps> = ({
     ${paddingStyles[padding]}
     ${accentStyles}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return (
     <div className={combinedClassName} {...props}>
       {children}
     </div>
-  );
-};
+  )
+}
 
 // 📝 PREMIUM INPUT COMPONENT
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  helper?: string;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+  error?: string
+  helper?: string
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const PremiumInput: React.FC<InputProps> = ({
@@ -186,34 +194,38 @@ export const PremiumInput: React.FC<InputProps> = ({
     focus:outline-none focus:ring-2 focus:ring-offset-2 
     focus:ring-offset-transparent
     disabled:opacity-50 disabled:cursor-not-allowed
-  `;
+  `
 
   const borderStyle = error
     ? `border-[${eatRiteBrandColors.input.borderError}] focus:border-[${eatRiteBrandColors.input.borderError}] focus:ring-red-500`
-    : `border-[${eatRiteBrandColors.input.border}] focus:border-[${eatRiteBrandColors.input.borderFocus}] focus:ring-[${eatRiteBrandColors.border.focus}]`;
+    : `border-[${eatRiteBrandColors.input.border}] focus:border-[${eatRiteBrandColors.input.borderFocus}] focus:ring-[${eatRiteBrandColors.border.focus}]`
 
   return (
     <div className="space-y-2">
       {label && (
-        <label className={`
+        <label
+          className={`
           block text-sm font-medium 
           text-[${eatRiteBrandColors.text.primary}]
           font-serif
-        `}>
+        `}
+        >
           {label}
         </label>
       )}
-      
+
       <div className="relative">
         {leftIcon && (
-          <div className={`
+          <div
+            className={`
             absolute left-3 top-1/2 transform -translate-y-1/2 
             w-5 h-5 text-[${eatRiteBrandColors.input.placeholder}]
-          `}>
+          `}
+          >
             {leftIcon}
           </div>
         )}
-        
+
         <input
           className={`
             ${inputStyles}
@@ -221,39 +233,46 @@ export const PremiumInput: React.FC<InputProps> = ({
             ${leftIcon ? 'pl-11' : ''}
             ${rightIcon ? 'pr-11' : ''}
             ${className}
-          `.replace(/\s+/g, ' ').trim()}
+          `
+            .replace(/\s+/g, ' ')
+            .trim()}
           {...props}
         />
-        
+
         {rightIcon && (
-          <div className={`
+          <div
+            className={`
             absolute right-3 top-1/2 transform -translate-y-1/2 
             w-5 h-5 text-[${eatRiteBrandColors.input.placeholder}]
-          `}>
+          `}
+          >
             {rightIcon}
           </div>
         )}
       </div>
-      
+
       {(error || helper) && (
-        <p className={`
+        <p
+          className={`
           text-sm
-          ${error 
-            ? `text-[${eatRiteBrandColors.status.error}]` 
-            : `text-[${eatRiteBrandColors.text.secondary}]`
+          ${
+            error
+              ? `text-[${eatRiteBrandColors.status.error}]`
+              : `text-[${eatRiteBrandColors.text.secondary}]`
           }
-        `}>
+        `}
+        >
           {error || helper}
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
 // 🏷️ PREMIUM BADGE COMPONENT
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const PremiumBadge: React.FC<BadgeProps> = ({
@@ -266,7 +285,7 @@ export const PremiumBadge: React.FC<BadgeProps> = ({
   const baseStyles = `
     inline-flex items-center justify-center font-medium rounded-full
     border transition-colors duration-200
-  `;
+  `
 
   const variantStyles = {
     primary: `
@@ -293,28 +312,30 @@ export const PremiumBadge: React.FC<BadgeProps> = ({
       bg-[${eatRiteBrandColors.status.error}]
       text-[${eatRiteBrandColors.text.primary}]
       border-transparent
-    `
-  };
+    `,
+  }
 
   const sizeStyles = {
     sm: 'px-2 py-1 text-xs h-5',
     md: 'px-3 py-1 text-sm h-6',
-    lg: 'px-4 py-2 text-base h-8'
-  };
+    lg: 'px-4 py-2 text-base h-8',
+  }
 
   const combinedClassName = `
     ${baseStyles}
     ${variantStyles[variant]}
     ${sizeStyles[size]}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return (
     <span className={combinedClassName} {...props}>
       {children}
     </span>
-  );
-};
+  )
+}
 
 // Export all premium components
 export const EatRitePremiumComponents = {
@@ -322,4 +343,4 @@ export const EatRitePremiumComponents = {
   PremiumCard,
   PremiumInput,
   PremiumBadge,
-};
+}

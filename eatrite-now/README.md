@@ -5,6 +5,7 @@ A modern meal delivery platform inspired by Factor75, built with React, TypeScri
 ## 🚀 Tech Stack
 
 ### Frontend
+
 - **React 18** with TypeScript
 - **Vite** for blazing fast development
 - **Tailwind CSS** for styling
@@ -13,6 +14,7 @@ A modern meal delivery platform inspired by Factor75, built with React, TypeScri
 - **Framer Motion** for animations
 
 ### Backend
+
 - **Node.js** with TypeScript
 - **Express.js** framework
 - **PostgreSQL** database
@@ -22,6 +24,7 @@ A modern meal delivery platform inspired by Factor75, built with React, TypeScri
 - **Nodemailer** for email services
 
 ### DevOps & Tools
+
 - **pnpm** monorepo management
 - **ESLint** & **Prettier** for code quality
 - **Husky** for git hooks
@@ -42,7 +45,8 @@ eatrite-now/
 ## 🏃‍♂️ Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - pnpm 8+
 - PostgreSQL 14+
 - Git
@@ -50,16 +54,19 @@ eatrite-now/
 ### Installation
 
 1. **Clone and navigate to project:**
+
    ```bash
    cd eatrite-now
    ```
 
 2. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 3. **Set up environment variables:**
+
    ```bash
    # Backend
    cp apps/backend/.env.example apps/backend/.env
@@ -67,22 +74,24 @@ eatrite-now/
    ```
 
 4. **Set up database:**
+
    ```bash
    # Generate Prisma client
    pnpm --filter backend db:generate
-   
+
    # Run migrations
    pnpm --filter backend db:migrate
-   
+
    # Seed database with sample data
    pnpm --filter backend db:seed
    ```
 
 5. **Start development servers:**
+
    ```bash
    # Start both frontend and backend
    pnpm dev
-   
+
    # Or start individually:
    pnpm --filter frontend dev    # http://localhost:3000
    pnpm --filter backend dev     # http://localhost:3001
@@ -91,6 +100,7 @@ eatrite-now/
 ## 🗄️ Database Setup
 
 ### Using Docker (Recommended)
+
 ```bash
 # Start PostgreSQL container
 docker run --name eatrite-postgres \
@@ -105,6 +115,7 @@ DATABASE_URL="postgresql://eatrite:password@localhost:5432/eatrite_now?schema=pu
 ```
 
 ### Local PostgreSQL
+
 1. Install PostgreSQL 14+
 2. Create database: `createdb eatrite_now`
 3. Update `DATABASE_URL` in `.env`
@@ -141,6 +152,7 @@ pnpm clean                 # Clean all node_modules and build files
 ### Environment Variables
 
 #### Backend (.env)
+
 ```bash
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/eatrite_now"
@@ -167,6 +179,7 @@ STRIPE_WEBHOOK_SECRET="whsec_..."
 ## 📦 Features
 
 ### 🎯 Core Features
+
 - [ ] User registration and authentication
 - [ ] Meal browsing and filtering
 - [ ] Subscription management
@@ -176,18 +189,21 @@ STRIPE_WEBHOOK_SECRET="whsec_..."
 - [ ] Admin dashboard
 
 ### 🍽️ Meal Management
+
 - [ ] Dynamic meal categories
 - [ ] Nutritional information
 - [ ] Allergen tracking
 - [ ] Meal customization
 
 ### 🔄 Subscription System
+
 - [ ] Flexible meal plans (6, 8, 10, 12 meals/week)
 - [ ] Pause/resume subscriptions
 - [ ] Delivery scheduling
 - [ ] Plan modifications
 
 ### 📊 Analytics & Admin
+
 - [ ] Order analytics
 - [ ] User behavior tracking
 - [ ] Inventory management
@@ -196,6 +212,7 @@ STRIPE_WEBHOOK_SECRET="whsec_..."
 ## 🚀 Deployment
 
 ### Using Docker
+
 ```bash
 # Build images
 docker-compose build
@@ -208,6 +225,7 @@ docker-compose exec backend pnpm db:migrate
 ```
 
 ### Manual Deployment
+
 ```bash
 # Build applications
 pnpm build
@@ -229,6 +247,7 @@ pnpm start
 The API documentation is available at `http://localhost:3001/api/docs` when running in development mode.
 
 ### Key Endpoints
+
 - `GET /api/health` - Health check
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login

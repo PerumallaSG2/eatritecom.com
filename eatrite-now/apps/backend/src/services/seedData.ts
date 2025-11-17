@@ -1,7 +1,7 @@
 // import sql from 'mssql';
 
 // export const seedDatabaseWithPool = async (pool: sql.ConnectionPool): Promise<void> => {
-  
+
 //   try {
 //     console.log('🌱 Starting EatRite database seeding...');
 
@@ -288,8 +288,8 @@
 //         .input('dietary_tags', sql.NVarChar, meal.dietary_tags || '[]')
 //         .query(`
 //           INSERT INTO meals (
-//             name, description, short_description, image_url, category_id, 
-//             ingredients, allergens, price, calories, protein, carbs, fat, 
+//             name, description, short_description, image_url, category_id,
+//             ingredients, allergens, price, calories, protein, carbs, fat,
 //             fiber, sodium, prep_time, is_popular, is_new, is_top_rated, dietary_tags
 //           ) VALUES (
 //             @name, @description, @short_description, @image_url, @category_id,
@@ -382,7 +382,7 @@
 //         .input('features', sql.NVarChar, plan.features)
 //         .query(`
 //           INSERT INTO meal_plans (
-//             name, description, meals_per_week, price_per_meal, 
+//             name, description, meals_per_week, price_per_meal,
 //             total_weekly_price, discount_percentage, is_popular, features
 //           ) VALUES (
 //             @name, @description, @meals_per_week, @price_per_meal,

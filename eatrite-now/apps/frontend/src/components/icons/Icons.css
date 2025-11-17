@@ -140,7 +140,8 @@
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     filter: drop-shadow(0 0 4px rgba(212, 160, 71, 0.3));
   }
@@ -209,8 +210,12 @@
 }
 
 @keyframes iconSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* SVG Gradient Definitions */
@@ -271,7 +276,7 @@
     width: 40px;
     height: 40px;
   }
-  
+
   .eatrite-icon--2xl {
     width: 48px;
     height: 48px;
@@ -297,11 +302,11 @@
     stroke: #ffcc00;
     filter: none;
   }
-  
+
   .eatrite-icon--gray {
     stroke: #cccccc;
   }
-  
+
   .eatrite-icon--interactive:hover {
     stroke: #ffffff;
     filter: none;

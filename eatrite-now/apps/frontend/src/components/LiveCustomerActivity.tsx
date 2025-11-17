@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   TrendingUp,
   Users,
@@ -9,27 +9,27 @@ import {
   Star,
   Award,
   Heart,
-  ThumbsUp
-} from 'lucide-react';
-import { FadeIn } from './AnimationComponents';
+  ThumbsUp,
+} from 'lucide-react'
+import { FadeIn } from './AnimationComponents'
 
 interface CustomerActivity {
-  id: string;
-  type: 'order' | 'review' | 'milestone' | 'referral' | 'subscription';
+  id: string
+  type: 'order' | 'review' | 'milestone' | 'referral' | 'subscription'
   customer: {
-    name: string;
-    location: string;
-    avatar: string;
-    isVerified: boolean;
-  };
-  activity: string;
-  details: string;
-  timestamp: Date;
-  rating?: number;
-  mealCount?: number;
-  savings?: number;
-  icon: React.ComponentType<any>;
-  color: string;
+    name: string
+    location: string
+    avatar: string
+    isVerified: boolean
+  }
+  activity: string
+  details: string
+  timestamp: Date
+  rating?: number
+  mealCount?: number
+  savings?: number
+  icon: React.ComponentType<any>
+  color: string
 }
 
 const generateRecentActivities = (): CustomerActivity[] => {
@@ -41,13 +41,13 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Sarah M.',
         location: 'New York, NY',
         avatar: '👩‍💼',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Ordered the Mediterranean Bundle',
       details: '12 meals for family meal prep',
       timestamp: new Date(Date.now() - 2 * 60 * 1000),
       icon: Utensils,
-      color: 'blue'
+      color: 'blue',
     },
     {
       id: '2',
@@ -56,14 +56,14 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Mike R.',
         location: 'Los Angeles, CA',
         avatar: '👨‍🏋️',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Rated Keto Power Bowl',
       details: '"Perfect macros for my training!"',
       timestamp: new Date(Date.now() - 5 * 60 * 1000),
       rating: 5,
       icon: Star,
-      color: 'yellow'
+      color: 'yellow',
     },
     {
       id: '3',
@@ -72,14 +72,14 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Jessica L.',
         location: 'Austin, TX',
         avatar: '👩‍⚕️',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Reached 50 meal milestone',
       details: 'Lost 15 lbs and feels amazing!',
       timestamp: new Date(Date.now() - 8 * 60 * 1000),
       mealCount: 50,
       icon: Award,
-      color: 'purple'
+      color: 'purple',
     },
     {
       id: '4',
@@ -88,13 +88,13 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'David K.',
         location: 'Chicago, IL',
         avatar: '👨‍💻',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Started Premium Plan',
       details: 'Upgraded for family of 4',
       timestamp: new Date(Date.now() - 12 * 60 * 1000),
       icon: CheckCircle,
-      color: 'green'
+      color: 'green',
     },
     {
       id: '5',
@@ -103,14 +103,14 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Emily C.',
         location: 'Seattle, WA',
         avatar: '👩‍🎨',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Referred 3 friends',
       details: 'Earned $75 in credits',
       timestamp: new Date(Date.now() - 15 * 60 * 1000),
       savings: 75,
       icon: Heart,
-      color: 'pink'
+      color: 'pink',
     },
     {
       id: '6',
@@ -119,13 +119,13 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Carlos M.',
         location: 'Miami, FL',
         avatar: '👨‍🍳',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Reordered Paleo Favorites',
       details: '8 meals for the week',
       timestamp: new Date(Date.now() - 18 * 60 * 1000),
       icon: Utensils,
-      color: 'blue'
+      color: 'blue',
     },
     {
       id: '7',
@@ -134,28 +134,30 @@ const generateRecentActivities = (): CustomerActivity[] => {
         name: 'Amanda P.',
         location: 'Denver, CO',
         avatar: '👩‍🏫',
-        isVerified: true
+        isVerified: true,
       },
       activity: 'Left 5-star review',
       details: '"Kids actually love these healthy meals!"',
       timestamp: new Date(Date.now() - 22 * 60 * 1000),
       rating: 5,
       icon: ThumbsUp,
-      color: 'green'
-    }
-  ];
+      color: 'green',
+    },
+  ]
 
-  return activities;
-};
+  return activities
+}
 
 export const LiveCustomerActivity: React.FC = () => {
-  const [_activities, _setActivities] = useState<CustomerActivity[]>([]);
-  const [visibleActivities, setVisibleActivities] = useState<CustomerActivity[]>([]);
+  const [_activities, _setActivities] = useState<CustomerActivity[]>([])
+  const [visibleActivities, setVisibleActivities] = useState<
+    CustomerActivity[]
+  >([])
 
   useEffect(() => {
-    const initialActivities = generateRecentActivities();
-    _setActivities(initialActivities);
-    setVisibleActivities(initialActivities.slice(0, 4));
+    const initialActivities = generateRecentActivities()
+    _setActivities(initialActivities)
+    setVisibleActivities(initialActivities.slice(0, 4))
 
     // Simulate new activity every 10 seconds
     const interval = setInterval(() => {
@@ -166,42 +168,44 @@ export const LiveCustomerActivity: React.FC = () => {
           name: 'New Customer',
           location: 'Nationwide',
           avatar: '🎉',
-          isVerified: true
+          isVerified: true,
         },
         activity: 'Just placed an order',
         details: 'Fresh meal delivery',
         timestamp: new Date(),
         icon: Utensils,
-        color: 'blue'
-      };
-      
-      _setActivities((prev: CustomerActivity[]) => [newActivity, ...prev]);
-      setVisibleActivities(prev => [newActivity, ...prev.slice(0, 3)]);
-    }, 10000);
+        color: 'blue',
+      }
 
-    return () => clearInterval(interval);
-  }, []);
+      _setActivities((prev: CustomerActivity[]) => [newActivity, ...prev])
+      setVisibleActivities(prev => [newActivity, ...prev.slice(0, 3)])
+    }, 10000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const getTimeAgo = (timestamp: Date) => {
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - timestamp.getTime()) / 1000 / 60);
-    
-    if (diff < 1) return 'Just now';
-    if (diff < 60) return `${diff}m ago`;
-    const hours = Math.floor(diff / 60);
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.floor(hours / 24);
-    return `${days}d ago`;
-  };
+    const now = new Date()
+    const diff = Math.floor((now.getTime() - timestamp.getTime()) / 1000 / 60)
+
+    if (diff < 1) return 'Just now'
+    if (diff < 60) return `${diff}m ago`
+    const hours = Math.floor(diff / 60)
+    if (hours < 24) return `${hours}h ago`
+    const days = Math.floor(hours / 24)
+    return `${days}d ago`
+  }
 
   const getActivityIcon = (activity: CustomerActivity) => {
-    const IconComponent = activity.icon;
+    const IconComponent = activity.icon
     return (
-      <div className={`w-10 h-10 rounded-full bg-${activity.color}-100 flex items-center justify-center flex-shrink-0`}>
+      <div
+        className={`w-10 h-10 rounded-full bg-${activity.color}-100 flex items-center justify-center flex-shrink-0`}
+      >
         <IconComponent className={`w-5 h-5 text-${activity.color}-600`} />
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -213,7 +217,9 @@ export const LiveCustomerActivity: React.FC = () => {
           </div>
           <div>
             <h3 className="text-xl font-bold">Live Customer Activity</h3>
-            <p className="text-blue-100">Real customers, real results, happening now</p>
+            <p className="text-blue-100">
+              Real customers, real results, happening now
+            </p>
           </div>
         </div>
       </div>
@@ -239,10 +245,13 @@ export const LiveCustomerActivity: React.FC = () => {
 
         {/* Live Activity Feed */}
         <div className="space-y-4 max-h-96 overflow-y-auto">
-          {visibleActivities.map((activity) => (
-            <div key={activity.id} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          {visibleActivities.map(activity => (
+            <div
+              key={activity.id}
+              className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+            >
               {getActivityIcon(activity)}
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
                   <span className="font-semibold text-gray-900">
@@ -253,22 +262,20 @@ export const LiveCustomerActivity: React.FC = () => {
                   )}
                   <span className="text-2xl">{activity.customer.avatar}</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
                   <MapPin className="w-3 h-3" />
                   <span>{activity.customer.location}</span>
                   <Clock className="w-3 h-3 ml-2" />
                   <span>{getTimeAgo(activity.timestamp)}</span>
                 </div>
-                
+
                 <p className="text-gray-800 font-medium mb-1">
                   {activity.activity}
                 </p>
-                
-                <p className="text-sm text-gray-600">
-                  {activity.details}
-                </p>
-                
+
+                <p className="text-sm text-gray-600">{activity.details}</p>
+
                 {/* Rating Display */}
                 {activity.rating && (
                   <div className="flex items-center mt-2">
@@ -276,13 +283,15 @@ export const LiveCustomerActivity: React.FC = () => {
                       <Star
                         key={i}
                         className={`w-4 h-4 ${
-                          i < activity.rating! ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          i < activity.rating!
+                            ? 'text-yellow-400 fill-current'
+                            : 'text-gray-300'
                         }`}
                       />
                     ))}
                   </div>
                 )}
-                
+
                 {/* Meal Count Badge */}
                 {activity.mealCount && (
                   <div className="inline-flex items-center mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
@@ -290,7 +299,7 @@ export const LiveCustomerActivity: React.FC = () => {
                     {activity.mealCount} meals completed
                   </div>
                 )}
-                
+
                 {/* Savings Badge */}
                 {activity.savings && (
                   <div className="inline-flex items-center mt-2 px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
@@ -312,7 +321,9 @@ export const LiveCustomerActivity: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-gray-600">Most Popular: </span>
-                <span className="font-semibold text-blue-600">Keto Power Bowl</span>
+                <span className="font-semibold text-blue-600">
+                  Keto Power Bowl
+                </span>
               </div>
               <div>
                 <span className="text-gray-600">Top Location: </span>
@@ -320,7 +331,9 @@ export const LiveCustomerActivity: React.FC = () => {
               </div>
               <div>
                 <span className="text-gray-600">Peak Time: </span>
-                <span className="font-semibold text-purple-600">Sunday 6PM</span>
+                <span className="font-semibold text-purple-600">
+                  Sunday 6PM
+                </span>
               </div>
               <div>
                 <span className="text-gray-600">Avg Order: </span>
@@ -343,7 +356,7 @@ export const LiveCustomerActivity: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LiveCustomerActivity;
+export default LiveCustomerActivity

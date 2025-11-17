@@ -15,24 +15,24 @@ export const ProgressiveFeatures = () => {
   const [activeTab, setActiveTab] = useState<FeatureTab>('basics')
 
   const tabs = [
-    { 
-      id: 'basics' as const, 
-      label: 'How It Works', 
+    {
+      id: 'basics' as const,
+      label: 'How It Works',
       icon: <EatRiteIcons.Clock size="sm" />,
-      description: 'Simple meal delivery'
+      description: 'Simple meal delivery',
     },
-    { 
-      id: 'smart' as const, 
-      label: 'Smart Features', 
+    {
+      id: 'smart' as const,
+      label: 'Smart Features',
       icon: <EatRiteIcons.Target size="sm" />,
-      description: 'AI-powered personalization'
+      description: 'AI-powered personalization',
     },
-    { 
-      id: 'premium' as const, 
-      label: 'Premium Tools', 
+    {
+      id: 'premium' as const,
+      label: 'Premium Tools',
       icon: <EatRiteIcons.Star size="sm" />,
-      description: 'Advanced analytics'
-    }
+      description: 'Advanced analytics',
+    },
   ]
 
   return (
@@ -41,15 +41,16 @@ export const ProgressiveFeatures = () => {
         {/* Tab Navigation */}
         <div className="flex justify-center mb-12">
           <div className="flex bg-eatrite-black-800 rounded-lg p-2">
-            {tabs.map((tab) => (
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
                   flex items-center gap-2 px-6 py-3 rounded-md transition-all
-                  ${activeTab === tab.id 
-                    ? 'bg-gradient-gold text-eatrite-text-inverse shadow-gold-sm' 
-                    : 'text-eatrite-text-tertiary hover:text-eatrite-text-secondary'
+                  ${
+                    activeTab === tab.id
+                      ? 'bg-gradient-gold text-eatrite-text-inverse shadow-gold-sm'
+                      : 'text-eatrite-text-tertiary hover:text-eatrite-text-secondary'
                   }
                 `}
               >
@@ -65,32 +66,47 @@ export const ProgressiveFeatures = () => {
           {activeTab === 'basics' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <EatRiteCard variant="flat" className="text-center p-8">
-                <EatRiteIcons.ChefHat size="lg" color="gold" className="mx-auto mb-4" />
+                <EatRiteIcons.ChefHat
+                  size="lg"
+                  color="gold"
+                  className="mx-auto mb-4"
+                />
                 <h3 className="font-serif text-xl font-semibold text-eatrite-gold-400 mb-4">
                   Chef-Crafted
                 </h3>
                 <p className="text-eatrite-text-secondary">
-                  Professional chefs design every meal with premium ingredients and perfect nutrition balance.
+                  Professional chefs design every meal with premium ingredients
+                  and perfect nutrition balance.
                 </p>
               </EatRiteCard>
 
               <EatRiteCard variant="flat" className="text-center p-8">
-                <EatRiteIcons.Truck size="lg" color="gold" className="mx-auto mb-4" />
+                <EatRiteIcons.Truck
+                  size="lg"
+                  color="gold"
+                  className="mx-auto mb-4"
+                />
                 <h3 className="font-serif text-xl font-semibold text-eatrite-gold-400 mb-4">
                   Fresh Delivery
                 </h3>
                 <p className="text-eatrite-text-secondary">
-                  Insulated packaging keeps meals fresh. Delivered weekly to your door, ready in 2 minutes.
+                  Insulated packaging keeps meals fresh. Delivered weekly to
+                  your door, ready in 2 minutes.
                 </p>
               </EatRiteCard>
 
               <EatRiteCard variant="flat" className="text-center p-8">
-                <EatRiteIcons.Heart size="lg" color="gold" className="mx-auto mb-4" />
+                <EatRiteIcons.Heart
+                  size="lg"
+                  color="gold"
+                  className="mx-auto mb-4"
+                />
                 <h3 className="font-serif text-xl font-semibold text-eatrite-gold-400 mb-4">
                   Health First
                 </h3>
                 <p className="text-eatrite-text-secondary">
-                  Nutritionist-approved recipes. Track calories, macros, and health goals effortlessly.
+                  Nutritionist-approved recipes. Track calories, macros, and
+                  health goals effortlessly.
                 </p>
               </EatRiteCard>
             </div>

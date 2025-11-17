@@ -8,10 +8,26 @@ import { FadeIn } from '../AnimationComponents'
 
 export const EarlySocialProof = () => {
   const stats = [
-    { value: '50K+', label: 'Happy Customers', icon: <EatRiteIcons.Heart size="md" /> },
-    { value: '4.9★', label: 'Average Rating', icon: <EatRiteIcons.Star size="md" /> },
-    { value: '500+', label: 'Premium Meals', icon: <EatRiteIcons.ChefHat size="md" /> },
-    { value: '98%', label: 'Would Recommend', icon: <EatRiteIcons.Check size="md" /> }
+    {
+      value: '50K+',
+      label: 'Happy Customers',
+      icon: <EatRiteIcons.Heart size="md" />,
+    },
+    {
+      value: '4.9★',
+      label: 'Average Rating',
+      icon: <EatRiteIcons.Star size="md" />,
+    },
+    {
+      value: '500+',
+      label: 'Premium Meals',
+      icon: <EatRiteIcons.ChefHat size="md" />,
+    },
+    {
+      value: '98%',
+      label: 'Would Recommend',
+      icon: <EatRiteIcons.Check size="md" />,
+    },
   ]
 
   const reviews = [
@@ -19,26 +35,25 @@ export const EarlySocialProof = () => {
       name: 'Sarah M.',
       rating: 5,
       text: 'Finally, healthy meals that actually taste amazing. The convenience is unmatched.',
-      verified: true
+      verified: true,
     },
     {
       name: 'Michael R.',
-      rating: 5, 
+      rating: 5,
       text: 'Lost 15 lbs in 2 months without sacrificing flavor. Worth every penny.',
-      verified: true
+      verified: true,
     },
     {
       name: 'Jennifer L.',
       rating: 5,
       text: 'As a busy mom, EatRite saves me hours while keeping my family healthy.',
-      verified: true
-    }
+      verified: true,
+    },
   ]
 
   return (
     <section className="py-16 bg-eatrite-black-900 border-t border-eatrite-black-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Trust Stats */}
         <FadeIn>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
@@ -86,11 +101,11 @@ export const EarlySocialProof = () => {
                   </div>
                 )}
               </div>
-              
+
               <p className="text-eatrite-text-secondary text-sm mb-4 leading-relaxed">
                 "{review.text}"
               </p>
-              
+
               <div className="text-eatrite-text-tertiary text-xs font-medium">
                 — {review.name}
               </div>

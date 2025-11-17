@@ -1,71 +1,79 @@
-import React, { useState } from 'react';
-import { LoginScreen, SignupScreen, ForgotPasswordScreen } from '../components/screens/AuthenticationScreens';
+import React, { useState } from 'react'
+import {
+  LoginScreen,
+  SignupScreen,
+  ForgotPasswordScreen,
+} from '../components/screens/AuthenticationScreens'
 
-type AuthScreen = 'login' | 'signup' | 'forgot-password';
+type AuthScreen = 'login' | 'signup' | 'forgot-password'
 
 const LoginPage: React.FC = () => {
-  const [currentScreen, setCurrentScreen] = useState<AuthScreen>('login');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState<AuthScreen>('login')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string>('')
+  const [success, setSuccess] = useState(false)
 
   const handleLogin = async (email: string, password: string) => {
-    setLoading(true);
-    setError('');
-    
+    setLoading(true)
+    setError('')
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
       // For demo purposes, accept any email/password
       if (email && password) {
-        console.log('Login successful:', { email });
+        console.log('Login successful:', { email })
         // Here you would typically redirect to the account page or dashboard
-        window.location.href = '/account';
+        window.location.href = '/account'
       } else {
-        throw new Error('Please enter valid credentials');
+        throw new Error('Please enter valid credentials')
       }
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      setError('Invalid email or password. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const handleSignup = async (data: { name: string; email: string; password: string }) => {
-    setLoading(true);
-    setError('');
-    
+  const handleSignup = async (data: {
+    name: string
+    email: string
+    password: string
+  }) => {
+    setLoading(true)
+    setError('')
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log('Signup successful:', data);
+      await new Promise(resolve => setTimeout(resolve, 2000))
+
+      console.log('Signup successful:', data)
       // Here you would typically create the account and redirect
-      window.location.href = '/account';
+      window.location.href = '/account'
     } catch (err) {
-      setError('Failed to create account. Please try again.');
+      setError('Failed to create account. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleForgotPassword = async (email: string) => {
-    setLoading(true);
-    setError('');
-    
+    setLoading(true)
+    setError('')
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSuccess(true);
-      console.log('Password reset sent to:', email);
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      setSuccess(true)
+      console.log('Password reset sent to:', email)
     } catch (err) {
-      setError('Failed to send reset email. Please try again.');
+      setError('Failed to send reset email. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -74,50 +82,50 @@ const LoginPage: React.FC = () => {
           <SignupScreen
             onSignup={handleSignup}
             onLoginClick={() => {
-              setCurrentScreen('login');
-              setError('');
-              setSuccess(false);
+              setCurrentScreen('login')
+              setError('')
+              setSuccess(false)
             }}
             loading={loading}
             error={error}
           />
-        );
+        )
       case 'forgot-password':
         return (
           <ForgotPasswordScreen
             onSubmit={handleForgotPassword}
             onBackToLogin={() => {
-              setCurrentScreen('login');
-              setError('');
-              setSuccess(false);
+              setCurrentScreen('login')
+              setError('')
+              setSuccess(false)
             }}
             loading={loading}
             success={success}
             error={error}
           />
-        );
+        )
       default:
         return (
           <LoginScreen
             onLogin={handleLogin}
             onSignupClick={() => {
-              setCurrentScreen('signup');
-              setError('');
-              setSuccess(false);
+              setCurrentScreen('signup')
+              setError('')
+              setSuccess(false)
             }}
             onForgotPasswordClick={() => {
-              setCurrentScreen('forgot-password');
-              setError('');
-              setSuccess(false);
+              setCurrentScreen('forgot-password')
+              setError('')
+              setSuccess(false)
             }}
             loading={loading}
             error={error}
           />
-        );
+        )
     }
-  };
+  }
 
-  return renderScreen();
-};
+  return renderScreen()
+}
 
-export default LoginPage;
+export default LoginPage

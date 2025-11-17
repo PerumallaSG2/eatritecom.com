@@ -21,15 +21,15 @@
   --color-primary-950: #3f2c14;
 
   /* === BACKGROUND COLORS === */
-  --color-bg-primary: #000000;    /* Pure black */
-  --color-bg-secondary: #0a0a0a;  /* Slightly lighter */
-  --color-bg-tertiary: #111111;   /* Card backgrounds */
-  --color-bg-elevated: #1a1a1a;   /* Elevated surfaces */
+  --color-bg-primary: #000000; /* Pure black */
+  --color-bg-secondary: #0a0a0a; /* Slightly lighter */
+  --color-bg-tertiary: #111111; /* Card backgrounds */
+  --color-bg-elevated: #1a1a1a; /* Elevated surfaces */
 
   /* === ACCENT COLORS (Black & Gold Only) === */
-  --color-accent-light: #f9d672;   /* Light gold accent */
-  --color-accent-medium: #d4a047;  /* Medium gold accent */
-  --color-accent-dark: #96661f;    /* Dark gold accent */
+  --color-accent-light: #f9d672; /* Light gold accent */
+  --color-accent-medium: #d4a047; /* Medium gold accent */
+  --color-accent-dark: #96661f; /* Dark gold accent */
 
   /* === TEXT COLORS === */
   --color-text-primary: #ffffff;
@@ -46,43 +46,52 @@
   --color-surface-divider: #2a2a2a;
 
   /* === STATUS COLORS (Black & Gold Theme) === */
-  --color-success: #d4a047;        /* Gold for success */
-  --color-success-bg: #5c3b14;     /* Dark gold background */
-  --color-warning: #f4c430;        /* Light gold for warnings */
-  --color-warning-bg: #7a4f1a;     /* Medium gold background */
-  --color-error: #737373;          /* Gray for errors (no red) */
-  --color-error-bg: #262626;       /* Dark gray background */
+  --color-success: #d4a047; /* Gold for success */
+  --color-success-bg: #5c3b14; /* Dark gold background */
+  --color-warning: #f4c430; /* Light gold for warnings */
+  --color-warning-bg: #7a4f1a; /* Medium gold background */
+  --color-error: #737373; /* Gray for errors (no red) */
+  --color-error-bg: #262626; /* Dark gray background */
 
   /* === TYPOGRAPHY === */
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
 
   /* === SPACING === */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
-  --spacing-3xl: 4rem;     /* 64px */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 4rem; /* 64px */
 
   /* === BORDER RADIUS === */
-  --radius-sm: 0.25rem;    /* 4px */
-  --radius-md: 0.5rem;     /* 8px */
-  --radius-lg: 0.75rem;    /* 12px */
-  --radius-xl: 1rem;       /* 16px */
-  --radius-2xl: 1.5rem;    /* 24px */
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-2xl: 1.5rem; /* 24px */
 
   /* === SHADOWS === */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.7);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.7);
-  --shadow-gold: 0 0 20px rgba(212, 160, 71, 0.3), 0 0 40px rgba(212, 160, 71, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.6);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.7);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.7);
+  --shadow-gold:
+    0 0 20px rgba(212, 160, 71, 0.3), 0 0 40px rgba(212, 160, 71, 0.1);
 
   /* === GRADIENTS === */
-  --gradient-gold: linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%);
+  --gradient-gold: linear-gradient(
+    135deg,
+    #f4d03f 0%,
+    #d4a047 50%,
+    #b8903d 100%
+  );
   --gradient-dark: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
   --gradient-surface: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
 
@@ -121,7 +130,12 @@ body {
 }
 
 /* === TYPOGRAPHY STYLES === */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-serif);
   font-weight: 700;
   line-height: 1.2;
@@ -237,7 +251,9 @@ a:hover {
 .card-premium {
   background: var(--gradient-surface);
   border-color: var(--color-primary-700);
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(212, 160, 71, 0.1);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 20px rgba(212, 160, 71, 0.1);
 }
 
 /* === INPUT STYLES === */
@@ -317,18 +333,35 @@ a:hover {
 
 /* === ANIMATIONS === */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 71, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(212, 160, 71, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(212, 160, 71, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(212, 160, 71, 0.6);
+  }
 }
 
 .animate-fade-in {
@@ -393,8 +426,12 @@ select:focus-visible {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-shimmer {
@@ -409,8 +446,12 @@ select:focus-visible {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* === RESPONSIVE DESIGN === */
@@ -418,7 +459,7 @@ select:focus-visible {
   .card {
     padding: var(--spacing-md);
   }
-  
+
   .btn {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;

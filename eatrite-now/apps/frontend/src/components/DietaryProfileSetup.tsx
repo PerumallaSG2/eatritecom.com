@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { User, Target, AlertTriangle, Utensils, Calendar } from 'lucide-react';
-import { useUserPreferences } from '../context/UserPreferencesContext';
+import React, { useState } from 'react'
+import { User, Target, AlertTriangle, Utensils, Calendar } from 'lucide-react'
+import { useUserPreferences } from '../context/UserPreferencesContext'
 
 interface DietaryProfileSetupProps {
-  onComplete?: () => void;
-  isModal?: boolean;
+  onComplete?: () => void
+  isModal?: boolean
 }
 
-const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, isModal = false }) => {
-  const { preferences, updatePreferences, updateDietaryProfile } = useUserPreferences();
-  const [step, setStep] = useState(1);
+const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({
+  onComplete,
+  isModal = false,
+}) => {
+  const { preferences, updatePreferences, updateDietaryProfile } =
+    useUserPreferences()
+  const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: preferences?.name || '',
     email: preferences?.email || '',
@@ -19,62 +23,95 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
       allergies: preferences?.dietaryProfile?.allergies || [],
       calorieGoal: preferences?.dietaryProfile?.calorieGoal || 2000,
       proteinGoal: preferences?.dietaryProfile?.proteinGoal || 150,
-      carbPreference: preferences?.dietaryProfile?.carbPreference || 'moderate' as const,
-      goals: preferences?.dietaryProfile?.goals || []
+      carbPreference:
+        preferences?.dietaryProfile?.carbPreference || ('moderate' as const),
+      goals: preferences?.dietaryProfile?.goals || [],
     },
     mealPlanPreferences: {
       mealsPerWeek: preferences?.mealPlanPreferences?.mealsPerWeek || 8,
       deliveryDay: preferences?.mealPlanPreferences?.deliveryDay || 'Tuesday',
-      portion: preferences?.mealPlanPreferences?.portion || 'regular' as const,
-      variety: preferences?.mealPlanPreferences?.variety || 'adventurous' as const
-    }
-  });
+      portion:
+        preferences?.mealPlanPreferences?.portion || ('regular' as const),
+      variety:
+        preferences?.mealPlanPreferences?.variety || ('adventurous' as const),
+    },
+  })
 
   const dietaryOptions = [
     { id: 'keto', label: 'Keto', description: 'Low carb, high fat' },
     { id: 'paleo', label: 'Paleo', description: 'Whole foods, no grains' },
     { id: 'vegetarian', label: 'Vegetarian', description: 'No meat or fish' },
     { id: 'vegan', label: 'Vegan', description: 'Plant-based only' },
-    { id: 'high-protein', label: 'High Protein', description: '30g+ protein per meal' },
+    {
+      id: 'high-protein',
+      label: 'High Protein',
+      description: '30g+ protein per meal',
+    },
     { id: 'low-carb', label: 'Low Carb', description: 'Under 30g carbs' },
-    { id: 'calorie-smart', label: 'Calorie Smart', description: 'Under 550 calories' },
-    { id: 'mediterranean', label: 'Mediterranean', description: 'Heart-healthy fats' }
-  ];
+    {
+      id: 'calorie-smart',
+      label: 'Calorie Smart',
+      description: 'Under 550 calories',
+    },
+    {
+      id: 'mediterranean',
+      label: 'Mediterranean',
+      description: 'Heart-healthy fats',
+    },
+  ]
 
   const allergyOptions = [
-    'Dairy', 'Gluten', 'Nuts', 'Shellfish', 'Eggs', 'Soy', 'Fish', 'Sesame'
-  ];
+    'Dairy',
+    'Gluten',
+    'Nuts',
+    'Shellfish',
+    'Eggs',
+    'Soy',
+    'Fish',
+    'Sesame',
+  ]
 
   const goalOptions = [
-    'Weight Loss', 'Muscle Gain', 'Maintain Weight', 'Improve Energy', 
-    'Better Sleep', 'Reduce Inflammation', 'Heart Health', 'Performance'
-  ];
+    'Weight Loss',
+    'Muscle Gain',
+    'Maintain Weight',
+    'Improve Energy',
+    'Better Sleep',
+    'Reduce Inflammation',
+    'Heart Health',
+    'Performance',
+  ]
 
-  const handleToggleOption = (category: 'restrictions' | 'preferences' | 'allergies' | 'goals', option: string) => {
+  const handleToggleOption = (
+    category: 'restrictions' | 'preferences' | 'allergies' | 'goals',
+    option: string
+  ) => {
     setFormData(prev => ({
       ...prev,
       dietaryProfile: {
         ...prev.dietaryProfile,
         [category]: (prev.dietaryProfile[category] as string[]).includes(option)
-          ? (prev.dietaryProfile[category] as string[]).filter((item: string) => item !== option)
-          : [...(prev.dietaryProfile[category] as string[]), option]
-      }
-    }));
-  };
+          ? (prev.dietaryProfile[category] as string[]).filter(
+              (item: string) => item !== option
+            )
+          : [...(prev.dietaryProfile[category] as string[]), option],
+      },
+    }))
+  }
 
   const handleSave = () => {
     // Update user preferences
     updatePreferences({
       name: formData.name,
       email: formData.email,
-      mealPlanPreferences: formData.mealPlanPreferences
-    });
+      mealPlanPreferences: formData.mealPlanPreferences,
+    })
 
     // Update dietary profile
-    updateDietaryProfile(formData.dietaryProfile);
+    updateDietaryProfile(formData.dietaryProfile)
 
-    onComplete?.();
-  };
+    onComplete?.()
+  }
 
   const renderStep = () => {
     switch (step) {
@@ -83,8 +120,12 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
           <div className="space-y-6">
             <div className="text-center mb-8">
               <User className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900">Welcome to Eatrite!</h2>
-              <p className="text-gray-600">Let's personalize your meal experience</p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Welcome to Eatrite!
+              </h2>
+              <p className="text-gray-600">
+                Let's personalize your meal experience
+              </p>
             </div>
 
             <div className="space-y-4">
@@ -95,7 +136,9 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e =>
+                    setFormData(prev => ({ ...prev, name: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter your name"
                 />
@@ -108,21 +151,25 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={e =>
+                    setFormData(prev => ({ ...prev, email: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Enter your email"
                 />
               </div>
             </div>
           </div>
-        );
+        )
 
       case 2:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
               <Utensils className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900">Dietary Preferences</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Dietary Preferences
+              </h2>
               <p className="text-gray-600">Select all that apply to you</p>
             </div>
 
@@ -137,20 +184,26 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                       : 'border-gray-200 hover:border-green-300'
                   }`}
                 >
-                  <div className="font-semibold text-gray-900">{option.label}</div>
-                  <div className="text-sm text-gray-600">{option.description}</div>
+                  <div className="font-semibold text-gray-900">
+                    {option.label}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {option.description}
+                  </div>
                 </button>
               ))}
             </div>
           </div>
-        );
+        )
 
       case 3:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
               <AlertTriangle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900">Food Allergies</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Food Allergies
+              </h2>
               <p className="text-gray-600">Help us keep you safe</p>
             </div>
 
@@ -170,7 +223,7 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
               ))}
             </div>
           </div>
-        );
+        )
 
       case 4:
         return (
@@ -209,13 +262,15 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                     max="4000"
                     step="50"
                     value={formData.dietaryProfile.calorieGoal}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      dietaryProfile: {
-                        ...prev.dietaryProfile,
-                        calorieGoal: parseInt(e.target.value)
-                      }
-                    }))}
+                    onChange={e =>
+                      setFormData(prev => ({
+                        ...prev,
+                        dietaryProfile: {
+                          ...prev.dietaryProfile,
+                          calorieGoal: parseInt(e.target.value),
+                        },
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
@@ -230,27 +285,31 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                     max="300"
                     step="5"
                     value={formData.dietaryProfile.proteinGoal}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      dietaryProfile: {
-                        ...prev.dietaryProfile,
-                        proteinGoal: parseInt(e.target.value)
-                      }
-                    }))}
+                    onChange={e =>
+                      setFormData(prev => ({
+                        ...prev,
+                        dietaryProfile: {
+                          ...prev.dietaryProfile,
+                          proteinGoal: parseInt(e.target.value),
+                        },
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
               </div>
             </div>
           </div>
-        );
+        )
 
       case 5:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
               <Calendar className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900">Meal Plan Preferences</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Meal Plan Preferences
+              </h2>
               <p className="text-gray-600">Customize your delivery</p>
             </div>
 
@@ -263,13 +322,15 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                   {[4, 6, 8, 10].map(count => (
                     <button
                       key={count}
-                      onClick={() => setFormData(prev => ({
-                        ...prev,
-                        mealPlanPreferences: {
-                          ...prev.mealPlanPreferences,
-                          mealsPerWeek: count
-                        }
-                      }))}
+                      onClick={() =>
+                        setFormData(prev => ({
+                          ...prev,
+                          mealPlanPreferences: {
+                            ...prev.mealPlanPreferences,
+                            mealsPerWeek: count,
+                          },
+                        }))
+                      }
                       className={`p-3 border-2 rounded-lg text-center transition-colors ${
                         formData.mealPlanPreferences.mealsPerWeek === count
                           ? 'border-green-500 bg-green-50'
@@ -288,13 +349,15 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                 </label>
                 <select
                   value={formData.mealPlanPreferences.deliveryDay}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    mealPlanPreferences: {
-                      ...prev.mealPlanPreferences,
-                      deliveryDay: e.target.value
-                    }
-                  }))}
+                  onChange={e =>
+                    setFormData(prev => ({
+                      ...prev,
+                      mealPlanPreferences: {
+                        ...prev.mealPlanPreferences,
+                        deliveryDay: e.target.value,
+                      },
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   <option value="Monday">Monday</option>
@@ -311,18 +374,28 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'regular', label: 'Regular', description: 'Standard portions' },
-                    { value: 'large', label: 'Large', description: '25% more food' }
+                    {
+                      value: 'regular',
+                      label: 'Regular',
+                      description: 'Standard portions',
+                    },
+                    {
+                      value: 'large',
+                      label: 'Large',
+                      description: '25% more food',
+                    },
                   ].map(option => (
                     <button
                       key={option.value}
-                      onClick={() => setFormData(prev => ({
-                        ...prev,
-                        mealPlanPreferences: {
-                          ...prev.mealPlanPreferences,
-                          portion: option.value as 'regular' | 'large'
-                        }
-                      }))}
+                      onClick={() =>
+                        setFormData(prev => ({
+                          ...prev,
+                          mealPlanPreferences: {
+                            ...prev.mealPlanPreferences,
+                            portion: option.value as 'regular' | 'large',
+                          },
+                        }))
+                      }
                       className={`p-3 border-2 rounded-lg text-center transition-colors ${
                         formData.mealPlanPreferences.portion === option.value
                           ? 'border-green-500 bg-green-50'
@@ -330,23 +403,25 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
                       }`}
                     >
                       <div className="font-semibold">{option.label}</div>
-                      <div className="text-sm text-gray-600">{option.description}</div>
+                      <div className="text-sm text-gray-600">
+                        {option.description}
+                      </div>
                     </button>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        );
+        )
 
       default:
-        return null;
+        return null
     }
-  };
+  }
 
-  const containerClasses = isModal 
-    ? "bg-white rounded-xl shadow-xl p-6 max-w-2xl mx-auto max-h-[90vh] overflow-y-auto"
-    : "max-w-2xl mx-auto py-12 px-4";
+  const containerClasses = isModal
+    ? 'bg-white rounded-xl shadow-xl p-6 max-w-2xl mx-auto max-h-[90vh] overflow-y-auto'
+    : 'max-w-2xl mx-auto py-12 px-4'
 
   return (
     <div className={containerClasses}>
@@ -361,7 +436,7 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
+          <div
             className="bg-green-600 h-2 rounded-full transition-all duration-300"
             style={{ width: `${(step / 5) * 100}%` }}
           />
@@ -401,7 +476,7 @@ const DietaryProfileSetup: React.FC<DietaryProfileSetupProps> = ({ onComplete, i
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DietaryProfileSetup;
+export default DietaryProfileSetup

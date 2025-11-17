@@ -10,19 +10,26 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  
+
   /* Typography */
-  font-family: var(--font-sans, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-family: var(
+    --font-sans,
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
   font-weight: 600;
   text-decoration: none;
   user-select: none;
-  
+
   /* Interaction */
   cursor: pointer;
   border: none;
   outline: none;
   transition: var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1));
-  
+
   /* Appearance */
   border-radius: var(--radius-lg, 0.5rem);
   position: relative;
@@ -54,8 +61,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Icons */
@@ -96,7 +107,10 @@
 
 /* Primary Gold Button */
 .eatrite-btn--primary {
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   color: var(--color-text-inverse, #000000);
   box-shadow: var(--shadow-gold, 0 0 20px rgba(212, 160, 71, 0.3));
 }
@@ -104,8 +118,8 @@
 .eatrite-btn--primary:hover:not(.eatrite-btn--disabled) {
   background: linear-gradient(135deg, #f9d672 0%, #e8b85c 50%, #d4a047 100%);
   transform: translateY(-2px);
-  box-shadow: 
-    var(--shadow-goldLg, 0 0 30px rgba(212, 160, 71, 0.4)), 
+  box-shadow:
+    var(--shadow-goldLg, 0 0 30px rgba(212, 160, 71, 0.4)),
     var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8));
 }
 
@@ -193,7 +207,7 @@
     font-size: 1rem;
     min-height: 3rem;
   }
-  
+
   .eatrite-btn--md {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
@@ -206,7 +220,7 @@
   .eatrite-btn {
     transition: none;
   }
-  
+
   .eatrite-btn:hover:not(.eatrite-btn--disabled) {
     transform: none;
   }
@@ -217,11 +231,11 @@
   .eatrite-btn--primary {
     border: 2px solid var(--color-text-inverse, #000000);
   }
-  
+
   .eatrite-btn--secondary {
     border-width: 3px;
   }
-  
+
   .eatrite-btn--dark {
     border-width: 2px;
   }

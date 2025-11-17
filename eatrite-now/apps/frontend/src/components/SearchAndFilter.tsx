@@ -1,49 +1,69 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Search, X, ChevronDown, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react'
+import { Search, X, ChevronDown, SlidersHorizontal } from 'lucide-react'
 
 export interface FilterOptions {
-  dietary: string[];
-  calorieRange: [number, number];
-  proteinRange: [number, number];
-  priceRange: [number, number];
-  sortBy: 'name' | 'price' | 'calories' | 'protein' | 'popularity';
-  sortOrder: 'asc' | 'desc';
+  dietary: string[]
+  calorieRange: [number, number]
+  proteinRange: [number, number]
+  priceRange: [number, number]
+  sortBy: 'name' | 'price' | 'calories' | 'protein' | 'popularity'
+  sortOrder: 'asc' | 'desc'
 }
 
 interface SearchAndFilterProps {
-  onSearch: (query: string) => void;
-  onFilter: (filters: FilterOptions) => void;
-  totalResults: number;
+  onSearch: (query: string) => void
+  onFilter: (filters: FilterOptions) => void
+  totalResults: number
 }
 
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
   onSearch,
   onFilter,
-  totalResults
+  totalResults,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const [filters, setFilters] = useState<FilterOptions>({
     dietary: [],
     calorieRange: [200, 800],
     proteinRange: [10, 50],
     priceRange: [8, 15],
     sortBy: 'popularity',
-    sortOrder: 'desc'
-  });
+    sortOrder: 'desc',
+  })
 
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const dietaryOptions = [
     { id: 'keto', label: 'Keto', color: 'bg-purple-100 text-purple-800' },
     { id: 'paleo', label: 'Paleo', color: 'bg-orange-100 text-orange-800' },
     { id: 'vegan', label: 'Vegan', color: 'bg-green-100 text-green-800' },
-    { id: 'vegetarian', label: 'Vegetarian', color: 'bg-emerald-100 text-emerald-800' },
-    { id: 'gluten-free', label: 'Gluten-Free', color: 'bg-blue-100 text-blue-800' },
-    { id: 'dairy-free', label: 'Dairy-Free', color: 'bg-yellow-100 text-yellow-800' },
-    { id: 'high-protein', label: 'High-Protein', color: 'bg-red-100 text-red-800' },
-    { id: 'low-carb', label: 'Low-Carb', color: 'bg-indigo-100 text-indigo-800' }
-  ];
+    {
+      id: 'vegetarian',
+      label: 'Vegetarian',
+      color: 'bg-emerald-100 text-emerald-800',
+    },
+    {
+      id: 'gluten-free',
+      label: 'Gluten-Free',
+      color: 'bg-blue-100 text-blue-800',
+    },
+    {
+      id: 'dairy-free',
+      label: 'Dairy-Free',
+      color: 'bg-yellow-100 text-yellow-800',
+    },
+    {
+      id: 'high-protein',
+      label: 'High-Protein',
+      color: 'bg-red-100 text-red-800',
+    },
+    {
+      id: 'low-carb',
+      label: 'Low-Carb',
+      color: 'bg-indigo-100 text-indigo-800',
+    },
+  ]
 
   const quickFilters = [
     { label: 'All', value: 'all', icon: '🍽️' },
@@ -51,39 +71,39 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     { label: 'High Protein', value: 'high-protein', icon: '💪' },
     { label: 'Under 500 cal', value: 'low-cal', icon: '⚖️' },
     { label: 'Quick Prep', value: 'quick', icon: '⚡' },
-    { label: 'Popular', value: 'popular', icon: '⭐' }
-  ];
+    { label: 'Popular', value: 'popular', icon: '⭐' },
+  ]
 
   const sortOptions = [
     { value: 'popularity', label: 'Most Popular' },
     { value: 'price', label: 'Price' },
     { value: 'calories', label: 'Calories' },
     { value: 'protein', label: 'Protein' },
-    { value: 'name', label: 'Name' }
-  ];
+    { value: 'name', label: 'Name' },
+  ]
 
   // Handle search input changes
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    onSearch(query);
-  };
+    const query = e.target.value
+    setSearchQuery(query)
+    onSearch(query)
+  }
 
   // Handle dietary filter toggle
   const toggleDietaryFilter = (option: string) => {
     const newDietary = filters.dietary.includes(option)
       ? filters.dietary.filter(item => item !== option)
-      : [...filters.dietary, option];
-    
-    const newFilters = { ...filters, dietary: newDietary };
-    setFilters(newFilters);
-    onFilter(newFilters);
-  };
+      : [...filters.dietary, option]
+
+    const newFilters = { ...filters, dietary: newDietary }
+    setFilters(newFilters)
+    onFilter(newFilters)
+  }
 
   // Handle quick filter selection
   const handleQuickFilter = (filterValue: string) => {
-    let newFilters = { ...filters };
-    
+    let newFilters = { ...filters }
+
     switch (filterValue) {
       case 'all':
         newFilters = {
@@ -91,27 +111,27 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
           dietary: [],
           calorieRange: [200, 800],
           proteinRange: [10, 50],
-          priceRange: [8, 15]
-        };
-        break;
+          priceRange: [8, 15],
+        }
+        break
       case 'keto':
-        newFilters.dietary = ['keto'];
-        break;
+        newFilters.dietary = ['keto']
+        break
       case 'high-protein':
-        newFilters.dietary = ['high-protein'];
-        break;
+        newFilters.dietary = ['high-protein']
+        break
       case 'low-cal':
-        newFilters.calorieRange = [200, 500];
-        break;
+        newFilters.calorieRange = [200, 500]
+        break
       case 'popular':
-        newFilters.sortBy = 'popularity';
-        newFilters.sortOrder = 'desc';
-        break;
+        newFilters.sortBy = 'popularity'
+        newFilters.sortOrder = 'desc'
+        break
     }
-    
-    setFilters(newFilters);
-    onFilter(newFilters);
-  };
+
+    setFilters(newFilters)
+    onFilter(newFilters)
+  }
 
   // Handle range input changes
   const handleRangeChange = (
@@ -119,20 +139,20 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     index: number,
     value: number
   ) => {
-    const newRange = [...filters[type]] as [number, number];
-    newRange[index] = value;
-    
-    const newFilters = { ...filters, [type]: newRange };
-    setFilters(newFilters);
-    onFilter(newFilters);
-  };
+    const newRange = [...filters[type]] as [number, number]
+    newRange[index] = value
+
+    const newFilters = { ...filters, [type]: newRange }
+    setFilters(newFilters)
+    onFilter(newFilters)
+  }
 
   // Handle sort change
   const handleSortChange = (sortBy: FilterOptions['sortBy']) => {
-    const newFilters = { ...filters, sortBy };
-    setFilters(newFilters);
-    onFilter(newFilters);
-  };
+    const newFilters = { ...filters, sortBy }
+    setFilters(newFilters)
+    onFilter(newFilters)
+  }
 
   // Clear all filters
   const clearFilters = () => {
@@ -142,25 +162,24 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
       proteinRange: [10, 50],
       priceRange: [8, 15],
       sortBy: 'popularity',
-      sortOrder: 'desc'
-    };
-    setFilters(defaultFilters);
-    setSearchQuery('');
-    onSearch('');
-    onFilter(defaultFilters);
-  };
+      sortOrder: 'desc',
+    }
+    setFilters(defaultFilters)
+    setSearchQuery('')
+    onSearch('')
+    onFilter(defaultFilters)
+  }
 
   // Focus search input when component mounts
   useEffect(() => {
     if (searchInputRef.current) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus()
     }
-  }, []);
+  }, [])
 
   return (
     <div className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        
         {/* Search Bar */}
         <div className="flex items-center space-x-4 mb-4">
           <div className="flex-1 relative">
@@ -178,8 +197,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
             {searchQuery && (
               <button
                 onClick={() => {
-                  setSearchQuery('');
-                  onSearch('');
+                  setSearchQuery('')
+                  onSearch('')
                 }}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
@@ -198,13 +217,15 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
           >
             <SlidersHorizontal className="h-4 w-4" />
             <span className="hidden sm:inline">Filters</span>
-            <ChevronDown className={`h-4 w-4 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`}
+            />
           </button>
         </div>
 
         {/* Quick Filters */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {quickFilters.map((filter) => (
+          {quickFilters.map(filter => (
             <button
               key={filter.value}
               onClick={() => handleQuickFilter(filter.value)}
@@ -221,15 +242,17 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
           <div className="text-sm text-gray-600">
             {totalResults} meal{totalResults !== 1 ? 's' : ''} found
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <label className="text-sm text-gray-600">Sort by:</label>
             <select
               value={filters.sortBy}
-              onChange={(e) => handleSortChange(e.target.value as FilterOptions['sortBy'])}
+              onChange={e =>
+                handleSortChange(e.target.value as FilterOptions['sortBy'])
+              }
               className="text-sm border border-gray-300 rounded px-3 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
             >
-              {sortOptions.map((option) => (
+              {sortOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -241,12 +264,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         {/* Advanced Filters Panel */}
         {showAdvancedFilters && (
           <div className="bg-gray-50 rounded-lg p-4 space-y-4 animate-fade-in">
-            
             {/* Dietary Preferences */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Dietary Preferences</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                Dietary Preferences
+              </h3>
               <div className="flex flex-wrap gap-2">
-                {dietaryOptions.map((option) => (
+                {dietaryOptions.map(option => (
                   <button
                     key={option.id}
                     onClick={() => toggleDietaryFilter(option.id)}
@@ -267,11 +291,11 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
 
             {/* Range Filters */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
               {/* Calories Range */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Calories: {filters.calorieRange[0]} - {filters.calorieRange[1]}
+                  Calories: {filters.calorieRange[0]} -{' '}
+                  {filters.calorieRange[1]}
                 </label>
                 <div className="flex items-center space-x-2">
                   <input
@@ -279,7 +303,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     min="200"
                     max="800"
                     value={filters.calorieRange[0]}
-                    onChange={(e) => handleRangeChange('calorieRange', 0, parseInt(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'calorieRange',
+                        0,
+                        parseInt(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                   <input
@@ -287,7 +317,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     min="200"
                     max="800"
                     value={filters.calorieRange[1]}
-                    onChange={(e) => handleRangeChange('calorieRange', 1, parseInt(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'calorieRange',
+                        1,
+                        parseInt(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                 </div>
@@ -296,7 +332,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
               {/* Protein Range */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Protein: {filters.proteinRange[0]}g - {filters.proteinRange[1]}g
+                  Protein: {filters.proteinRange[0]}g -{' '}
+                  {filters.proteinRange[1]}g
                 </label>
                 <div className="flex items-center space-x-2">
                   <input
@@ -304,7 +341,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     min="10"
                     max="50"
                     value={filters.proteinRange[0]}
-                    onChange={(e) => handleRangeChange('proteinRange', 0, parseInt(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'proteinRange',
+                        0,
+                        parseInt(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                   <input
@@ -312,7 +355,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     min="10"
                     max="50"
                     value={filters.proteinRange[1]}
-                    onChange={(e) => handleRangeChange('proteinRange', 1, parseInt(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'proteinRange',
+                        1,
+                        parseInt(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                 </div>
@@ -330,7 +379,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     max="15"
                     step="0.50"
                     value={filters.priceRange[0]}
-                    onChange={(e) => handleRangeChange('priceRange', 0, parseFloat(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'priceRange',
+                        0,
+                        parseFloat(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                   <input
@@ -339,7 +394,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     max="15"
                     step="0.50"
                     value={filters.priceRange[1]}
-                    onChange={(e) => handleRangeChange('priceRange', 1, parseFloat(e.target.value))}
+                    onChange={e =>
+                      handleRangeChange(
+                        'priceRange',
+                        1,
+                        parseFloat(e.target.value)
+                      )
+                    }
                     className="flex-1"
                   />
                 </div>
@@ -360,7 +421,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SearchAndFilter;
+export default SearchAndFilter

@@ -1,71 +1,73 @@
-import React, { useState } from 'react';
-import { Star, ThumbsUp, MessageCircle, Award } from 'lucide-react';
+import React, { useState } from 'react'
+import { Star, ThumbsUp, MessageCircle, Award } from 'lucide-react'
 
 interface Rating {
-  id: string;
-  userId: string;
-  userName: string;
-  rating: number;
-  review?: string;
-  helpful: number;
-  createdAt: string;
-  verified: boolean;
+  id: string
+  userId: string
+  userName: string
+  rating: number
+  review?: string
+  helpful: number
+  createdAt: string
+  verified: boolean
 }
 
 interface MealRatingsProps {
-  mealId: string;
-  mealName: string;
-  initialRating?: number;
-  showReviews?: boolean;
-  compact?: boolean;
-  onRatingChange?: (rating: number) => void;
+  mealId: string
+  mealName: string
+  initialRating?: number
+  showReviews?: boolean
+  compact?: boolean
+  onRatingChange?: (rating: number) => void
 }
 
 const MealRatings: React.FC<MealRatingsProps> = ({
-
   initialRating = 0,
   showReviews = true,
   compact = false,
-  onRatingChange
+  onRatingChange,
 }) => {
-  const [userRating, setUserRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [averageRating, setAverageRating] = useState(initialRating || 4.5);
-  const [totalRatings, setTotalRatings] = useState(127); // Mock data
-  const [showReviewForm, setShowReviewForm] = useState(false);
-  const [reviewText, setReviewText] = useState('');
+  const [userRating, setUserRating] = useState(0)
+  const [hoverRating, setHoverRating] = useState(0)
+  const [averageRating, setAverageRating] = useState(initialRating || 4.5)
+  const [totalRatings, setTotalRatings] = useState(127) // Mock data
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [reviewText, setReviewText] = useState('')
   const [ratings, setRatings] = useState<Rating[]>([
     {
       id: '1',
       userId: 'user1',
       userName: 'Sarah M.',
       rating: 5,
-      review: 'Absolutely delicious! The flavors were perfectly balanced and the portion size was just right. Will definitely order again.',
+      review:
+        'Absolutely delicious! The flavors were perfectly balanced and the portion size was just right. Will definitely order again.',
       helpful: 8,
       createdAt: '2024-11-10T10:00:00Z',
-      verified: true
+      verified: true,
     },
     {
       id: '2',
       userId: 'user2',
       userName: 'Mike R.',
       rating: 4,
-      review: 'Great meal overall. The protein was cooked perfectly, though I would have liked a bit more seasoning on the vegetables.',
+      review:
+        'Great meal overall. The protein was cooked perfectly, though I would have liked a bit more seasoning on the vegetables.',
       helpful: 5,
       createdAt: '2024-11-08T14:30:00Z',
-      verified: true
+      verified: true,
     },
     {
       id: '3',
       userId: 'user3',
       userName: 'Jennifer L.',
       rating: 5,
-      review: 'This has become my go-to meal! Healthy, tasty, and so convenient. The nutrition balance is perfect for my fitness goals.',
+      review:
+        'This has become my go-to meal! Healthy, tasty, and so convenient. The nutrition balance is perfect for my fitness goals.',
       helpful: 12,
       createdAt: '2024-11-05T09:15:00Z',
-      verified: true
-    }
-  ]);
+      verified: true,
+    },
+  ])
 
   // Rating distribution for visualization
   const ratingDistribution: Record<number, number> = {
@@ -73,17 +75,17 @@ const MealRatings: React.FC<MealRatingsProps> = ({
     4: 32,
     3: 8,
     2: 2,
-    1: 1
-  };
+    1: 1,
+  }
 
   const handleRatingClick = (rating: number) => {
-    setUserRating(rating);
-    setShowReviewForm(true);
-    onRatingChange?.(rating);
-  };
+    setUserRating(rating)
+    setShowReviewForm(true)
+    onRatingChange?.(rating)
+  }
 
   const handleReviewSubmit = () => {
-    if (userRating === 0) return;
+    if (userRating === 0) return
 
     const newReview: Rating = {
       id: `user-${Date.now()}`,
@@ -93,27 +95,31 @@ const MealRatings: React.FC<MealRatingsProps> = ({
       review: reviewText,
       helpful: 0,
       createdAt: new Date().toISOString(),
-      verified: false
-    };
+      verified: false,
+    }
 
-    setRatings(prev => [newReview, ...prev]);
-    
+    setRatings(prev => [newReview, ...prev])
+
     // Update average rating
-    const newTotal = totalRatings + 1;
-    const newAverage = ((averageRating * totalRatings) + userRating) / newTotal;
-    setAverageRating(newAverage);
-    setTotalRatings(newTotal);
-    
-    setShowReviewForm(false);
-    setReviewText('');
-  };
+    const newTotal = totalRatings + 1
+    const newAverage = (averageRating * totalRatings + userRating) / newTotal
+    setAverageRating(newAverage)
+    setTotalRatings(newTotal)
 
-  const renderStars = (rating: number, interactive: boolean = false, size: 'sm' | 'md' | 'lg' = 'md') => {
+    setShowReviewForm(false)
+    setReviewText('')
+  }
+
+  const renderStars = (
+    rating: number,
+    interactive: boolean = false,
+    size: 'sm' | 'md' | 'lg' = 'md'
+  ) => {
     const sizeClasses = {
       sm: 'w-4 h-4',
       md: 'w-5 h-5',
-      lg: 'w-6 h-6'
-    };
+      lg: 'w-6 h-6',
+    }
 
     return (
       <div className="flex items-center space-x-1">
@@ -136,17 +142,17 @@ const MealRatings: React.FC<MealRatingsProps> = ({
           </button>
         ))}
       </div>
-    );
-  };
+    )
+  }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
 
   if (compact) {
     return (
@@ -155,11 +161,9 @@ const MealRatings: React.FC<MealRatingsProps> = ({
         <span className="text-sm font-medium text-gray-700">
           {averageRating.toFixed(1)}
         </span>
-        <span className="text-xs text-gray-500">
-          ({totalRatings})
-        </span>
+        <span className="text-xs text-gray-500">({totalRatings})</span>
       </div>
-    );
+    )
   }
 
   return (
@@ -168,7 +172,9 @@ const MealRatings: React.FC<MealRatingsProps> = ({
       <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Customer Reviews</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Customer Reviews
+            </h3>
             <div className="flex items-center space-x-3 mb-3">
               {renderStars(averageRating, false, 'lg')}
               <div>
@@ -180,11 +186,12 @@ const MealRatings: React.FC<MealRatingsProps> = ({
                 </div>
               </div>
             </div>
-            
+
             {/* Rating Distribution */}
             <div className="space-y-2">
               {[5, 4, 3, 2, 1].map(stars => {
-                const percentage = (ratingDistribution[stars] / totalRatings) * 100;
+                const percentage =
+                  (ratingDistribution[stars] / totalRatings) * 100
                 return (
                   <div key={stars} className="flex items-center space-x-3">
                     <span className="text-sm text-gray-600 w-8">{stars}★</span>
@@ -198,17 +205,21 @@ const MealRatings: React.FC<MealRatingsProps> = ({
                       {ratingDistribution[stars]}
                     </span>
                   </div>
-                );
+                )
               })}
             </div>
           </div>
 
           {/* Rate This Meal */}
           <div className="text-center">
-            <div className="mb-2 text-sm font-medium text-gray-700">Rate This Meal</div>
+            <div className="mb-2 text-sm font-medium text-gray-700">
+              Rate This Meal
+            </div>
             {renderStars(userRating, true)}
             {userRating > 0 && (
-              <div className="mt-2 text-xs text-green-600">Thanks for rating!</div>
+              <div className="mt-2 text-xs text-green-600">
+                Thanks for rating!
+              </div>
             )}
           </div>
         </div>
@@ -225,7 +236,7 @@ const MealRatings: React.FC<MealRatingsProps> = ({
           </div>
           <textarea
             value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            onChange={e => setReviewText(e.target.value)}
             placeholder="Tell others about your experience with this meal..."
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
             rows={4}
@@ -255,9 +266,12 @@ const MealRatings: React.FC<MealRatingsProps> = ({
             <MessageCircle className="w-5 h-5 mr-2" />
             Recent Reviews
           </h4>
-          
-          {ratings.slice(0, 5).map((rating) => (
-            <div key={rating.id} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+
+          {ratings.slice(0, 5).map(rating => (
+            <div
+              key={rating.id}
+              className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -267,7 +281,9 @@ const MealRatings: React.FC<MealRatingsProps> = ({
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="font-medium text-gray-900">{rating.userName}</span>
+                      <span className="font-medium text-gray-900">
+                        {rating.userName}
+                      </span>
                       {rating.verified && (
                         <div title="Verified Purchase">
                           <Award className="w-4 h-4 text-green-500" />
@@ -283,19 +299,19 @@ const MealRatings: React.FC<MealRatingsProps> = ({
                   </div>
                 </div>
               </div>
-              
+
               {rating.review && (
                 <p className="text-gray-700 mb-3 leading-relaxed">
                   {rating.review}
                 </p>
               )}
-              
+
               <div className="flex items-center justify-between text-sm">
                 <button className="flex items-center space-x-1 text-gray-500 hover:text-green-600 transition-colors">
                   <ThumbsUp className="w-4 h-4" />
                   <span>Helpful ({rating.helpful})</span>
                 </button>
-                
+
                 {rating.userId === 'current-user' && (
                   <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                     Your Review
@@ -313,7 +329,7 @@ const MealRatings: React.FC<MealRatingsProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default MealRatings;
+export default MealRatings

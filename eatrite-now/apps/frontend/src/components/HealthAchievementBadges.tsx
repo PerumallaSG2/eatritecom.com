@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Award, 
-  Heart, 
-  Zap, 
-  Target, 
-  TrendingUp, 
+import React, { useState, useEffect } from 'react'
+import {
+  Award,
+  Heart,
+  Zap,
+  Target,
+  TrendingUp,
   Star,
   Shield,
   Crown,
@@ -15,35 +15,35 @@ import {
   Activity,
   Leaf,
   Moon,
-  Sun
-} from 'lucide-react';
-import { FadeIn, StaggeredAnimation } from './AnimationComponents';
+  Sun,
+} from 'lucide-react'
+import { FadeIn, StaggeredAnimation } from './AnimationComponents'
 
 interface HealthBadge {
-  id: string;
-  name: string;
-  description: string;
-  category: 'nutrition' | 'fitness' | 'wellness' | 'consistency' | 'achievement';
-  icon: React.ComponentType<any>;
-  color: string;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  isEarned: boolean;
-  earnedDate?: Date;
-  progress: number;
-  maxProgress: number;
-  reward: string;
-  requirements: string[];
+  id: string
+  name: string
+  description: string
+  category: 'nutrition' | 'fitness' | 'wellness' | 'consistency' | 'achievement'
+  icon: React.ComponentType<any>
+  color: string
+  rarity: 'common' | 'rare' | 'epic' | 'legendary'
+  isEarned: boolean
+  earnedDate?: Date
+  progress: number
+  maxProgress: number
+  reward: string
+  requirements: string[]
 }
 
 interface HealthMetrics {
-  mealsEaten: number;
-  caloriesTracked: number;
-  proteinGoalsMet: number;
-  sugarReduced: number;
-  energyLevelImproved: number;
-  sleepQualityImproved: number;
-  workoutDays: number;
-  streakDays: number;
+  mealsEaten: number
+  caloriesTracked: number
+  proteinGoalsMet: number
+  sugarReduced: number
+  energyLevelImproved: number
+  sleepQualityImproved: number
+  workoutDays: number
+  streakDays: number
 }
 
 const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
@@ -57,11 +57,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'blue',
     rarity: 'rare',
     isEarned: metrics.proteinGoalsMet >= 30,
-    earnedDate: metrics.proteinGoalsMet >= 30 ? new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.proteinGoalsMet >= 30
+        ? new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.proteinGoalsMet, 30),
     maxProgress: 30,
     reward: '20% off protein-rich meals',
-    requirements: ['Track daily protein intake', 'Meet 25g minimum daily', 'Maintain for 30 consecutive days']
+    requirements: [
+      'Track daily protein intake',
+      'Meet 25g minimum daily',
+      'Maintain for 30 consecutive days',
+    ],
   },
   {
     id: 'sugar-slayer',
@@ -72,11 +79,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'green',
     rarity: 'epic',
     isEarned: metrics.sugarReduced >= 75,
-    earnedDate: metrics.sugarReduced >= 75 ? new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.sugarReduced >= 75
+        ? new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.sugarReduced, 75),
     maxProgress: 75,
     reward: 'Custom low-sugar meal plan',
-    requirements: ['Track sugar consumption', 'Use Factor75 low-sugar options', 'Maintain reduction for 2 weeks']
+    requirements: [
+      'Track sugar consumption',
+      'Use Factor75 low-sugar options',
+      'Maintain reduction for 2 weeks',
+    ],
   },
   {
     id: 'clean-eater',
@@ -87,11 +101,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'emerald',
     rarity: 'rare',
     isEarned: metrics.mealsEaten >= 50,
-    earnedDate: metrics.mealsEaten >= 50 ? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.mealsEaten >= 50
+        ? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.mealsEaten, 50),
     maxProgress: 50,
     reward: 'Exclusive clean-label collection',
-    requirements: ['Select only clean-label options', 'No processed ingredients', '14 consecutive days']
+    requirements: [
+      'Select only clean-label options',
+      'No processed ingredients',
+      '14 consecutive days',
+    ],
   },
 
   // Fitness Badges
@@ -104,11 +125,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'yellow',
     rarity: 'common',
     isEarned: metrics.energyLevelImproved >= 21,
-    earnedDate: metrics.energyLevelImproved >= 21 ? new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.energyLevelImproved >= 21
+        ? new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.energyLevelImproved, 21),
     maxProgress: 21,
     reward: 'Energy-boosting meal recommendations',
-    requirements: ['Daily energy level tracking', 'Report improvement', 'Consistent for 21 days']
+    requirements: [
+      'Daily energy level tracking',
+      'Report improvement',
+      'Consistent for 21 days',
+    ],
   },
   {
     id: 'workout-warrior',
@@ -119,11 +147,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'red',
     rarity: 'epic',
     isEarned: metrics.workoutDays >= 30,
-    earnedDate: metrics.workoutDays >= 30 ? new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.workoutDays >= 30
+        ? new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.workoutDays, 30),
     maxProgress: 30,
     reward: 'Pre/post-workout meal bundle',
-    requirements: ['Track workout days', 'Eat Factor75 within 2 hours of workout', '30-day commitment']
+    requirements: [
+      'Track workout days',
+      'Eat Factor75 within 2 hours of workout',
+      '30-day commitment',
+    ],
   },
 
   // Wellness Badges
@@ -136,11 +171,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'purple',
     rarity: 'rare',
     isEarned: metrics.sleepQualityImproved >= 15,
-    earnedDate: metrics.sleepQualityImproved >= 15 ? new Date(Date.now() - 6 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.sleepQualityImproved >= 15
+        ? new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.sleepQualityImproved, 15),
     maxProgress: 15,
     reward: 'Sleep-supporting evening meals',
-    requirements: ['Track sleep quality', 'Choose sleep-friendly meals', 'Show improvement trend']
+    requirements: [
+      'Track sleep quality',
+      'Choose sleep-friendly meals',
+      'Show improvement trend',
+    ],
   },
   {
     id: 'mindful-eater',
@@ -154,7 +196,11 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     progress: 8,
     maxProgress: 14,
     reward: 'Mindful eating guide + meditation app access',
-    requirements: ['Eat without distractions', 'Rate meal satisfaction', 'Complete mindfulness check-ins']
+    requirements: [
+      'Eat without distractions',
+      'Rate meal satisfaction',
+      'Complete mindfulness check-ins',
+    ],
   },
 
   // Consistency Badges
@@ -167,11 +213,18 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'orange',
     rarity: 'legendary',
     isEarned: metrics.streakDays >= 30,
-    earnedDate: metrics.streakDays >= 30 ? new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.streakDays >= 30
+        ? new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.streakDays, 30),
     maxProgress: 30,
     reward: 'VIP status + personal nutrition coach session',
-    requirements: ['Daily Factor75 meal', 'No cheat days', '30 consecutive days']
+    requirements: [
+      'Daily Factor75 meal',
+      'No cheat days',
+      '30 consecutive days',
+    ],
   },
   {
     id: 'habit-builder',
@@ -185,7 +238,11 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     progress: 18,
     maxProgress: 21,
     reward: 'Habit tracking toolkit',
-    requirements: ['Track eating times', 'Consistent meal schedules', '21-day pattern']
+    requirements: [
+      'Track eating times',
+      'Consistent meal schedules',
+      '21-day pattern',
+    ],
   },
 
   // Achievement Badges
@@ -201,7 +258,11 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     progress: 75,
     maxProgress: 100,
     reward: 'Hall of Fame + $100 credit + personal chef consultation',
-    requirements: ['Achieve all health goals', 'Complete 90-day program', 'Share transformation story']
+    requirements: [
+      'Achieve all health goals',
+      'Complete 90-day program',
+      'Share transformation story',
+    ],
   },
   {
     id: 'calorie-tracker',
@@ -212,27 +273,34 @@ const generateHealthBadges = (metrics: HealthMetrics): HealthBadge[] => [
     color: 'teal',
     rarity: 'common',
     isEarned: metrics.caloriesTracked >= 60,
-    earnedDate: metrics.caloriesTracked >= 60 ? new Date(Date.now() - 4 * 24 * 60 * 60 * 1000) : undefined,
+    earnedDate:
+      metrics.caloriesTracked >= 60
+        ? new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+        : undefined,
     progress: Math.min(metrics.caloriesTracked, 60),
     maxProgress: 60,
     reward: 'Advanced nutrition analytics',
-    requirements: ['Daily calorie logging', 'Accurate portion tracking', '60-day consistency']
-  }
-];
+    requirements: [
+      'Daily calorie logging',
+      'Accurate portion tracking',
+      '60-day consistency',
+    ],
+  },
+]
 
 const rarityColors = {
   common: 'from-gray-400 to-gray-600',
   rare: 'from-blue-400 to-blue-600',
   epic: 'from-purple-400 to-purple-600',
-  legendary: 'from-yellow-400 to-yellow-600'
-};
+  legendary: 'from-yellow-400 to-yellow-600',
+}
 
 const rarityBorders = {
   common: 'border-gray-400',
   rare: 'border-blue-400',
   epic: 'border-purple-400',
-  legendary: 'border-yellow-400'
-};
+  legendary: 'border-yellow-400',
+}
 
 export const HealthAchievementBadges: React.FC = () => {
   const [healthMetrics] = useState<HealthMetrics>({
@@ -243,43 +311,47 @@ export const HealthAchievementBadges: React.FC = () => {
     energyLevelImproved: 28,
     sleepQualityImproved: 19,
     workoutDays: 35,
-    streakDays: 33
-  });
+    streakDays: 33,
+  })
 
-  const [badges, setBadges] = useState<HealthBadge[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedRarity, setSelectedRarity] = useState<string>('all');
-  const [animatedProgress, setAnimatedProgress] = useState<Record<string, number>>({});
+  const [badges, setBadges] = useState<HealthBadge[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedRarity, setSelectedRarity] = useState<string>('all')
+  const [animatedProgress, setAnimatedProgress] = useState<
+    Record<string, number>
+  >({})
 
   useEffect(() => {
-    const generatedBadges = generateHealthBadges(healthMetrics);
-    setBadges(generatedBadges);
-    
+    const generatedBadges = generateHealthBadges(healthMetrics)
+    setBadges(generatedBadges)
+
     // Animate progress
     setTimeout(() => {
-      generatedBadges.forEach((badge) => {
+      generatedBadges.forEach(badge => {
         setAnimatedProgress(prev => ({
           ...prev,
-          [badge.id]: badge.progress
-        }));
-      });
-    }, 300);
-  }, [healthMetrics]);
+          [badge.id]: badge.progress,
+        }))
+      })
+    }, 300)
+  }, [healthMetrics])
 
   const filteredBadges = badges.filter(badge => {
-    const categoryMatch = selectedCategory === 'all' || badge.category === selectedCategory;
-    const rarityMatch = selectedRarity === 'all' || badge.rarity === selectedRarity;
-    return categoryMatch && rarityMatch;
-  });
+    const categoryMatch =
+      selectedCategory === 'all' || badge.category === selectedCategory
+    const rarityMatch =
+      selectedRarity === 'all' || badge.rarity === selectedRarity
+    return categoryMatch && rarityMatch
+  })
 
-  const earnedBadges = badges.filter(b => b.isEarned);
-  const totalBadges = badges.length;
-  const completionRate = Math.round((earnedBadges.length / totalBadges) * 100);
+  const earnedBadges = badges.filter(b => b.isEarned)
+  const totalBadges = badges.length
+  const completionRate = Math.round((earnedBadges.length / totalBadges) * 100)
 
   const getProgressPercentage = (badge: HealthBadge) => {
-    const animated = animatedProgress[badge.id] || 0;
-    return (animated / badge.maxProgress) * 100;
-  };
+    const animated = animatedProgress[badge.id] || 0
+    return (animated / badge.maxProgress) * 100
+  }
 
   const categories = [
     { value: 'all', label: 'All Categories' },
@@ -287,16 +359,16 @@ export const HealthAchievementBadges: React.FC = () => {
     { value: 'fitness', label: 'Fitness' },
     { value: 'wellness', label: 'Wellness' },
     { value: 'consistency', label: 'Consistency' },
-    { value: 'achievement', label: 'Achievement' }
-  ];
+    { value: 'achievement', label: 'Achievement' },
+  ]
 
   const rarities = [
     { value: 'all', label: 'All Rarities' },
     { value: 'common', label: 'Common' },
     { value: 'rare', label: 'Rare' },
     { value: 'epic', label: 'Epic' },
-    { value: 'legendary', label: 'Legendary' }
-  ];
+    { value: 'legendary', label: 'Legendary' },
+  ]
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl overflow-hidden shadow-2xl">
@@ -321,19 +393,27 @@ export const HealthAchievementBadges: React.FC = () => {
         <FadeIn delay={0.1}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-indigo-600">{earnedBadges.length}</div>
+              <div className="text-3xl font-bold text-indigo-600">
+                {earnedBadges.length}
+              </div>
               <div className="text-sm text-gray-600">Badges Earned</div>
             </div>
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-purple-600">{completionRate}%</div>
+              <div className="text-3xl font-bold text-purple-600">
+                {completionRate}%
+              </div>
               <div className="text-sm text-gray-600">Completion Rate</div>
             </div>
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-green-600">{earnedBadges.filter(b => b.rarity === 'legendary').length}</div>
+              <div className="text-3xl font-bold text-green-600">
+                {earnedBadges.filter(b => b.rarity === 'legendary').length}
+              </div>
               <div className="text-sm text-gray-600">Legendary Badges</div>
             </div>
             <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-orange-600">{healthMetrics.streakDays}</div>
+              <div className="text-3xl font-bold text-orange-600">
+                {healthMetrics.streakDays}
+              </div>
               <div className="text-sm text-gray-600">Current Streak</div>
             </div>
           </div>
@@ -343,28 +423,32 @@ export const HealthAchievementBadges: React.FC = () => {
         <FadeIn delay={0.2}>
           <div className="flex flex-wrap gap-4 mb-8">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={e => setSelectedCategory(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
-                {categories.map((category) => (
+                {categories.map(category => (
                   <option key={category.value} value={category.value}>
                     {category.label}
                   </option>
                 ))}
               </select>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Rarity</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rarity
+              </label>
               <select
                 value={selectedRarity}
-                onChange={(e) => setSelectedRarity(e.target.value)}
+                onChange={e => setSelectedRarity(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
-                {rarities.map((rarity) => (
+                {rarities.map(rarity => (
                   <option key={rarity.value} value={rarity.value}>
                     {rarity.label}
                   </option>
@@ -376,11 +460,11 @@ export const HealthAchievementBadges: React.FC = () => {
 
         {/* Badges Grid */}
         <StaggeredAnimation className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredBadges.map((badge) => {
-            const IconComponent = badge.icon;
-            const progressPercentage = getProgressPercentage(badge);
-            const isEarned = badge.isEarned;
-            
+          {filteredBadges.map(badge => {
+            const IconComponent = badge.icon
+            const progressPercentage = getProgressPercentage(badge)
+            const isEarned = badge.isEarned
+
             return (
               <div
                 key={badge.id}
@@ -391,7 +475,9 @@ export const HealthAchievementBadges: React.FC = () => {
                 }`}
               >
                 {/* Rarity Indicator */}
-                <div className={`absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br ${rarityColors[badge.rarity]} rounded-full flex items-center justify-center`}>
+                <div
+                  className={`absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br ${rarityColors[badge.rarity]} rounded-full flex items-center justify-center`}
+                >
                   {isEarned ? (
                     <CheckCircle className="w-5 h-5 text-white" />
                   ) : (
@@ -400,25 +486,33 @@ export const HealthAchievementBadges: React.FC = () => {
                 </div>
 
                 {/* Badge Icon */}
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${rarityColors[badge.rarity]} flex items-center justify-center ${
-                  !isEarned ? 'grayscale opacity-50' : ''
-                }`}>
+                <div
+                  className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${rarityColors[badge.rarity]} flex items-center justify-center ${
+                    !isEarned ? 'grayscale opacity-50' : ''
+                  }`}
+                >
                   <IconComponent className="w-8 h-8 text-white" />
                 </div>
 
                 {/* Badge Info */}
                 <div className="text-center mb-4">
-                  <h3 className={`font-bold text-lg ${isEarned ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <h3
+                    className={`font-bold text-lg ${isEarned ? 'text-gray-900' : 'text-gray-500'}`}
+                  >
                     {badge.name}
                   </h3>
-                  <p className={`text-sm ${isEarned ? 'text-gray-600' : 'text-gray-400'}`}>
+                  <p
+                    className={`text-sm ${isEarned ? 'text-gray-600' : 'text-gray-400'}`}
+                  >
                     {badge.description}
                   </p>
-                  <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full mt-2 capitalize ${
-                    isEarned 
-                      ? `bg-${badge.color}-100 text-${badge.color}-700`
-                      : 'bg-gray-100 text-gray-500'
-                  }`}>
+                  <span
+                    className={`inline-block px-2 py-1 text-xs font-semibold rounded-full mt-2 capitalize ${
+                      isEarned
+                        ? `bg-${badge.color}-100 text-${badge.color}-700`
+                        : 'bg-gray-100 text-gray-500'
+                    }`}
+                  >
                     {badge.rarity}
                   </span>
                 </div>
@@ -454,14 +548,20 @@ export const HealthAchievementBadges: React.FC = () => {
                 )}
 
                 {/* Reward */}
-                <div className={`p-3 rounded-lg text-center ${
-                  isEarned 
-                    ? `bg-${badge.color}-50 border border-${badge.color}-200`
-                    : 'bg-gray-50 border border-gray-200'
-                }`}>
+                <div
+                  className={`p-3 rounded-lg text-center ${
+                    isEarned
+                      ? `bg-${badge.color}-50 border border-${badge.color}-200`
+                      : 'bg-gray-50 border border-gray-200'
+                  }`}
+                >
                   <div className="flex items-center justify-center space-x-2">
-                    <Trophy className={`w-4 h-4 ${isEarned ? `text-${badge.color}-600` : 'text-gray-400'}`} />
-                    <span className={`text-sm font-semibold ${isEarned ? `text-${badge.color}-700` : 'text-gray-500'}`}>
+                    <Trophy
+                      className={`w-4 h-4 ${isEarned ? `text-${badge.color}-600` : 'text-gray-400'}`}
+                    />
+                    <span
+                      className={`text-sm font-semibold ${isEarned ? `text-${badge.color}-700` : 'text-gray-500'}`}
+                    >
                       {badge.reward}
                     </span>
                   </div>
@@ -469,14 +569,20 @@ export const HealthAchievementBadges: React.FC = () => {
 
                 {/* Requirements */}
                 <div className="mt-4">
-                  <h5 className="text-xs font-semibold text-gray-600 mb-2">Requirements:</h5>
+                  <h5 className="text-xs font-semibold text-gray-600 mb-2">
+                    Requirements:
+                  </h5>
                   <ul className="space-y-1">
                     {badge.requirements.map((req, index) => (
                       <li key={index} className="flex items-start space-x-2">
-                        <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
-                          isEarned ? 'bg-green-500' : 'bg-gray-400'
-                        }`}></div>
-                        <span className={`text-xs ${isEarned ? 'text-gray-700' : 'text-gray-500'}`}>
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
+                            isEarned ? 'bg-green-500' : 'bg-gray-400'
+                          }`}
+                        ></div>
+                        <span
+                          className={`text-xs ${isEarned ? 'text-gray-700' : 'text-gray-500'}`}
+                        >
                           {req}
                         </span>
                       </li>
@@ -484,7 +590,7 @@ export const HealthAchievementBadges: React.FC = () => {
                   </ul>
                 </div>
               </div>
-            );
+            )
           })}
         </StaggeredAnimation>
 
@@ -497,28 +603,44 @@ export const HealthAchievementBadges: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white rounded-lg p-4 text-center">
                 <TrendingUp className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                <h4 className="font-semibold text-gray-900">Weight Loss Challenge</h4>
+                <h4 className="font-semibold text-gray-900">
+                  Weight Loss Challenge
+                </h4>
                 <p className="text-sm text-gray-600">Lose 5 lbs in 30 days</p>
-                <span className="text-xs text-blue-600 font-semibold">Starts Monday</span>
+                <span className="text-xs text-blue-600 font-semibold">
+                  Starts Monday
+                </span>
               </div>
               <div className="bg-white rounded-lg p-4 text-center">
                 <Heart className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                <h4 className="font-semibold text-gray-900">Heart Health Month</h4>
-                <p className="text-sm text-gray-600">30 days of heart-healthy meals</p>
-                <span className="text-xs text-red-600 font-semibold">February</span>
+                <h4 className="font-semibold text-gray-900">
+                  Heart Health Month
+                </h4>
+                <p className="text-sm text-gray-600">
+                  30 days of heart-healthy meals
+                </p>
+                <span className="text-xs text-red-600 font-semibold">
+                  February
+                </span>
               </div>
               <div className="bg-white rounded-lg p-4 text-center">
                 <Leaf className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                <h4 className="font-semibold text-gray-900">Plant Power Challenge</h4>
-                <p className="text-sm text-gray-600">Increase vegetable intake by 50%</p>
-                <span className="text-xs text-green-600 font-semibold">Join anytime</span>
+                <h4 className="font-semibold text-gray-900">
+                  Plant Power Challenge
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Increase vegetable intake by 50%
+                </p>
+                <span className="text-xs text-green-600 font-semibold">
+                  Join anytime
+                </span>
               </div>
             </div>
           </div>
         </FadeIn>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HealthAchievementBadges;
+export default HealthAchievementBadges

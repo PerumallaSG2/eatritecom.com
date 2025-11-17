@@ -19,6 +19,8 @@ model User {
   lastName  String?
   phone     String?
   role      String   @default("USER")
+  companyId String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -28,6 +30,12 @@ model User {
   preferences   UserPreference?
   profile       UserProfile?
   addresses     Address[]
+  company       Company? @relation(fields: [companyId], references: [id])
+  tasteProfile  TasteProfile?
+  
+  // Wellness tracking
+  wellnessScore WellnessScore[]
+  achievements  UserAchievement[]
 
   @@map("users")
 }
@@ -109,6 +117,7 @@ model Meal {
   description     String
   shortDescription String?
   imageUrl        String?
+  localImagePath  String? // Local branded image path
   categoryId      String
   ingredients     String[]
   allergens       String[]
@@ -124,11 +133,18 @@ model Meal {
   isActive        Boolean  @default(true)
   isPopular       Boolean  @default(false)
   prepTime        Int? // minutes
+  spiceLevel      Int?     @default(0) // 0-5 scale
+  cuisineType     String?  // 'italian', 'asian', 'mediterranean'
+  complexity      String?  @default("moderate") // 'simple', 'moderate', 'complex'
+  wellnessScore   Int?     @default(70) // 0-100 wellness rating
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  category  Category    @relation(fields: [categoryId], references: [id])
-  orderItems OrderItem[]
+  category         Category         @relation(fields: [categoryId], references: [id])
+  orderItems       OrderItem[]
+  bulkOrderItems   BulkOrderItem[]
+  weeklyMenuMeals  WeeklyMenuMeal[]
+  featuredInMenus  WeeklyMenu[]
 
   @@map("meals")
 }
@@ -237,6 +253,213 @@ model Newsletter {
 enum SubscriptionStatus {
   ACTIVE
   PAUSED
+  CANCELLED
+}
+
+// Corporate models
+model Company {
+  id                String   @id @default(cuid())
+  name              String
+  code              String   @unique // Company signup code
+  email             String   @unique
+  phone             String?
+  address           String?
+  tier              CompanyTier @default(TIER_A)
+  isActive          Boolean  @default(true)
+  billingContact    String?
+  employeeLimit     Int?
+  discountPercent   Decimal? @db.Decimal(5, 2)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relationships
+  users             User[]
+  bulkOrders        BulkOrder[]
+  corporateAnalytics CorporateAnalytics[]
+
+  @@map("companies")
+}
+
+model BulkOrder {
+  id          String      @id @default(cuid())
+  companyId   String
+  adminUserId String
+  orderDate   DateTime
+  deliveryDate DateTime
+  totalMeals  Int
+  totalAmount Decimal     @db.Decimal(10, 2)
+  status      BulkOrderStatus @default(PENDING)
+  recurring   Boolean     @default(false)
+  frequency   String? // 'daily', 'weekly'
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  company     Company     @relation(fields: [companyId], references: [id])
+  items       BulkOrderItem[]
+
+  @@map("bulk_orders")
+}
+
+model BulkOrderItem {
+  id          String    @id @default(cuid())
+  bulkOrderId String
+  mealId      String
+  quantity    Int
+  price       Decimal   @db.Decimal(10, 2)
+
+  bulkOrder   BulkOrder @relation(fields: [bulkOrderId], references: [id], onDelete: Cascade)
+  meal        Meal      @relation(fields: [mealId], references: [id])
+
+  @@map("bulk_order_items")
+}
+
+// Wellness & Gamification models
+model WellnessScore {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @db.Date
+  score     Int      // Daily wellness score (0-100)
+  calories  Int?
+  protein   Int?
+  vegetables Int?
+  hydration Int?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("wellness_scores")
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  points      Int
+  category    String   // 'health', 'consistency', 'social'
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+  points        Int
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// Analytics models
+model CorporateAnalytics {
+  id                  String   @id @default(cuid())
+  companyId           String
+  weekStarting        DateTime @db.Date
+  totalOrders         Int      @default(0)
+  totalEmployees      Int      @default(0)
+  activeEmployees     Int      @default(0)
+  participationRate   Decimal  @db.Decimal(5, 2) @default(0)
+  avgWellnessScore    Decimal? @db.Decimal(5, 2)
+  totalSpend          Decimal  @db.Decimal(10, 2) @default(0)
+  topMeals            Json? // Array of meal IDs with counts
+  createdAt           DateTime @default(now())
+
+  company             Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, weekStarting])
+  @@map("corporate_analytics")
+}
+
+// Testimonials
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  position  String?
+  company   String?
+  content   String
+  rating    Int      @default(5)
+  isApproved Boolean @default(false)
+  isFeatured Boolean @default(false)
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+// Taste Profile
+model TasteProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  spiceTolerance    Int      // 1-5 scale
+  proteinPreference String[] // ['chicken', 'fish', 'beef', 'plant-based']
+  cuisinePreference String[] // ['italian', 'asian', 'mediterranean', etc.]
+  dietaryGoals      String   // 'weight-loss', 'muscle-gain', 'maintenance'
+  allergens         String[]
+  healthConditions  String[]
+  mealComplexity    String   // 'simple', 'moderate', 'complex'
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("taste_profiles")
+}
+
+// Weekly Menu Management
+model WeeklyMenu {
+  id          String   @id @default(cuid())
+  weekStart   DateTime @db.Date
+  weekEnd     DateTime @db.Date
+  isActive    Boolean  @default(false)
+  featuredMealId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  meals       WeeklyMenuMeal[]
+  featuredMeal Meal? @relation(fields: [featuredMealId], references: [id])
+
+  @@unique([weekStart, weekEnd])
+  @@map("weekly_menus")
+}
+
+model WeeklyMenuMeal {
+  id           String     @id @default(cuid())
+  weeklyMenuId String
+  mealId       String
+  displayOrder Int        @default(0)
+  isSpecial    Boolean    @default(false)
+
+  weeklyMenu   WeeklyMenu @relation(fields: [weeklyMenuId], references: [id], onDelete: Cascade)
+  meal         Meal       @relation(fields: [mealId], references: [id])
+
+  @@unique([weeklyMenuId, mealId])
+  @@map("weekly_menu_meals")
+}
+
+enum CompanyTier {
+  TIER_A  // 10-30 employees
+  TIER_B  // 30-100 employees  
+  TIER_C  // 100-300 employees
+}
+
+enum BulkOrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  DELIVERED
   CANCELLED
 }
 

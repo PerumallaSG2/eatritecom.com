@@ -8,40 +8,40 @@
 /* EatRite Luxury Brand Design System */
 :root {
   /* Core Brand Colors */
-  --brand-gold: #D4B46A;
-  --brand-dark-green: #0F2B1E;
-  --brand-forest-green: #0A2418;
-  --brand-soft-black: #0A0A0A;
-  --brand-off-white: #F5F2E8;
-  --brand-warm-beige: #F5EEDC;
-  
+  --brand-gold: #d4b46a;
+  --brand-dark-green: #0f2b1e;
+  --brand-forest-green: #0a2418;
+  --brand-soft-black: #0a0a0a;
+  --brand-off-white: #f5f2e8;
+  --brand-warm-beige: #f5eedc;
+
   /* Surface Hierarchy */
-  --surface-primary: #0F2B1E;          /* Deep forest green - main background */
-  --surface-secondary: #0A2418;        /* Very dark green - cards, panels */
-  --surface-tertiary: #152D22;         /* Elevated surfaces */
+  --surface-primary: #0f2b1e; /* Deep forest green - main background */
+  --surface-secondary: #0a2418; /* Very dark green - cards, panels */
+  --surface-tertiary: #152d22; /* Elevated surfaces */
   --surface-overlay: rgba(10, 10, 10, 0.9); /* Modal overlays */
-  
+
   /* Text Hierarchy */
-  --text-primary: #F5F2E8;             /* Off-white - main text */
-  --text-secondary: #E0DDD5;           /* Slightly dimmed text */
-  --text-tertiary: #B8B5AD;            /* Subtle text, placeholders */
-  --text-accent: #D4B46A;              /* Gold - headings, highlights */
-  --text-dark: #0A0A0A;                /* Dark text on light backgrounds */
-  
+  --text-primary: #f5f2e8; /* Off-white - main text */
+  --text-secondary: #e0ddd5; /* Slightly dimmed text */
+  --text-tertiary: #b8b5ad; /* Subtle text, placeholders */
+  --text-accent: #d4b46a; /* Gold - headings, highlights */
+  --text-dark: #0a0a0a; /* Dark text on light backgrounds */
+
   /* Interactive States */
-  --interactive-gold: #D4B46A;         /* Primary actions */
-  --interactive-gold-hover: #C4A45A;   /* Gold hover state */
-  --interactive-beige: #F5EEDC;        /* Selected state */
-  --interactive-beige-hover: #EDE6D2;  /* Beige hover */
+  --interactive-gold: #d4b46a; /* Primary actions */
+  --interactive-gold-hover: #c4a45a; /* Gold hover state */
+  --interactive-beige: #f5eedc; /* Selected state */
+  --interactive-beige-hover: #ede6d2; /* Beige hover */
   --interactive-outline: rgba(255, 255, 255, 0.18); /* Subtle borders */
-  
+
   /* Component Tokens */
-  --border-radius-pill: 30px;          /* Pill buttons */
-  --border-radius-card: 20px;          /* Cards */
-  --border-radius-input: 16px;         /* Input fields */
+  --border-radius-pill: 30px; /* Pill buttons */
+  --border-radius-card: 20px; /* Cards */
+  --border-radius-input: 16px; /* Input fields */
   --border-width-thin: 1px;
   --border-width-medium: 2px;
-  
+
   /* Spacing Scale */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -51,24 +51,26 @@
   --spacing-2xl: 24px;
   --spacing-3xl: 32px;
   --spacing-4xl: 48px;
-  
+
   /* Typography Scale */
-  --font-size-xs: 0.75rem;    /* 12px */
-  --font-size-sm: 0.875rem;   /* 14px */
-  --font-size-base: 1rem;     /* 16px */
-  --font-size-lg: 1.125rem;   /* 18px */
-  --font-size-xl: 1.25rem;    /* 20px */
-  --font-size-2xl: 1.5rem;    /* 24px */
-  --font-size-3xl: 1.875rem;  /* 30px */
-  --font-size-4xl: 2.25rem;   /* 36px */
-  --font-size-5xl: 3rem;      /* 48px */
-  
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+
   /* Premium Effects */
   --shadow-gold-glow: 0 0 20px rgba(212, 180, 106, 0.3);
-  --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-premium:
+    0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-card:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --shadow-input-focus: 0 0 0 3px rgba(212, 180, 106, 0.2);
-  
+
   /* Animation Tokens */
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
@@ -80,9 +82,13 @@
   * {
     box-sizing: border-box;
   }
-  
+
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     background-color: var(--surface-primary);
     color: var(--text-primary);
     line-height: 1.6;
@@ -92,17 +98,27 @@
     margin: 0;
     padding: 0;
   }
-  
+
   /* EatRite Premium Typography System */
-  h1, h2, h3, h4, h5, h6,
-  .heading-1, .heading-2, .heading-3, .heading-4, .heading-5, .heading-6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .heading-1,
+  .heading-2,
+  .heading-3,
+  .heading-4,
+  .heading-5,
+  .heading-6 {
     font-family: 'Playfair Display', Georgia, serif;
     color: var(--text-accent);
     line-height: 1.2;
     letter-spacing: -0.02em;
     margin: 0 0 var(--spacing-lg) 0;
   }
-  
+
   /* Section Labels & Navigation Headings */
   .section-label {
     font-family: 'Playfair Display', Georgia, serif;
@@ -111,70 +127,109 @@
     font-size: var(--font-size-lg);
     text-transform: capitalize;
   }
-  
+
   /* Typography Scale - Playfair Display Headings */
-  h1, .heading-1 {
+  h1,
+  .heading-1 {
     font-size: var(--font-size-4xl);
     font-weight: 700;
   }
-  
-  h2, .heading-2 {
+
+  h2,
+  .heading-2 {
     font-size: var(--font-size-3xl);
     font-weight: 600;
   }
-  
-  h3, .heading-3 {
+
+  h3,
+  .heading-3 {
     font-size: var(--font-size-2xl);
     font-weight: 600;
   }
-  
-  h4, .heading-4 {
+
+  h4,
+  .heading-4 {
     font-size: var(--font-size-xl);
     font-weight: 500;
   }
-  
-  h5, .heading-5 {
+
+  h5,
+  .heading-5 {
     font-size: var(--font-size-lg);
     font-weight: 500;
   }
-  
-  h6, .heading-6 {
+
+  h6,
+  .heading-6 {
     font-size: var(--font-size-base);
     font-weight: 500;
   }
-  
+
   /* Body Text - Inter Sans-Serif */
-  p, .body-text, .text-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  p,
+  .body-text,
+  .text-body {
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     color: var(--text-primary);
     line-height: 1.6;
     font-weight: 400;
     margin: 0 0 var(--spacing-lg) 0;
     font-size: var(--font-size-base);
   }
-  
+
   /* Typography Utilities */
-  .text-xs { font-size: var(--font-size-xs); }
-  .text-sm { font-size: var(--font-size-sm); }
-  .text-base { font-size: var(--font-size-base); }
-  .text-lg { font-size: var(--font-size-lg); }
-  .text-xl { font-size: var(--font-size-xl); }
-  .text-2xl { font-size: var(--font-size-2xl); }
-  .text-3xl { font-size: var(--font-size-3xl); }
-  
-  .text-primary { color: var(--text-primary); }
-  .text-secondary { color: var(--text-secondary); }
-  .text-tertiary { color: var(--text-tertiary); }
-  .text-accent { color: var(--text-accent); }
-  .text-dark { color: var(--text-dark); }
+  .text-xs {
+    font-size: var(--font-size-xs);
+  }
+  .text-sm {
+    font-size: var(--font-size-sm);
+  }
+  .text-base {
+    font-size: var(--font-size-base);
+  }
+  .text-lg {
+    font-size: var(--font-size-lg);
+  }
+  .text-xl {
+    font-size: var(--font-size-xl);
+  }
+  .text-2xl {
+    font-size: var(--font-size-2xl);
+  }
+  .text-3xl {
+    font-size: var(--font-size-3xl);
+  }
+
+  .text-primary {
+    color: var(--text-primary);
+  }
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+  .text-tertiary {
+    color: var(--text-tertiary);
+  }
+  .text-accent {
+    color: var(--text-accent);
+  }
+  .text-dark {
+    color: var(--text-dark);
+  }
 }
 
 /* EatRite Luxury Component System */
 @layer components {
-  
   /* Premium Button System */
   .btn {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     font-weight: 500;
     border-radius: var(--border-radius-pill);
     padding: var(--spacing-md) var(--spacing-2xl);
@@ -189,47 +244,47 @@
     outline: none;
     font-size: var(--font-size-base);
   }
-  
+
   /* Primary Gold Button */
   .btn-primary {
     background-color: var(--interactive-gold);
     color: var(--text-dark);
     box-shadow: var(--shadow-card);
   }
-  
+
   .btn-primary:hover {
     background-color: var(--interactive-gold-hover);
     box-shadow: var(--shadow-gold-glow);
     transform: translateY(-1px);
   }
-  
+
   .btn-primary:active {
     transform: translateY(0);
   }
-  
+
   /* Secondary Outline Button */
   .btn-secondary {
     background-color: transparent;
     color: var(--text-primary);
     border: var(--border-width-thin) solid var(--interactive-gold);
   }
-  
+
   .btn-secondary:hover {
     background-color: var(--interactive-gold);
     color: var(--text-dark);
   }
-  
+
   /* Tertiary Text Button */
   .btn-tertiary {
     background-color: transparent;
     color: var(--text-accent);
     padding: var(--spacing-sm) var(--spacing-lg);
   }
-  
+
   .btn-tertiary:hover {
     background-color: rgba(212, 180, 106, 0.1);
   }
-  
+
   /* Premium Card System */
   .card {
     background-color: var(--surface-secondary);
@@ -239,20 +294,28 @@
     box-shadow: var(--shadow-card);
     transition: all var(--transition-base);
   }
-  
+
   .card:hover {
     box-shadow: var(--shadow-premium);
     transform: translateY(-2px);
   }
-  
+
   .card-highlight {
     border-color: var(--interactive-gold);
-    background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
+    background: linear-gradient(
+      135deg,
+      var(--surface-secondary),
+      var(--surface-tertiary)
+    );
   }
-  
+
   /* Chip/Pills System */
   .chip {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     font-size: var(--font-size-sm);
     font-weight: 500;
     padding: var(--spacing-sm) var(--spacing-lg);
@@ -266,21 +329,25 @@
     align-items: center;
     gap: var(--spacing-xs);
   }
-  
+
   .chip:hover {
     border-color: var(--interactive-gold);
     background-color: rgba(212, 180, 106, 0.05);
   }
-  
+
   .chip.selected {
     background-color: var(--interactive-beige);
     color: var(--text-dark);
     border-color: var(--interactive-beige);
   }
-  
+
   /* Premium Input System */
   .input {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     width: 100%;
     padding: var(--spacing-lg) var(--spacing-xl);
     border-radius: var(--border-radius-input);
@@ -291,23 +358,23 @@
     transition: all var(--transition-base);
     outline: none;
   }
-  
+
   .input::placeholder {
     color: var(--text-tertiary);
   }
-  
+
   .input:focus {
     border-color: var(--interactive-gold);
     box-shadow: var(--shadow-input-focus);
   }
-  
+
   /* Navigation System */
   .nav {
     background-color: var(--surface-primary);
     border-bottom: var(--border-width-thin) solid rgba(245, 242, 232, 0.1);
     padding: var(--spacing-lg) var(--spacing-2xl);
   }
-  
+
   .nav-item {
     color: var(--text-primary);
     text-decoration: none;
@@ -318,16 +385,16 @@
     align-items: center;
     gap: var(--spacing-sm);
   }
-  
+
   .nav-item:hover {
     background-color: rgba(245, 242, 232, 0.05);
   }
-  
+
   .nav-item.active {
     color: var(--text-accent);
     background-color: rgba(212, 180, 106, 0.1);
   }
-  
+
   /* Icon System */
   .icon {
     width: 20px;
@@ -336,12 +403,12 @@
     fill: none;
     stroke-width: 1.5;
   }
-  
+
   .icon-lg {
     width: 24px;
     height: 24px;
   }
-  
+
   .icon-xl {
     width: 32px;
     height: 32px;
@@ -350,59 +417,130 @@
 
 /* EatRite Utility Classes */
 @layer utilities {
-  
   /* Spacing Utilities */
-  .p-xs { padding: var(--spacing-xs); }
-  .p-sm { padding: var(--spacing-sm); }
-  .p-md { padding: var(--spacing-md); }
-  .p-lg { padding: var(--spacing-lg); }
-  .p-xl { padding: var(--spacing-xl); }
-  .p-2xl { padding: var(--spacing-2xl); }
-  .p-3xl { padding: var(--spacing-3xl); }
-  
-  .m-xs { margin: var(--spacing-xs); }
-  .m-sm { margin: var(--spacing-sm); }
-  .m-md { margin: var(--spacing-md); }
-  .m-lg { margin: var(--spacing-lg); }
-  .m-xl { margin: var(--spacing-xl); }
-  .m-2xl { margin: var(--spacing-2xl); }
-  .m-3xl { margin: var(--spacing-3xl); }
-  
+  .p-xs {
+    padding: var(--spacing-xs);
+  }
+  .p-sm {
+    padding: var(--spacing-sm);
+  }
+  .p-md {
+    padding: var(--spacing-md);
+  }
+  .p-lg {
+    padding: var(--spacing-lg);
+  }
+  .p-xl {
+    padding: var(--spacing-xl);
+  }
+  .p-2xl {
+    padding: var(--spacing-2xl);
+  }
+  .p-3xl {
+    padding: var(--spacing-3xl);
+  }
+
+  .m-xs {
+    margin: var(--spacing-xs);
+  }
+  .m-sm {
+    margin: var(--spacing-sm);
+  }
+  .m-md {
+    margin: var(--spacing-md);
+  }
+  .m-lg {
+    margin: var(--spacing-lg);
+  }
+  .m-xl {
+    margin: var(--spacing-xl);
+  }
+  .m-2xl {
+    margin: var(--spacing-2xl);
+  }
+  .m-3xl {
+    margin: var(--spacing-3xl);
+  }
+
   /* Layout Utilities */
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 var(--spacing-2xl);
   }
-  
-  .flex { display: flex; }
-  .flex-col { flex-direction: column; }
-  .items-center { align-items: center; }
-  .justify-center { justify-content: center; }
-  .justify-between { justify-content: space-between; }
-  .gap-xs { gap: var(--spacing-xs); }
-  .gap-sm { gap: var(--spacing-sm); }
-  .gap-md { gap: var(--spacing-md); }
-  .gap-lg { gap: var(--spacing-lg); }
-  .gap-xl { gap: var(--spacing-xl); }
-  .gap-2xl { gap: var(--spacing-2xl); }
-  
+
+  .flex {
+    display: flex;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-xs {
+    gap: var(--spacing-xs);
+  }
+  .gap-sm {
+    gap: var(--spacing-sm);
+  }
+  .gap-md {
+    gap: var(--spacing-md);
+  }
+  .gap-lg {
+    gap: var(--spacing-lg);
+  }
+  .gap-xl {
+    gap: var(--spacing-xl);
+  }
+  .gap-2xl {
+    gap: var(--spacing-2xl);
+  }
+
   /* Background Utilities */
-  .bg-primary { background-color: var(--surface-primary); }
-  .bg-secondary { background-color: var(--surface-secondary); }
-  .bg-tertiary { background-color: var(--surface-tertiary); }
-  .bg-gold { background-color: var(--brand-gold); }
-  .bg-beige { background-color: var(--brand-warm-beige); }
-  
+  .bg-primary {
+    background-color: var(--surface-primary);
+  }
+  .bg-secondary {
+    background-color: var(--surface-secondary);
+  }
+  .bg-tertiary {
+    background-color: var(--surface-tertiary);
+  }
+  .bg-gold {
+    background-color: var(--brand-gold);
+  }
+  .bg-beige {
+    background-color: var(--brand-warm-beige);
+  }
+
   /* Border Utilities */
-  .rounded { border-radius: var(--border-radius-input); }
-  .rounded-pill { border-radius: var(--border-radius-pill); }
-  .rounded-card { border-radius: var(--border-radius-card); }
-  
+  .rounded {
+    border-radius: var(--border-radius-input);
+  }
+  .rounded-pill {
+    border-radius: var(--border-radius-pill);
+  }
+  .rounded-card {
+    border-radius: var(--border-radius-card);
+  }
+
   /* Shadow Utilities */
-  .shadow-card { box-shadow: var(--shadow-card); }
-  .shadow-premium { box-shadow: var(--shadow-premium); }
-  .shadow-glow { box-shadow: var(--shadow-gold-glow); }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-premium {
+    box-shadow: var(--shadow-premium);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-gold-glow);
+  }
 }
 
 /* Global Layout Classes */
@@ -423,7 +561,8 @@
 
 /* EatRite Brand Animations */
 @keyframes gold-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

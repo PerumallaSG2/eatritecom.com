@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { 
-  Users, 
-  TrendingUp, 
+import {
+  Users,
+  TrendingUp,
   Star,
   Shield,
   Heart,
@@ -9,7 +9,7 @@ import {
   Phone,
   Mail,
   Calendar,
-  Download
+  Download,
 } from 'lucide-react'
 
 const CorporatePartnerships = () => {
@@ -19,7 +19,7 @@ const CorporatePartnerships = () => {
     { id: 'all', name: 'All Industries', count: 150 },
     { id: 'technology', name: 'Technology', count: 45 },
     { id: 'healthcare', name: 'Healthcare', count: 32 },
-    { id: 'finance', name: 'Finance', count: 28 }
+    { id: 'finance', name: 'Finance', count: 28 },
   ]
 
   const partnershipTiers = [
@@ -34,9 +34,9 @@ const CorporatePartnerships = () => {
         'Basic nutrition tracking',
         'Employee wellness portal',
         'Monthly usage reports',
-        'Email support'
+        'Email support',
       ],
-      popular: false
+      popular: false,
     },
     {
       id: 'growth',
@@ -50,9 +50,9 @@ const CorporatePartnerships = () => {
         'Dedicated account manager',
         'Custom wellness programs',
         'Priority support',
-        'Quarterly business reviews'
+        'Quarterly business reviews',
       ],
-      popular: true
+      popular: true,
     },
     {
       id: 'enterprise',
@@ -66,10 +66,10 @@ const CorporatePartnerships = () => {
         'Executive wellness dashboard',
         'On-site nutrition consultations',
         '24/7 dedicated support',
-        'Custom integrations & APIs'
+        'Custom integrations & APIs',
       ],
-      popular: false
-    }
+      popular: false,
+    },
   ]
 
   const corporatePartners = [
@@ -79,13 +79,14 @@ const CorporatePartnerships = () => {
       logo: '🏢',
       industry: 'Technology',
       employees: '450',
-      testimonial: 'EatRite has transformed our workplace wellness culture. Employee satisfaction with our food benefits increased by 85%.',
+      testimonial:
+        'EatRite has transformed our workplace wellness culture. Employee satisfaction with our food benefits increased by 85%.',
       contactPerson: 'Sarah Johnson',
       role: 'VP of People Operations',
       metrics: {
         satisfaction: 94,
-        participation: '87%'
-      }
+        participation: '87%',
+      },
     },
     {
       id: 2,
@@ -93,13 +94,14 @@ const CorporatePartnerships = () => {
       logo: '🌿',
       industry: 'Clean Energy',
       employees: '280',
-      testimonial: 'The partnership with EatRite aligns perfectly with our sustainability values. Our employees love the variety and quality.',
+      testimonial:
+        'The partnership with EatRite aligns perfectly with our sustainability values. Our employees love the variety and quality.',
       contactPerson: 'Michael Chen',
       role: 'Chief People Officer',
       metrics: {
         satisfaction: 91,
-        participation: '92%'
-      }
+        participation: '92%',
+      },
     },
     {
       id: 3,
@@ -107,14 +109,15 @@ const CorporatePartnerships = () => {
       logo: '🏥',
       industry: 'Healthcare',
       employees: '720',
-      testimonial: 'As healthcare professionals, we understand nutrition importance. EatRite delivers exactly what our staff needs.',
+      testimonial:
+        'As healthcare professionals, we understand nutrition importance. EatRite delivers exactly what our staff needs.',
       contactPerson: 'Dr. Lisa Rodriguez',
       role: 'Chief Medical Officer',
       metrics: {
         satisfaction: 96,
-        participation: '89%'
-      }
-    }
+        participation: '89%',
+      },
+    },
   ]
 
   const partnershipBenefits = [
@@ -122,31 +125,37 @@ const CorporatePartnerships = () => {
       icon: Users,
       title: 'Employee Satisfaction',
       description: 'Boost morale and retention with premium meal benefits',
-      metrics: ['94% average satisfaction', '35% increase in retention']
+      metrics: ['94% average satisfaction', '35% increase in retention'],
     },
     {
       icon: TrendingUp,
       title: 'Productivity Gains',
       description: 'Well-fed employees are more focused and productive',
-      metrics: ['23% productivity increase', '50% less lunch absences']
+      metrics: ['23% productivity increase', '50% less lunch absences'],
     },
     {
       icon: Shield,
       title: 'Cost Effectiveness',
       description: 'Reduce corporate food costs while improving quality',
-      metrics: ['30% cost savings vs catering', 'Tax-deductible benefit']
+      metrics: ['30% cost savings vs catering', 'Tax-deductible benefit'],
     },
     {
       icon: Heart,
       title: 'Health Impact',
       description: 'Support employee health and wellness goals',
-      metrics: ['25% improvement in health metrics', 'Reduced healthcare costs']
-    }
+      metrics: [
+        '25% improvement in health metrics',
+        'Reduced healthcare costs',
+      ],
+    },
   ]
 
-  const filteredPartners = selectedIndustry === 'all' 
-    ? corporatePartners 
-    : corporatePartners.filter(partner => partner.industry.toLowerCase().includes(selectedIndustry))
+  const filteredPartners =
+    selectedIndustry === 'all'
+      ? corporatePartners
+      : corporatePartners.filter(partner =>
+          partner.industry.toLowerCase().includes(selectedIndustry)
+        )
 
   return (
     <div className="bg-[#F5EEDC]">
@@ -157,29 +166,40 @@ const CorporatePartnerships = () => {
             Corporate Partnership Program
           </h1>
           <p className="text-xl text-white/90 max-w-4xl mx-auto mb-12 leading-relaxed">
-            Partner with EatRite to provide premium nutrition benefits that boost employee satisfaction, 
-            productivity, and wellness. Join 150+ companies transforming their workplace culture.
+            Partner with EatRite to provide premium nutrition benefits that
+            boost employee satisfaction, productivity, and wellness. Join 150+
+            companies transforming their workplace culture.
           </p>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="text-center">
               <div className="text-3xl font-bold text-[#D4B46A] mb-2">150+</div>
-              <div className="text-white/80 text-sm font-medium">Partner Companies</div>
+              <div className="text-white/80 text-sm font-medium">
+                Partner Companies
+              </div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-[#D4B46A] mb-2">45K+</div>
-              <div className="text-white/80 text-sm font-medium">Employees Served</div>
+              <div className="text-white/80 text-sm font-medium">
+                Employees Served
+              </div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-[#D4B46A] mb-2">94%</div>
-              <div className="text-white/80 text-sm font-medium">Satisfaction Rate</div>
+              <div className="text-white/80 text-sm font-medium">
+                Satisfaction Rate
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#D4B46A] mb-2">$2.4M+</div>
-              <div className="text-white/80 text-sm font-medium">Corporate Savings</div>
+              <div className="text-3xl font-bold text-[#D4B46A] mb-2">
+                $2.4M+
+              </div>
+              <div className="text-white/80 text-sm font-medium">
+                Corporate Savings
+              </div>
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-[#D4B46A] hover:bg-[#b8986b] text-[#0F2B1E] font-semibold py-4 px-8 rounded-lg transition-colors duration-200">
               Get Partnership Details
@@ -199,17 +219,18 @@ const CorporatePartnerships = () => {
               Choose Your Partnership Level
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Flexible solutions designed to match your company size and specific wellness objectives
+              Flexible solutions designed to match your company size and
+              specific wellness objectives
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {partnershipTiers.map((tier) => (
-              <div 
-                key={tier.id} 
+            {partnershipTiers.map(tier => (
+              <div
+                key={tier.id}
                 className={`relative bg-white rounded-xl border p-8 hover:shadow-lg transition-all duration-200 ${
-                  tier.popular 
-                    ? 'border-[#D4B46A] shadow-lg scale-105' 
+                  tier.popular
+                    ? 'border-[#D4B46A] shadow-lg scale-105'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -226,11 +247,15 @@ const CorporatePartnerships = () => {
                   <h3 className="text-xl font-semibold text-[#0F2B1E] mb-2 font-playfair">
                     {tier.name}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">{tier.description}</p>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {tier.description}
+                  </p>
                   <div className="text-sm text-[#D4B46A] font-medium mb-4 bg-[#F5F2E8] px-3 py-1 rounded-full inline-block">
                     {tier.employeeRange}
                   </div>
-                  <div className="text-2xl font-bold text-[#0F2B1E]">{tier.price}</div>
+                  <div className="text-2xl font-bold text-[#0F2B1E]">
+                    {tier.price}
+                  </div>
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -239,16 +264,20 @@ const CorporatePartnerships = () => {
                       <div className="flex-shrink-0 w-5 h-5 bg-green-50 rounded-full flex items-center justify-center mr-3 mt-0.5">
                         <Check className="w-3 h-3 text-green-600" />
                       </div>
-                      <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                      <span className="text-sm text-gray-700 leading-relaxed">
+                        {feature}
+                      </span>
                     </div>
                   ))}
                 </div>
 
-                <button className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
-                  tier.popular 
-                    ? 'bg-[#0F2B1E] hover:bg-[#1a4d33] text-white' 
-                    : 'bg-gray-50 hover:bg-gray-100 text-[#0F2B1E] border border-gray-200 hover:border-gray-300'
-                }`}>
+                <button
+                  className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
+                    tier.popular
+                      ? 'bg-[#0F2B1E] hover:bg-[#1a4d33] text-white'
+                      : 'bg-gray-50 hover:bg-gray-100 text-[#0F2B1E] border border-gray-200 hover:border-gray-300'
+                  }`}
+                >
                   Get Started
                 </button>
               </div>
@@ -265,11 +294,13 @@ const CorporatePartnerships = () => {
               <h2 className="text-3xl font-semibold text-[#0F2B1E] font-playfair">
                 Partner Success Stories
               </h2>
-              <p className="text-gray-600 mt-2">Real results from companies just like yours</p>
+              <p className="text-gray-600 mt-2">
+                Real results from companies just like yours
+              </p>
             </div>
-            
+
             <div className="flex flex-wrap gap-2">
-              {industries.map((industry) => (
+              {industries.map(industry => (
                 <button
                   key={industry.id}
                   onClick={() => setSelectedIndustry(industry.id)}
@@ -280,33 +311,50 @@ const CorporatePartnerships = () => {
                   }`}
                 >
                   {industry.name}
-                  <span className="ml-2 text-xs opacity-75">({industry.count})</span>
+                  <span className="ml-2 text-xs opacity-75">
+                    ({industry.count})
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPartners.map((partner) => (
-              <div key={partner.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
+            {filteredPartners.map(partner => (
+              <div
+                key={partner.id}
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200"
+              >
                 <div className="flex items-center mb-6">
                   <div className="text-3xl mr-4 bg-gray-50 w-12 h-12 rounded-lg flex items-center justify-center">
                     {partner.logo}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0F2B1E]">{partner.name}</h3>
-                    <p className="text-sm text-gray-600">{partner.industry} • {partner.employees} employees</p>
+                    <h3 className="font-semibold text-[#0F2B1E]">
+                      {partner.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {partner.industry} • {partner.employees} employees
+                    </p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
-                    <div className="text-2xl font-bold text-green-700 mb-1">{partner.metrics.satisfaction}%</div>
-                    <div className="text-xs text-green-600 font-medium">Satisfaction</div>
+                    <div className="text-2xl font-bold text-green-700 mb-1">
+                      {partner.metrics.satisfaction}%
+                    </div>
+                    <div className="text-xs text-green-600 font-medium">
+                      Satisfaction
+                    </div>
                   </div>
                   <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-700 mb-1">{partner.metrics.participation}</div>
-                    <div className="text-xs text-blue-600 font-medium">Participation</div>
+                    <div className="text-2xl font-bold text-blue-700 mb-1">
+                      {partner.metrics.participation}
+                    </div>
+                    <div className="text-xs text-blue-600 font-medium">
+                      Participation
+                    </div>
                   </div>
                 </div>
 
@@ -315,7 +363,9 @@ const CorporatePartnerships = () => {
                 </blockquote>
 
                 <div className="border-t border-gray-100 pt-4">
-                  <div className="font-semibold text-[#0F2B1E]">{partner.contactPerson}</div>
+                  <div className="font-semibold text-[#0F2B1E]">
+                    {partner.contactPerson}
+                  </div>
                   <div className="text-sm text-gray-600">{partner.role}</div>
                 </div>
               </div>
@@ -332,13 +382,17 @@ const CorporatePartnerships = () => {
               Why Companies Choose EatRite
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Measurable benefits that drive real business results and transform workplace culture
+              Measurable benefits that drive real business results and transform
+              workplace culture
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {partnershipBenefits.map((benefit, idx) => (
-              <div key={idx} className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-200">
+              <div
+                key={idx}
+                className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-200"
+              >
                 <div className="w-16 h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-xl flex items-center justify-center mx-auto mb-6">
                   <benefit.icon className="w-8 h-8 text-green-600" />
                 </div>
@@ -348,10 +402,13 @@ const CorporatePartnerships = () => {
                 <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                   {benefit.description}
                 </p>
-                
+
                 <div className="space-y-2">
                   {benefit.metrics.map((metric, metricIdx) => (
-                    <div key={metricIdx} className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium border border-green-200">
+                    <div
+                      key={metricIdx}
+                      className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium border border-green-200"
+                    >
                       {metric}
                     </div>
                   ))}
@@ -369,10 +426,11 @@ const CorporatePartnerships = () => {
             Ready to Transform Your Workplace?
           </h2>
           <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join industry leaders who have enhanced their employee benefits 
-            with EatRite's premium nutrition solutions. Start your partnership journey today.
+            Join industry leaders who have enhanced their employee benefits with
+            EatRite's premium nutrition solutions. Start your partnership
+            journey today.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button className="bg-[#D4B46A] hover:bg-[#b8986b] text-[#0F2B1E] font-semibold py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
               <Calendar className="w-5 h-5" />
@@ -391,25 +449,31 @@ const CorporatePartnerships = () => {
               </div>
               <div className="font-semibold text-white mb-2">Call Us</div>
               <div className="text-white/80">1-800-EATRITE</div>
-              <div className="text-sm text-white/60 mt-2">Mon-Fri 9AM-6PM EST</div>
+              <div className="text-sm text-white/60 mt-2">
+                Mon-Fri 9AM-6PM EST
+              </div>
             </div>
-            
+
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="w-12 h-12 bg-[#D4B46A] rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-6 h-6 text-[#0F2B1E]" />
               </div>
               <div className="font-semibold text-white mb-2">Email Us</div>
               <div className="text-white/80">partnerships@eatrite.com</div>
-              <div className="text-sm text-white/60 mt-2">24-hour response time</div>
+              <div className="text-sm text-white/60 mt-2">
+                24-hour response time
+              </div>
             </div>
-            
+
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="w-12 h-12 bg-[#D4B46A] rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-6 h-6 text-[#0F2B1E]" />
               </div>
               <div className="font-semibold text-white mb-2">Book Meeting</div>
               <div className="text-white/80">Available 24/7 online</div>
-              <div className="text-sm text-white/60 mt-2">Instant confirmation</div>
+              <div className="text-sm text-white/60 mt-2">
+                Instant confirmation
+              </div>
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ const HomepageVersionSwitcher = () => {
           <div className="text-xs text-eatrite-text-tertiary mb-2 text-center">
             Homepage Version
           </div>
-          
+
           <div className="flex flex-col gap-2 min-w-[150px]">
             <EatRiteButton
               variant={version === 'optimized' ? 'primary' : 'ghost'}
@@ -34,7 +34,7 @@ const HomepageVersionSwitcher = () => {
             >
               Optimized
             </EatRiteButton>
-            
+
             <EatRiteButton
               variant={version === 'original' ? 'primary' : 'ghost'}
               size="sm"
@@ -43,7 +43,7 @@ const HomepageVersionSwitcher = () => {
             >
               Original
             </EatRiteButton>
-            
+
             <EatRiteButton
               variant={version === 'revolutionary' ? 'primary' : 'ghost'}
               size="sm"
@@ -59,7 +59,9 @@ const HomepageVersionSwitcher = () => {
             <div className="text-xs text-eatrite-text-tertiary">
               {version === 'optimized' ? (
                 <div>
-                  <div className="font-medium text-eatrite-gold-400 mb-1">Conversion Focused</div>
+                  <div className="font-medium text-eatrite-gold-400 mb-1">
+                    Conversion Focused
+                  </div>
                   <div>• Simplified hero</div>
                   <div>• Early social proof</div>
                   <div>• Progressive features</div>
@@ -67,7 +69,9 @@ const HomepageVersionSwitcher = () => {
                 </div>
               ) : version === 'revolutionary' ? (
                 <div>
-                  <div className="font-medium text-eatrite-gold-400 mb-1">Living Food Interface</div>
+                  <div className="font-medium text-eatrite-gold-400 mb-1">
+                    Living Food Interface
+                  </div>
                   <div>• Adaptive colors</div>
                   <div>• Breathing animations</div>
                   <div>• AI personalization</div>
@@ -75,7 +79,9 @@ const HomepageVersionSwitcher = () => {
                 </div>
               ) : (
                 <div>
-                  <div className="font-medium text-eatrite-gold-400 mb-1">Feature Rich</div>
+                  <div className="font-medium text-eatrite-gold-400 mb-1">
+                    Feature Rich
+                  </div>
                   <div>• Comprehensive features</div>
                   <div>• Advanced tools</div>
                   <div>• Premium aesthetics</div>
@@ -89,7 +95,7 @@ const HomepageVersionSwitcher = () => {
 
       {/* Render Selected Version */}
       {version === 'optimized' ? (
-        <HomePage /> 
+        <HomePage />
       ) : version === 'revolutionary' ? (
         <RevolutionaryHomePage />
       ) : (

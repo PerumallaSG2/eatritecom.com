@@ -1,75 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  RotateCcw, 
-  Clock, 
-  ShoppingCart, 
+import React, { useState, useEffect } from 'react'
+import {
+  RotateCcw,
+  Clock,
+  ShoppingCart,
   Star,
-  Package, 
+  Package,
   Save,
   Zap,
   Target,
   Settings,
-  Award
-} from 'lucide-react';
-import { FadeIn, StaggeredAnimation, Floating } from './AnimationComponents';
+  Award,
+} from 'lucide-react'
+import { FadeIn, StaggeredAnimation, Floating } from './AnimationComponents'
 
 interface OrderHistoryItem {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  category: string;
-  dietType: string;
-  lastOrdered: Date;
-  totalOrders: number;
-  averageRating: number;
-  calories: number;
-  protein: number;
-  tags: string[];
-  frequency: 'weekly' | 'biweekly' | 'monthly' | 'occasional';
-  nextSuggestedOrder?: Date;
-  isSubscription: boolean;
+  id: string
+  name: string
+  image: string
+  price: number
+  category: string
+  dietType: string
+  lastOrdered: Date
+  totalOrders: number
+  averageRating: number
+  calories: number
+  protein: number
+  tags: string[]
+  frequency: 'weekly' | 'biweekly' | 'monthly' | 'occasional'
+  nextSuggestedOrder?: Date
+  isSubscription: boolean
   customizations?: {
-    portion: 'regular' | 'large' | 'small';
-    modifications: string[];
-  };
+    portion: 'regular' | 'large' | 'small'
+    modifications: string[]
+  }
 }
 
 interface QuickOrderBundle {
-  id: string;
-  name: string;
-  description: string;
+  id: string
+  name: string
+  description: string
   items: {
-    item: OrderHistoryItem;
-    quantity: number;
-  }[];
-  totalPrice: number;
-  originalPrice: number;
-  savings: number;
-  frequency: string;
-  popularity: number;
-  lastUsed?: Date;
+    item: OrderHistoryItem
+    quantity: number
+  }[]
+  totalPrice: number
+  originalPrice: number
+  savings: number
+  frequency: string
+  popularity: number
+  lastUsed?: Date
 }
 
 interface SmartRecommendation {
-  id: string;
-  type: 'replenishment' | 'complementary' | 'seasonal' | 'trending' | 'bundle';
-  item: OrderHistoryItem;
-  reason: string;
-  confidence: number;
-  urgency: 'high' | 'medium' | 'low';
-  savings?: number;
-  timeframe: string;
+  id: string
+  type: 'replenishment' | 'complementary' | 'seasonal' | 'trending' | 'bundle'
+  item: OrderHistoryItem
+  reason: string
+  confidence: number
+  urgency: 'high' | 'medium' | 'low'
+  savings?: number
+  timeframe: string
 }
 
 interface ReorderPreferences {
-  autoReorder: boolean;
-  reminderDays: number;
-  preferredDeliveryDay: string;
-  bundleRecommendations: boolean;
-  dietaryRestrictions: string[];
-  budgetLimit?: number;
-  favoriteCategories: string[];
+  autoReorder: boolean
+  reminderDays: number
+  preferredDeliveryDay: string
+  bundleRecommendations: boolean
+  dietaryRestrictions: string[]
+  budgetLimit?: number
+  favoriteCategories: string[]
 }
 
 const generateOrderHistory = (): OrderHistoryItem[] => [
@@ -91,8 +91,8 @@ const generateOrderHistory = (): OrderHistoryItem[] => [
     isSubscription: true,
     customizations: {
       portion: 'large',
-      modifications: ['Extra Avocado', 'No Onions']
-    }
+      modifications: ['Extra Avocado', 'No Onions'],
+    },
   },
   {
     id: 'grilled-salmon-plate',
@@ -109,7 +109,7 @@ const generateOrderHistory = (): OrderHistoryItem[] => [
     tags: ['High Protein', 'Omega-3', 'Heart Healthy'],
     frequency: 'biweekly',
     nextSuggestedOrder: new Date(2024, 11, 29),
-    isSubscription: false
+    isSubscription: false,
   },
   {
     id: 'chicken-teriyaki-bowl',
@@ -126,7 +126,7 @@ const generateOrderHistory = (): OrderHistoryItem[] => [
     tags: ['Balanced', 'Asian Fusion', 'Customer Favorite'],
     frequency: 'weekly',
     nextSuggestedOrder: new Date(2024, 11, 26),
-    isSubscription: false
+    isSubscription: false,
   },
   {
     id: 'mediterranean-wrap',
@@ -142,7 +142,7 @@ const generateOrderHistory = (): OrderHistoryItem[] => [
     protein: 22,
     tags: ['Mediterranean', 'Whole Grain', 'Vegetarian Option'],
     frequency: 'monthly',
-    isSubscription: false
+    isSubscription: false,
   },
   {
     id: 'vegan-burrito-bowl',
@@ -159,25 +159,26 @@ const generateOrderHistory = (): OrderHistoryItem[] => [
     tags: ['Plant-Based', 'High Fiber', 'Sustainable'],
     frequency: 'weekly',
     nextSuggestedOrder: new Date(2024, 11, 22),
-    isSubscription: false
-  }
-];
+    isSubscription: false,
+  },
+]
 
 const generateQuickOrderBundles = (): QuickOrderBundle[] => [
   {
     id: 'weekly-keto-bundle',
     name: 'Your Weekly Keto Favorites',
-    description: 'Based on your order history - perfect for your keto lifestyle',
+    description:
+      'Based on your order history - perfect for your keto lifestyle',
     items: [
       { item: generateOrderHistory()[0], quantity: 3 },
-      { item: generateOrderHistory()[1], quantity: 2 }
+      { item: generateOrderHistory()[1], quantity: 2 },
     ],
     totalPrice: 82.94,
     originalPrice: 92.94,
-    savings: 10.00,
+    savings: 10.0,
     frequency: 'Weekly',
     popularity: 94,
-    lastUsed: new Date(2024, 11, 11)
+    lastUsed: new Date(2024, 11, 11),
   },
   {
     id: 'balanced-meal-prep',
@@ -186,16 +187,16 @@ const generateQuickOrderBundles = (): QuickOrderBundle[] => [
     items: [
       { item: generateOrderHistory()[2], quantity: 2 },
       { item: generateOrderHistory()[3], quantity: 2 },
-      { item: generateOrderHistory()[4], quantity: 1 }
+      { item: generateOrderHistory()[4], quantity: 1 },
     ],
     totalPrice: 68.94,
     originalPrice: 76.94,
-    savings: 8.00,
+    savings: 8.0,
     frequency: 'Biweekly',
     popularity: 87,
-    lastUsed: new Date(2024, 10, 28)
-  }
-];
+    lastUsed: new Date(2024, 10, 28),
+  },
+]
 
 const generateSmartRecommendations = (): SmartRecommendation[] => [
   {
@@ -205,7 +206,7 @@ const generateSmartRecommendations = (): SmartRecommendation[] => [
     reason: 'You typically reorder this every 7 days',
     confidence: 96,
     urgency: 'high',
-    timeframe: 'Order by tomorrow for usual schedule'
+    timeframe: 'Order by tomorrow for usual schedule',
   },
   {
     id: 'rec-2',
@@ -214,8 +215,8 @@ const generateSmartRecommendations = (): SmartRecommendation[] => [
     reason: 'Pairs well with your Keto Power Bowl orders',
     confidence: 87,
     urgency: 'medium',
-    savings: 3.00,
-    timeframe: 'Perfect for this week\'s variety'
+    savings: 3.0,
+    timeframe: "Perfect for this week's variety",
   },
   {
     id: 'rec-3',
@@ -224,14 +225,16 @@ const generateSmartRecommendations = (): SmartRecommendation[] => [
     reason: 'Vegan options trending 40% higher this season',
     confidence: 78,
     urgency: 'low',
-    timeframe: 'Great for New Year goals'
-  }
-];
+    timeframe: 'Great for New Year goals',
+  },
+]
 
 export const OneClickReorderingSystem: React.FC = () => {
-  const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([]);
-  const [quickBundles, setQuickBundles] = useState<QuickOrderBundle[]>([]);
-  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>([]);
+  const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([])
+  const [quickBundles, setQuickBundles] = useState<QuickOrderBundle[]>([])
+  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>(
+    []
+  )
   const [preferences, setPreferences] = useState<ReorderPreferences>({
     autoReorder: false,
     reminderDays: 2,
@@ -239,113 +242,137 @@ export const OneClickReorderingSystem: React.FC = () => {
     bundleRecommendations: true,
     dietaryRestrictions: ['gluten-free'],
     budgetLimit: 150,
-    favoriteCategories: ['Bowls', 'Seafood']
-  });
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [showCustomization, setShowCustomization] = useState<string | null>(null);
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'frequency' | 'recent' | 'rating'>('frequency');
+    favoriteCategories: ['Bowls', 'Seafood'],
+  })
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [showCustomization, setShowCustomization] = useState<string | null>(
+    null
+  )
+  const [filterCategory, setFilterCategory] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<'frequency' | 'recent' | 'rating'>(
+    'frequency'
+  )
 
   useEffect(() => {
-    setOrderHistory(generateOrderHistory());
-    setQuickBundles(generateQuickOrderBundles());
-    setRecommendations(generateSmartRecommendations());
-  }, []);
+    setOrderHistory(generateOrderHistory())
+    setQuickBundles(generateQuickOrderBundles())
+    setRecommendations(generateSmartRecommendations())
+  }, [])
 
   const quickReorder = (itemId: string, quantity: number = 1) => {
-    const item = orderHistory.find(i => i.id === itemId);
-    if (!item) return;
+    const item = orderHistory.find(i => i.id === itemId)
+    if (!item) return
 
     // Simulate adding to cart
-    console.log(`Quick reordered: ${quantity}x ${item.name}`);
-    
+    console.log(`Quick reordered: ${quantity}x ${item.name}`)
+
     // Update last ordered date
-    const updatedHistory = orderHistory.map(h => 
+    const updatedHistory = orderHistory.map(h =>
       h.id === itemId ? { ...h, lastOrdered: new Date() } : h
-    );
-    setOrderHistory(updatedHistory);
-  };
+    )
+    setOrderHistory(updatedHistory)
+  }
 
   const reorderBundle = (bundleId: string) => {
-    const bundle = quickBundles.find(b => b.id === bundleId);
-    if (!bundle) return;
+    const bundle = quickBundles.find(b => b.id === bundleId)
+    if (!bundle) return
 
-    console.log(`Reordered bundle: ${bundle.name}`);
-    
+    console.log(`Reordered bundle: ${bundle.name}`)
+
     // Update last used date
-    const updatedBundles = quickBundles.map(b => 
+    const updatedBundles = quickBundles.map(b =>
       b.id === bundleId ? { ...b, lastUsed: new Date() } : b
-    );
-    setQuickBundles(updatedBundles);
-  };
+    )
+    setQuickBundles(updatedBundles)
+  }
 
   const toggleItemSelection = (itemId: string) => {
-    setSelectedItems(prev => 
-      prev.includes(itemId) 
+    setSelectedItems(prev =>
+      prev.includes(itemId)
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
-    );
-  };
+    )
+  }
 
   const reorderSelected = () => {
-    const selectedItemsData = orderHistory.filter(item => selectedItems.includes(item.id));
-    console.log('Reordering selected items:', selectedItemsData);
-    setSelectedItems([]);
-  };
+    const selectedItemsData = orderHistory.filter(item =>
+      selectedItems.includes(item.id)
+    )
+    console.log('Reordering selected items:', selectedItemsData)
+    setSelectedItems([])
+  }
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })
+  }
 
   const getDaysAgo = (date: Date) => {
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - date.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    return diffDays
+  }
 
   const getFrequencyColor = (frequency: string) => {
     switch (frequency) {
-      case 'weekly': return 'bg-green-100 text-green-700';
-      case 'biweekly': return 'bg-blue-100 text-blue-700';
-      case 'monthly': return 'bg-purple-100 text-purple-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'weekly':
+        return 'bg-green-100 text-green-700'
+      case 'biweekly':
+        return 'bg-blue-100 text-blue-700'
+      case 'monthly':
+        return 'bg-purple-100 text-purple-700'
+      default:
+        return 'bg-gray-100 text-gray-700'
     }
-  };
+  }
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'high': return 'bg-red-100 text-red-700 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-700 border-blue-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'high':
+        return 'bg-red-100 text-red-700 border-red-200'
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-700 border-yellow-200'
+      case 'low':
+        return 'bg-blue-100 text-blue-700 border-blue-200'
+      default:
+        return 'bg-gray-100 text-gray-700 border-gray-200'
     }
-  };
+  }
 
   const filteredHistory = orderHistory
-    .filter(item => filterCategory === 'all' || item.category === filterCategory)
+    .filter(
+      item => filterCategory === 'all' || item.category === filterCategory
+    )
     .sort((a, b) => {
       switch (sortBy) {
         case 'frequency':
-          const frequencyOrder = { weekly: 3, biweekly: 2, monthly: 1, occasional: 0 };
-          return frequencyOrder[b.frequency] - frequencyOrder[a.frequency];
+          const frequencyOrder = {
+            weekly: 3,
+            biweekly: 2,
+            monthly: 1,
+            occasional: 0,
+          }
+          return frequencyOrder[b.frequency] - frequencyOrder[a.frequency]
         case 'recent':
-          return b.lastOrdered.getTime() - a.lastOrdered.getTime();
+          return b.lastOrdered.getTime() - a.lastOrdered.getTime()
         case 'rating':
-          return b.averageRating - a.averageRating;
+          return b.averageRating - a.averageRating
         default:
-          return 0;
+          return 0
       }
-    });
+    })
 
-  const categories = ['all', ...Array.from(new Set(orderHistory.map(item => item.category)))];
-  const totalSelected = selectedItems.length;
+  const categories = [
+    'all',
+    ...Array.from(new Set(orderHistory.map(item => item.category))),
+  ]
+  const totalSelected = selectedItems.length
   const selectedTotal = orderHistory
     .filter(item => selectedItems.includes(item.id))
-    .reduce((sum, item) => sum + item.price, 0);
+    .reduce((sum, item) => sum + item.price, 0)
 
   return (
     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl overflow-hidden shadow-2xl">
@@ -356,14 +383,16 @@ export const OneClickReorderingSystem: React.FC = () => {
             <div>
               <div className="flex items-center space-x-3 mb-2">
                 <RotateCcw className="w-7 h-7" />
-                <h2 className="text-2xl font-bold">One-Click Reordering System</h2>
+                <h2 className="text-2xl font-bold">
+                  One-Click Reordering System
+                </h2>
                 <Zap className="w-6 h-6" />
               </div>
               <p className="text-green-100">
                 Smart reordering based on your purchase history and preferences
               </p>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {totalSelected > 0 && (
                 <button
@@ -371,10 +400,12 @@ export const OneClickReorderingSystem: React.FC = () => {
                   className="flex items-center space-x-2 bg-white text-green-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                 >
                   <ShoppingCart className="w-4 h-4" />
-                  <span>Reorder {totalSelected} Items (${selectedTotal.toFixed(2)})</span>
+                  <span>
+                    Reorder {totalSelected} Items (${selectedTotal.toFixed(2)})
+                  </span>
                 </button>
               )}
-              
+
               <button className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-lg transition-colors">
                 <Settings className="w-4 h-4" />
                 <span>Preferences</span>
@@ -395,41 +426,68 @@ export const OneClickReorderingSystem: React.FC = () => {
                 Smart Picks
               </span>
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <StaggeredAnimation>
-                {quickBundles.map((bundle) => (
-                  <div key={bundle.id} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-green-200">
+                {quickBundles.map(bundle => (
+                  <div
+                    key={bundle.id}
+                    className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-green-200"
+                  >
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h4 className="font-bold text-gray-900 text-lg">{bundle.name}</h4>
-                        <p className="text-sm text-gray-600">{bundle.description}</p>
+                        <h4 className="font-bold text-gray-900 text-lg">
+                          {bundle.name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {bundle.description}
+                        </p>
                       </div>
                       <div className="text-right">
-                        <div className="text-xl font-bold text-green-600">${bundle.totalPrice.toFixed(2)}</div>
-                        <div className="text-sm text-gray-500 line-through">${bundle.originalPrice.toFixed(2)}</div>
-                        <div className="text-sm text-green-600 font-semibold">Save ${bundle.savings.toFixed(2)}</div>
+                        <div className="text-xl font-bold text-green-600">
+                          ${bundle.totalPrice.toFixed(2)}
+                        </div>
+                        <div className="text-sm text-gray-500 line-through">
+                          ${bundle.originalPrice.toFixed(2)}
+                        </div>
+                        <div className="text-sm text-green-600 font-semibold">
+                          Save ${bundle.savings.toFixed(2)}
+                        </div>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2 mb-4">
                       {bundle.items.map((bundleItem, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
-                          <span className="text-lg">{bundleItem.item.image}</span>
+                        <div
+                          key={index}
+                          className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg"
+                        >
+                          <span className="text-lg">
+                            {bundleItem.item.image}
+                          </span>
                           <div className="flex-1">
-                            <span className="font-medium text-gray-900">{bundleItem.item.name}</span>
-                            <span className="text-sm text-gray-600 ml-2">x{bundleItem.quantity}</span>
+                            <span className="font-medium text-gray-900">
+                              {bundleItem.item.name}
+                            </span>
+                            <span className="text-sm text-gray-600 ml-2">
+                              x{bundleItem.quantity}
+                            </span>
                           </div>
                           <span className="text-sm font-semibold text-gray-700">
-                            ${(bundleItem.item.price * bundleItem.quantity).toFixed(2)}
+                            $
+                            {(
+                              bundleItem.item.price * bundleItem.quantity
+                            ).toFixed(2)}
                           </span>
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-4 text-sm text-gray-600">
-                        <span className={`px-2 py-1 rounded-full text-xs ${getFrequencyColor(bundle.frequency.toLowerCase())}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${getFrequencyColor(bundle.frequency.toLowerCase())}`}
+                        >
                           {bundle.frequency}
                         </span>
                         <span className="flex items-center">
@@ -444,7 +502,7 @@ export const OneClickReorderingSystem: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <button
                       onClick={() => reorderBundle(bundle.id)}
                       className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-colors flex items-center justify-center space-x-2"
@@ -469,11 +527,11 @@ export const OneClickReorderingSystem: React.FC = () => {
                     <Clock className="w-5 h-5 text-blue-600 mr-2" />
                     Order History ({orderHistory.length} items)
                   </h3>
-                  
+
                   <div className="flex items-center space-x-4">
                     <select
                       value={filterCategory}
-                      onChange={(e) => setFilterCategory(e.target.value)}
+                      onChange={e => setFilterCategory(e.target.value)}
                       className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       {categories.map(category => (
@@ -482,10 +540,10 @@ export const OneClickReorderingSystem: React.FC = () => {
                         </option>
                       ))}
                     </select>
-                    
+
                     <select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
+                      onChange={e => setSortBy(e.target.value as any)}
                       className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       <option value="frequency">Most Frequent</option>
@@ -494,17 +552,22 @@ export const OneClickReorderingSystem: React.FC = () => {
                     </select>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <StaggeredAnimation>
-                    {filteredHistory.map((item) => {
-                      const isSelected = selectedItems.includes(item.id);
-                      const daysAgo = getDaysAgo(item.lastOrdered);
-                      
+                    {filteredHistory.map(item => {
+                      const isSelected = selectedItems.includes(item.id)
+                      const daysAgo = getDaysAgo(item.lastOrdered)
+
                       return (
-                        <div key={item.id} className={`p-4 rounded-lg border transition-all hover:shadow-md ${
-                          isSelected ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                        }`}>
+                        <div
+                          key={item.id}
+                          className={`p-4 rounded-lg border transition-all hover:shadow-md ${
+                            isSelected
+                              ? 'bg-green-50 border-green-200'
+                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                          }`}
+                        >
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-4">
                               <input
@@ -513,9 +576,9 @@ export const OneClickReorderingSystem: React.FC = () => {
                                 onChange={() => toggleItemSelection(item.id)}
                                 className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
                               />
-                              
+
                               <span className="text-2xl">{item.image}</span>
-                              
+
                               <div>
                                 <h4 className="font-semibold text-gray-900 flex items-center">
                                   {item.name}
@@ -536,44 +599,60 @@ export const OneClickReorderingSystem: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="text-right">
-                              <div className="font-semibold text-gray-900">${item.price}</div>
-                              <div className="text-sm text-gray-600">Last: {daysAgo} days ago</div>
+                              <div className="font-semibold text-gray-900">
+                                ${item.price}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                Last: {daysAgo} days ago
+                              </div>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <span className={`px-2 py-1 rounded-full text-xs ${getFrequencyColor(item.frequency)}`}>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs ${getFrequencyColor(item.frequency)}`}
+                              >
                                 {item.frequency}
                               </span>
-                              
+
                               {item.tags.slice(0, 3).map((tag, index) => (
-                                <span key={index} className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                                <span
+                                  key={index}
+                                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full"
+                                >
                                   {tag}
                                 </span>
                               ))}
-                              
+
                               {item.nextSuggestedOrder && (
                                 <span className="text-xs text-green-600 font-semibold">
-                                  Suggested: {formatDate(item.nextSuggestedOrder)}
+                                  Suggested:{' '}
+                                  {formatDate(item.nextSuggestedOrder)}
                                 </span>
                               )}
                             </div>
-                            
+
                             <div className="flex items-center space-x-2">
                               {item.customizations && (
                                 <button
-                                  onClick={() => setShowCustomization(
-                                    showCustomization === item.id ? null : item.id
-                                  )}
+                                  onClick={() =>
+                                    setShowCustomization(
+                                      showCustomization === item.id
+                                        ? null
+                                        : item.id
+                                    )
+                                  }
                                   className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                                 >
-                                  {showCustomization === item.id ? 'Hide' : 'Customize'}
+                                  {showCustomization === item.id
+                                    ? 'Hide'
+                                    : 'Customize'}
                                 </button>
                               )}
-                              
+
                               <button
                                 onClick={() => quickReorder(item.id)}
                                 className="flex items-center space-x-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -583,35 +662,50 @@ export const OneClickReorderingSystem: React.FC = () => {
                               </button>
                             </div>
                           </div>
-                          
+
                           {/* Customization Details */}
-                          {showCustomization === item.id && item.customizations && (
-                            <Floating>
-                              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                <h5 className="font-semibold text-gray-900 mb-2">Your Customizations</h5>
-                                <div className="space-y-2 text-sm">
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Portion Size:</span>
-                                    <span className="font-semibold capitalize">{item.customizations.portion}</span>
-                                  </div>
-                                  {item.customizations.modifications.length > 0 && (
-                                    <div>
-                                      <span className="text-gray-600">Modifications:</span>
-                                      <div className="mt-1 space-y-1">
-                                        {item.customizations.modifications.map((mod, index) => (
-                                          <div key={index} className="text-blue-700 text-xs">
-                                            • {mod}
-                                          </div>
-                                        ))}
-                                      </div>
+                          {showCustomization === item.id &&
+                            item.customizations && (
+                              <Floating>
+                                <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                  <h5 className="font-semibold text-gray-900 mb-2">
+                                    Your Customizations
+                                  </h5>
+                                  <div className="space-y-2 text-sm">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">
+                                        Portion Size:
+                                      </span>
+                                      <span className="font-semibold capitalize">
+                                        {item.customizations.portion}
+                                      </span>
                                     </div>
-                                  )}
+                                    {item.customizations.modifications.length >
+                                      0 && (
+                                      <div>
+                                        <span className="text-gray-600">
+                                          Modifications:
+                                        </span>
+                                        <div className="mt-1 space-y-1">
+                                          {item.customizations.modifications.map(
+                                            (mod, index) => (
+                                              <div
+                                                key={index}
+                                                className="text-blue-700 text-xs"
+                                              >
+                                                • {mod}
+                                              </div>
+                                            )
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            </Floating>
-                          )}
+                              </Floating>
+                            )}
                         </div>
-                      );
+                      )
                     })}
                   </StaggeredAnimation>
                 </div>
@@ -628,22 +722,29 @@ export const OneClickReorderingSystem: React.FC = () => {
                   <Target className="w-5 h-5 text-purple-600 mr-2" />
                   Smart Recommendations
                 </h3>
-                
+
                 <div className="space-y-3">
-                  {recommendations.map((rec) => (
-                    <div key={rec.id} className={`p-3 rounded-lg border ${getUrgencyColor(rec.urgency)}`}>
+                  {recommendations.map(rec => (
+                    <div
+                      key={rec.id}
+                      className={`p-3 rounded-lg border ${getUrgencyColor(rec.urgency)}`}
+                    >
                       <div className="flex items-start space-x-2 mb-2">
                         <span className="text-lg">{rec.item.image}</span>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-sm">{rec.item.name}</h4>
+                          <h4 className="font-semibold text-sm">
+                            {rec.item.name}
+                          </h4>
                           <p className="text-xs mt-1">{rec.reason}</p>
                         </div>
                       </div>
-                      
+
                       <div className="text-xs space-y-1 mb-3">
                         <div className="flex justify-between">
                           <span>Confidence:</span>
-                          <span className="font-semibold">{rec.confidence}%</span>
+                          <span className="font-semibold">
+                            {rec.confidence}%
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Timeframe:</span>
@@ -652,11 +753,13 @@ export const OneClickReorderingSystem: React.FC = () => {
                         {rec.savings && (
                           <div className="flex justify-between">
                             <span>Savings:</span>
-                            <span className="font-semibold text-green-600">${rec.savings.toFixed(2)}</span>
+                            <span className="font-semibold text-green-600">
+                              ${rec.savings.toFixed(2)}
+                            </span>
                           </div>
                         )}
                       </div>
-                      
+
                       <button
                         onClick={() => quickReorder(rec.item.id)}
                         className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg text-sm font-medium transition-colors"
@@ -676,34 +779,40 @@ export const OneClickReorderingSystem: React.FC = () => {
                   <Settings className="w-5 h-5 text-gray-600 mr-2" />
                   Reorder Preferences
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">Auto Reorder</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      Auto Reorder
+                    </span>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={preferences.autoReorder}
-                        onChange={(e) => setPreferences(prev => ({
-                          ...prev,
-                          autoReorder: e.target.checked
-                        }))}
+                        onChange={e =>
+                          setPreferences(prev => ({
+                            ...prev,
+                            autoReorder: e.target.checked,
+                          }))
+                        }
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                     </label>
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-gray-700 block mb-2">
                       Reminder Days Before Usual Order
                     </label>
                     <select
                       value={preferences.reminderDays}
-                      onChange={(e) => setPreferences(prev => ({
-                        ...prev,
-                        reminderDays: parseInt(e.target.value)
-                      }))}
+                      onChange={e =>
+                        setPreferences(prev => ({
+                          ...prev,
+                          reminderDays: parseInt(e.target.value),
+                        }))
+                      }
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       <option value={1}>1 day</option>
@@ -712,17 +821,19 @@ export const OneClickReorderingSystem: React.FC = () => {
                       <option value={7}>1 week</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-gray-700 block mb-2">
                       Preferred Delivery Day
                     </label>
                     <select
                       value={preferences.preferredDeliveryDay}
-                      onChange={(e) => setPreferences(prev => ({
-                        ...prev,
-                        preferredDeliveryDay: e.target.value
-                      }))}
+                      onChange={e =>
+                        setPreferences(prev => ({
+                          ...prev,
+                          preferredDeliveryDay: e.target.value,
+                        }))
+                      }
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
                       <option value="Monday">Monday</option>
@@ -732,7 +843,7 @@ export const OneClickReorderingSystem: React.FC = () => {
                       <option value="Friday">Friday</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-gray-700 block mb-2">
                       Weekly Budget Limit
@@ -740,32 +851,38 @@ export const OneClickReorderingSystem: React.FC = () => {
                     <input
                       type="number"
                       value={preferences.budgetLimit || ''}
-                      onChange={(e) => setPreferences(prev => ({
-                        ...prev,
-                        budgetLimit: parseInt(e.target.value) || undefined
-                      }))}
+                      onChange={e =>
+                        setPreferences(prev => ({
+                          ...prev,
+                          budgetLimit: parseInt(e.target.value) || undefined,
+                        }))
+                      }
                       placeholder="150"
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">Bundle Recommendations</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      Bundle Recommendations
+                    </span>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={preferences.bundleRecommendations}
-                        onChange={(e) => setPreferences(prev => ({
-                          ...prev,
-                          bundleRecommendations: e.target.checked
-                        }))}
+                        onChange={e =>
+                          setPreferences(prev => ({
+                            ...prev,
+                            bundleRecommendations: e.target.checked,
+                          }))
+                        }
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                     </label>
                   </div>
                 </div>
-                
+
                 <button className="w-full mt-4 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-2">
                   <Save className="w-4 h-4" />
                   <span>Save Preferences</span>
@@ -780,25 +897,37 @@ export const OneClickReorderingSystem: React.FC = () => {
                   <Award className="w-5 h-5 text-yellow-600 mr-2" />
                   Your Stats
                 </h3>
-                
+
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Total Orders</span>
                     <span className="font-semibold text-gray-900">
-                      {orderHistory.reduce((sum, item) => sum + item.totalOrders, 0)}
+                      {orderHistory.reduce(
+                        (sum, item) => sum + item.totalOrders,
+                        0
+                      )}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Favorite Category</span>
+                    <span className="text-sm text-gray-600">
+                      Favorite Category
+                    </span>
                     <span className="font-semibold text-gray-900">
                       {preferences.favoriteCategories[0] || 'Bowls'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Average Rating Given</span>
+                    <span className="text-sm text-gray-600">
+                      Average Rating Given
+                    </span>
                     <span className="font-semibold text-gray-900 flex items-center">
                       <Star className="w-3 h-3 text-yellow-500 mr-1" />
-                      {(orderHistory.reduce((sum, item) => sum + item.averageRating, 0) / orderHistory.length).toFixed(1)}
+                      {(
+                        orderHistory.reduce(
+                          (sum, item) => sum + item.averageRating,
+                          0
+                        ) / orderHistory.length
+                      ).toFixed(1)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -812,7 +941,7 @@ export const OneClickReorderingSystem: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default OneClickReorderingSystem;
+export default OneClickReorderingSystem

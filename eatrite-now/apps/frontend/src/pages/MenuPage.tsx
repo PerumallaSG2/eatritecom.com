@@ -1,524 +1,623 @@
-import { useState, useEffect } from 'react';
-import { Star, Plus, Heart, Clock } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { useToast } from '../context/ToastContext';
-import MealFilters from '../components/MealFilters';
-import { MealCardSkeleton } from '../components/Loading';
+import { useState, useEffect } from 'react'
+import { Plus, ChevronDown, Minus } from 'lucide-react'
+import { useCart } from '../context/CartContext'
+import { useToast } from '../context/ToastContext'
+import MealFilters from '../components/MealFilters'
 
 interface Meal {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  image_url: string; // Required by CartContext
-  rating: number;
-  reviewCount: number;
-  category: string;
-  cookTime: string;
-  servingSize: string;
-  tags: string[];
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  fiber: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  isNew?: boolean;
-  isPopular?: boolean;
-  isPremium?: boolean;
-  allergens: string[];
-  nutritionalScore: number;
+  id: number
+  name: string
+  description: string
+  price: number
+  image_url: string
+  tags: string[]
+  calories?: number
+  protein?: number
+  isNew?: boolean
+  isPopular?: boolean
+  isPremium?: boolean
+  isTopRated?: boolean
 }
 
-const meals: Meal[] = [
-  {
-    id: 1,
-    name: "Grass-Fed Beef Taco Bowl",
-    description: "Seasoned grass-fed beef with fresh pico de gallo, black beans, cilantro lime rice, and avocado crema. A perfect blend of protein and flavor.",
-    price: 16.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.8,
-    reviewCount: 234,
-    category: "Beef",
-    cookTime: "25 mins",
-    servingSize: "1 serving",
-    tags: ["High Protein", "Gluten-Free", "Keto-Friendly"],
-    calories: 480,
-    protein: 32,
-    carbs: 28,
-    fat: 22,
-    fiber: 8,
-    difficulty: 'Medium',
-    isPopular: true,
-    allergens: [],
-    nutritionalScore: 92
-  },
-  {
-    id: 2,
-    name: "Wild-Caught Salmon Teriyaki",
-    description: "Pan-seared wild Alaskan salmon glazed with house-made teriyaki, served with jasmine rice and steamed broccoli.",
-    price: 19.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.9,
-    reviewCount: 187,
-    category: "Fish",
-    cookTime: "20 mins",
-    servingSize: "1 serving",
-    tags: ["High Protein", "Omega-3", "Heart Healthy"],
-    calories: 420,
-    protein: 35,
-    carbs: 32,
-    fat: 18,
-    fiber: 4,
-    difficulty: 'Easy',
-    isPremium: true,
-    allergens: ['Fish', 'Soy'],
-    nutritionalScore: 95
-  },
-  {
-    id: 3,
-    name: "Free-Range Chicken Harvest Bowl",
-    description: "Herb-crusted free-range chicken breast with roasted sweet potatoes, Brussels sprouts, and quinoa pilaf.",
-    price: 14.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.7,
-    reviewCount: 312,
-    category: "Chicken",
-    cookTime: "22 mins",
-    servingSize: "1 serving",
-    tags: ["High Protein", "Paleo", "Whole30"],
-    calories: 390,
-    protein: 30,
-    carbs: 35,
-    fat: 12,
-    fiber: 7,
-    difficulty: 'Medium',
-    isPopular: true,
-    allergens: [],
-    nutritionalScore: 88
-  },
-  {
-    id: 4,
-    name: "Plant-Based Power Bowl",
-    description: "Quinoa, roasted seasonal vegetables, chickpeas, hemp seeds, and creamy tahini dressing with microgreens.",
-    price: 13.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.6,
-    reviewCount: 156,
-    category: "Vegetarian",
-    cookTime: "15 mins",
-    servingSize: "1 serving",
-    tags: ["Vegan", "High Fiber", "Plant Protein"],
-    calories: 350,
-    protein: 18,
-    carbs: 42,
-    fat: 15,
-    fiber: 12,
-    difficulty: 'Easy',
-    isNew: true,
-    allergens: ['Sesame'],
-    nutritionalScore: 90
-  },
-  {
-    id: 5,
-    name: "Mediterranean Coastal Wrap",
-    description: "Grilled vegetables, hummus, feta cheese, and fresh herbs wrapped in a whole wheat tortilla with tzatziki.",
-    price: 12.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.5,
-    reviewCount: 89,
-    category: "Vegetarian",
-    cookTime: "12 mins",
-    servingSize: "1 serving",
-    tags: ["Vegetarian", "Mediterranean", "Fresh"],
-    calories: 320,
-    protein: 15,
-    carbs: 38,
-    fat: 14,
-    fiber: 6,
-    difficulty: 'Easy',
-    allergens: ['Dairy', 'Gluten'],
-    nutritionalScore: 85
-  },
-  {
-    id: 6,
-    name: "Turkey & Avocado Superfood Salad",
-    description: "Sliced organic turkey breast with avocado, mixed supergreens, pumpkin seeds, and pomegranate vinaigrette.",
-    price: 15.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.8,
-    reviewCount: 203,
-    category: "Salad",
-    cookTime: "8 mins",
-    servingSize: "1 serving",
-    tags: ["Low Carb", "High Protein", "Superfood"],
-    calories: 280,
-    protein: 25,
-    carbs: 12,
-    fat: 18,
-    fiber: 9,
-    difficulty: 'Easy',
-    isPremium: true,
-    allergens: [],
-    nutritionalScore: 94
-  },
-  {
-    id: 7,
-    name: "Spicy Shrimp & Cauliflower Rice",
-    description: "Cajun-spiced jumbo shrimp served over seasoned cauliflower rice with bell peppers and fresh cilantro.",
-    price: 17.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.7,
-    reviewCount: 145,
-    category: "Seafood",
-    cookTime: "18 mins",
-    servingSize: "1 serving",
-    tags: ["Low Carb", "High Protein", "Spicy", "Keto"],
-    calories: 310,
-    protein: 28,
-    carbs: 8,
-    fat: 16,
-    fiber: 5,
-    difficulty: 'Medium',
-    isNew: true,
-    allergens: ['Shellfish'],
-    nutritionalScore: 91
-  },
-  {
-    id: 8,
-    name: "Mushroom & Truffle Risotto",
-    description: "Creamy arborio rice with wild mushrooms, truffle oil, parmesan, and fresh thyme. A luxury comfort meal.",
-    price: 18.99,
-    image: "/api/placeholder/400/300",
-    image_url: "/api/placeholder/400/300",
-    rating: 4.6,
-    reviewCount: 98,
-    category: "Vegetarian",
-    cookTime: "30 mins",
-    servingSize: "1 serving",
-    tags: ["Vegetarian", "Comfort Food", "Gourmet"],
-    calories: 420,
-    protein: 12,
-    carbs: 52,
-    fat: 18,
-    fiber: 3,
-    difficulty: 'Hard',
-    isPremium: true,
-    allergens: ['Dairy', 'Gluten'],
-    nutritionalScore: 78
+const generateMeals = (): Meal[] => {
+  const mealData = [
+    {
+      name: 'Roasted Garlic Chicken',
+      description: 'with Gravy, Chive-Yukon Mash & Green Beans',
+      price: 15.99,
+      isPremium: true,
+      imageUrl: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['gluten-free', 'high-protein'],
+      calories: 520,
+      protein: 45,
+    },
+    {
+      name: 'Smoky Gouda Chicken',
+      description: 'with Potatoes & Parmesan Green Beans',
+      price: 14.99,
+      isTopRated: true,
+      imageUrl: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['high-protein'],
+      calories: 480,
+      protein: 42,
+    },
+    {
+      name: 'Shredded Chicken Taco Bowl',
+      description: 'with Corn Salsa & Cilantro Crema',
+      price: 13.99,
+      isNew: true,
+      imageUrl: 'https://images.unsplash.com/photo-1565299585323-38174c5a702a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['dairy-free', 'high-protein'],
+      calories: 420,
+      protein: 38,
+    },
+    {
+      name: 'Herb-Crusted Salmon',
+      description: 'with Lemon Butter & Roasted Asparagus',
+      price: 17.99,
+      isPremium: true,
+      imageUrl: 'https://images.unsplash.com/photo-1485704686097-ed47f7263ca4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['keto', 'gluten-free', 'high-protein'],
+      calories: 380,
+      protein: 35,
+    },
+    {
+      name: 'BBQ Pork Ribs',
+      description: 'with Sweet Potato Fries & Coleslaw',
+      price: 16.99,
+      imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['dairy-free', 'high-protein'],
+      calories: 650,
+      protein: 50,
+    },
+    {
+      name: 'Mediterranean Bowl',
+      description: 'with Quinoa, Feta & Olive Tapenade',
+      price: 12.99,
+      isNew: true,
+      imageUrl: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['gluten-free', 'vegetarian'],
+      calories: 350,
+      protein: 15,
+    },
+    {
+      name: 'Spicy Thai Curry',
+      description: 'with Jasmine Rice & Fresh Herbs',
+      price: 14.99,
+      imageUrl: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['dairy-free', 'vegan'],
+      calories: 380,
+      protein: 12,
+    },
+    {
+      name: 'Beef Stir Fry',
+      description: 'with Broccoli & Teriyaki Glaze',
+      price: 15.99,
+      isTopRated: true,
+      imageUrl: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['dairy-free', 'high-protein'],
+      calories: 440,
+      protein: 40,
+    },
+    {
+      name: 'Turkey Meatballs',
+      description: 'with Marinara & Zucchini Noodles',
+      price: 13.99,
+      imageUrl: 'https://images.unsplash.com/photo-1551782450-17144efb9c50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['paleo', 'gluten-free', 'high-protein'],
+      calories: 320,
+      protein: 35,
+    },
+    {
+      name: 'Moroccan Chicken',
+      description: 'with Couscous & Dried Fruits',
+      price: 14.99,
+      imageUrl: 'https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['dairy-free', 'high-protein'],
+      calories: 450,
+      protein: 38,
+    },
+    {
+      name: 'Grilled Steak Fajitas',
+      description: 'with Peppers & Guacamole',
+      price: 18.99,
+      isPremium: true,
+      imageUrl: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['keto', 'dairy-free', 'high-protein'],
+      calories: 580,
+      protein: 48,
+    },
+    {
+      name: 'Lemon Herb Cod',
+      description: 'with Wild Rice & Steamed Vegetables',
+      price: 16.99,
+      imageUrl: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      tags: ['gluten-free', 'high-protein'],
+      calories: 360,
+      protein: 32,
+    },
+  ]
+
+  // Additional unique images for recipe variations beyond the base 12 meals
+  const additionalImages = [
+    'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Grilled chicken variation
+    'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Pancakes
+    'https://images.unsplash.com/photo-1563379091339-03246963d96c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Beef bowl
+    'https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Pasta
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Pizza
+    'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Fresh salad
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Herb chicken variation
+    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Food spread
+    'https://images.unsplash.com/photo-1565976469981-95c51e2dee90?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Sandwich
+    'https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Gourmet burger
+    'https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Sushi
+    'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Soup
+    'https://images.unsplash.com/photo-1529042410759-befb1204b468?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Grilled steak
+    'https://images.unsplash.com/photo-1572441713132-51c75654db73?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Healthy bowl
+    'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Avocado toast
+    'https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Salad bowl
+    'https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Breakfast plate
+    'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Healthy meal prep
+    'https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Fish dish variation
+  ]
+
+  // Generate 101 meals by cycling through the base data with consistent images
+  const meals: Meal[] = []
+  for (let i = 1; i <= 101; i++) {
+    const baseIndex = (i - 1) % mealData.length
+    const baseMeal = mealData[baseIndex]
+    
+    // Each recipe always gets the same image - base meals use their specific imageUrl
+    // Additional variations use additionalImages array consistently
+    let imageUrl = baseMeal.imageUrl
+    if (!imageUrl) {
+      // For base meals without specific images, use additional images array
+      imageUrl = additionalImages[baseIndex % additionalImages.length]
+    }
+
+    // Create clean price variations (e.g., $14.99, $15.49, etc.)
+    const priceVariation = Math.floor(Math.random() * 5) * 0.5 - 1 // -1.0 to +1.5 in 0.5 increments
+    const cleanPrice = Math.round((baseMeal.price + priceVariation) * 2) / 2 // Round to nearest 0.5
+
+    meals.push({
+      id: i,
+      name: baseMeal.name,
+      description: baseMeal.description,
+      price: cleanPrice,
+      image_url: imageUrl,
+      tags: baseMeal.tags || ['healthy', 'chef-prepared'],
+      calories: baseMeal.calories || 400 + Math.floor(Math.random() * 200),
+      protein: baseMeal.protein || 25 + Math.floor(Math.random() * 15),
+      isPremium: baseMeal.isPremium,
+      isNew: baseMeal.isNew,
+      isTopRated: baseMeal.isTopRated,
+    })
   }
-];
+
+  return meals
+}
+
+const allMeals = generateMeals()
+const mealsPerPage = 12
+
+interface FilterState {
+  search: string
+  dietary: string[]
+  priceRange: [number, number]
+  sortBy: 'popular' | 'price' | 'rating' | 'name'
+  calories: [number, number]
+}
 
 export default function MenuPage() {
-  const [filteredMeals, setFilteredMeals] = useState<Meal[]>(meals);
-  const [isLoading, setIsLoading] = useState(true);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [displayedMeals, setDisplayedMeals] = useState<Meal[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const [filteredMeals, setFilteredMeals] = useState<Meal[]>(allMeals)
+  const [filters, setFilters] = useState<FilterState>({
+    search: '',
+    dietary: [],
+    priceRange: [10, 30],
+    sortBy: 'popular',
+    calories: [200, 800],
+  })
 
-  const { addToCart } = useCart();
-  const { showToast } = useToast();
-
-  // Simulate loading
+  // Apply filters whenever filters change
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    const filtered = applyFilters(allMeals, filters)
+    setFilteredMeals(filtered)
+    setCurrentPage(1) // Reset pagination when filters change
+    setDisplayedMeals(filtered.slice(0, 8))
+    setHasMore(filtered.length > 8)
+  }, [filters])
 
-  const handleFilterChange = (filters: any) => {
-    let filtered = [...meals];
+  const { addToCart, items, updateQuantity } = useCart()
+  const { showToast } = useToast()
 
-    // Search filter
-    if (filters.searchTerm) {
-      filtered = filtered.filter(meal =>
-        meal.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        meal.description.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        meal.tags.some(tag => tag.toLowerCase().includes(filters.searchTerm.toLowerCase()))
-      );
-    }
+  // Filter and sort meals based on current filters
+  const applyFilters = (meals: Meal[], filterState: FilterState) => {
+    let filtered = [...meals]
 
-    // Category filter
-    if (filters.category !== 'All') {
-      filtered = filtered.filter(meal => meal.category === filters.category);
-    }
-
-    // Dietary filters
-    if (filters.dietary.length > 0) {
-      filtered = filtered.filter(meal =>
-        filters.dietary.some((diet: string) => 
-          meal.tags.some(tag => tag.toLowerCase().includes(diet.toLowerCase()))
-        )
-      );
+    // Search filter - match name, description, or tags
+    if (filterState.search) {
+      const searchTerm = filterState.search.toLowerCase()
+      filtered = filtered.filter(
+        meal =>
+          meal.name.toLowerCase().includes(searchTerm) ||
+          meal.description.toLowerCase().includes(searchTerm) ||
+          meal.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      )
     }
 
     // Price range filter
-    filtered = filtered.filter(meal => 
-      meal.price >= filters.priceRange[0] && meal.price <= filters.priceRange[1]
-    );
+    filtered = filtered.filter(
+      meal =>
+        meal.price >= filterState.priceRange[0] &&
+        meal.price <= filterState.priceRange[1]
+    )
 
-    // Calorie range filter
-    if (filters.calorieRange[0] > 0 || filters.calorieRange[1] < 1000) {
+    // Calories filter - only apply if meal has calories data
+    filtered = filtered.filter(meal => {
+      if (!meal.calories) return true // Include meals without calorie data
+      return (
+        meal.calories >= filterState.calories[0] &&
+        meal.calories <= filterState.calories[1]
+      )
+    })
+
+    // Dietary filters (simplified - would need meal tags to match dietary preferences)
+    if (filterState.dietary.length > 0) {
       filtered = filtered.filter(meal =>
-        meal.calories >= filters.calorieRange[0] && meal.calories <= filters.calorieRange[1]
-      );
+        filterState.dietary.some(dietary =>
+          meal.tags.some(tag =>
+            tag.toLowerCase().includes(dietary.toLowerCase())
+          )
+        )
+      )
     }
 
-    // Sort
-    filtered.sort((a, b) => {
-      switch (filters.sortBy) {
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        case 'rating':
-          return b.rating - a.rating;
-        case 'calories-low':
-          return a.calories - b.calories;
-        case 'calories-high':
-          return b.calories - a.calories;
-        case 'name':
-          return a.name.localeCompare(b.name);
-        default:
-          return b.rating - a.rating;
-      }
-    });
+    // Sort meals
+    switch (filterState.sortBy) {
+      case 'price':
+        filtered.sort((a, b) => a.price - b.price)
+        break
+      case 'name':
+        filtered.sort((a, b) => a.name.localeCompare(b.name))
+        break
+      case 'rating':
+        // Sort by rating - put top-rated first, then premium, then new
+        filtered.sort((a, b) => {
+          if (a.isTopRated && !b.isTopRated) return -1
+          if (b.isTopRated && !a.isTopRated) return 1
+          if (a.isPremium && !b.isPremium) return -1
+          if (b.isPremium && !a.isPremium) return 1
+          return 0
+        })
+        break
+      case 'popular':
+      default:
+        // Sort by popular - new items first, then premium, then top-rated
+        filtered.sort((a, b) => {
+          if (a.isNew && !b.isNew) return -1
+          if (b.isNew && !a.isNew) return 1
+          if (a.isPremium && !b.isPremium) return -1
+          if (b.isPremium && !a.isPremium) return 1
+          return 0
+        })
+        break
+    }
 
-    setFilteredMeals(filtered);
-  };
+    return filtered
+  }
 
-  const toggleFavorite = (mealId: number) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(mealId)) {
-        newFavorites.delete(mealId);
-        showToast('info', 'Removed from favorites', 'Item has been removed from your favorites list.');
-      } else {
-        newFavorites.add(mealId);
-        showToast('success', 'Added to favorites', 'Item has been added to your favorites list.');
-      }
-      return newFavorites;
-    });
-  };
+  // Handle filter changes
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters)
+    const filtered = applyFilters(allMeals, newFilters)
+    setFilteredMeals(filtered)
+
+    // Reset pagination and display first page of filtered results
+    const initialMeals = filtered.slice(0, mealsPerPage)
+    setDisplayedMeals(initialMeals)
+    setCurrentPage(1)
+    setHasMore(filtered.length > mealsPerPage)
+
+    showToast(
+      'info',
+      'Filters Applied',
+      `Found ${filtered.length} matching meals`
+    )
+  }
+
+  useEffect(() => {
+    const initialMeals = allMeals.slice(0, mealsPerPage)
+    setDisplayedMeals(initialMeals)
+    setHasMore(allMeals.length > mealsPerPage)
+  }, [])
+
+  const loadMoreMeals = async () => {
+    if (isLoading || !hasMore) return
+
+    setIsLoading(true)
+
+    await new Promise(resolve => setTimeout(resolve, 800))
+
+    const nextPageStart = currentPage * mealsPerPage
+    const nextPageEnd = nextPageStart + mealsPerPage
+    const newMeals = filteredMeals.slice(nextPageStart, nextPageEnd)
+
+    if (newMeals.length > 0) {
+      setDisplayedMeals(prev => [...prev, ...newMeals])
+      setCurrentPage(prev => prev + 1)
+    }
+
+    if (nextPageEnd >= filteredMeals.length) {
+      setHasMore(false)
+    }
+
+    setIsLoading(false)
+  }
 
   const handleAddToCart = (meal: Meal) => {
     const cartItem = {
       id: meal.id.toString(),
       name: meal.name,
       description: meal.description,
-      calories: meal.calories,
-      protein: meal.protein,
+      calories: meal.calories || 0,
+      protein: meal.protein || 0,
       price: meal.price,
       image_url: meal.image_url,
-      dietary_tags: meal.tags.join(', ')
-    };
-    addToCart(cartItem);
-    showToast('success', 'Added to cart', `${meal.name} has been added to your cart.`);
-  };
+    }
 
-
+    addToCart(cartItem)
+    showToast('success', 'Added to Cart', `${meal.name} added to cart!`)
+  }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5F2E8] to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#0F2B1E] font-playfair mb-6">
-            Our Menu
+          <h1 className="text-5xl md:text-6xl font-bold text-[#0F2B1E] mb-4">
+            Explore our Flexible Weekly Menu
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-            Thoughtfully prepared meals using premium ingredients, 
-            crafted to nourish your body and delight your taste buds.
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+            Choose from {allMeals.length} healthy, restaurant-quality meals
+            each week
           </p>
-          <div className="flex items-center justify-center gap-12 text-sm text-gray-500">
+          <div className="flex justify-center gap-4 text-sm text-gray-600">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#FF6B35] rounded-full"></div>
-              <span>Fresh Ingredients</span>
+              <div className="w-4 h-4 bg-gradient-to-r from-[#D4B46A] to-[#B8935A] rounded-full"></div>
+              <span>Premium</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#D4B46A] rounded-full"></div>
-              <span>Chef Prepared</span>
+              <div className="w-4 h-4 bg-[#FF6B35] rounded-full"></div>
+              <span>New</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#0F2B1E] rounded-full"></div>
-              <span>Delivered Fresh</span>
+              <div className="w-4 h-4 bg-[#0F2B1E] rounded-full"></div>
+              <span>Top-Rated</span>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-12">
-          <MealFilters onFilterChange={handleFilterChange} />
-        </div>
+        {/* Meal Filters */}
+        <MealFilters onFilterChange={handleFilterChange} className="mb-8" />
 
-        {/* Results Summary */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <p className="text-gray-600">
-              Showing <span className="font-semibold text-[#0F2B1E]">{filteredMeals.length}</span> meals
+        {/* Search Results Info */}
+        {filters.search && (
+          <div className="mb-6 p-4 bg-white rounded-lg border-l-4 border-[#D4B46A]">
+            <p className="text-lg font-medium text-[#0F2B1E]">
+              {filteredMeals.length > 0 
+                ? `Found ${filteredMeals.length} meal${filteredMeals.length !== 1 ? 's' : ''} matching "${filters.search}"`
+                : `No meals found matching "${filters.search}"`
+              }
             </p>
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <Clock className="h-4 w-4" />
-              <span>Updated daily with fresh options</span>
-            </div>
+            {filteredMeals.length === 0 && (
+              <p className="text-sm text-gray-600 mt-1">
+                Try searching for different ingredients, meal names, or dietary preferences.
+              </p>
+            )}
           </div>
-        </div>
+        )}
 
-        {/* Meal Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, index) => (
-              <MealCardSkeleton key={index} />
-            ))}
+        {/* No Results State */}
+        {filteredMeals.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
+              <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">No meals found</h3>
+            <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+              Try adjusting your search terms or filters to find the perfect meal for you.
+            </p>
+            <button
+              onClick={() => handleFilterChange({
+                search: '',
+                dietary: [],
+                priceRange: [10, 30],
+                sortBy: 'popular',
+                calories: [200, 800],
+              })}
+              className="bg-[#0F2B1E] hover:bg-[#0A2418] text-white font-bold px-8 py-4 rounded-lg transition-colors duration-300"
+            >
+              Clear All Filters
+            </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredMeals.map((meal) => (
-              <div
-                key={meal.id}
-                className="group bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 overflow-hidden"
-              >
-                {/* Image Container */}
-                <div className="relative overflow-hidden">
-                  <img
-                    src={meal.image}
-                    alt={meal.name}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  
-                  {/* Subtle Badges */}
-                  <div className="absolute top-3 left-3">
-                    {meal.isNew && (
-                      <span className="bg-[#FF6B35] text-white px-2 py-1 rounded-md text-xs font-medium">
-                        New
-                      </span>
-                    )}
-                    {meal.isPopular && !meal.isNew && (
-                      <span className="bg-[#D4B46A] text-white px-2 py-1 rounded-md text-xs font-medium">
-                        Popular
-                      </span>
-                    )}
-                  </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {displayedMeals.map(meal => (
+            <div
+              key={meal.id}
+              className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+            >
+              <div className="relative overflow-hidden">
+                <img
+                  src={meal.image_url}
+                  alt={meal.name}
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={e => {
+                    // Fallback to professional food images if the original fails to load
+                    const fallbackImages = [
+                      'https://images.unsplash.com/photo-1532550907401-a500c9a57435?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                      'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                      'https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                      'https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                      'https://images.unsplash.com/photo-1485704686097-ed47f7263ca4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                    ]
+                    const fallback =
+                      fallbackImages[meal.id % fallbackImages.length]
+                    ;(e.target as HTMLImageElement).src = fallback
+                  }}
+                />
 
-                  {/* Subtle Actions */}
-                  <div className="absolute top-3 right-3">
-                    <button
-                      onClick={() => toggleFavorite(meal.id)}
-                      className={`p-2 rounded-full backdrop-blur-sm transition-colors duration-200 ${
-                        favorites.has(meal.id)
-                          ? 'bg-red-500/90 text-white'
-                          : 'bg-white/80 text-gray-600 hover:text-red-500'
-                      }`}
-                    >
-                      <Heart className={`h-4 w-4 ${favorites.has(meal.id) ? 'fill-current' : ''}`} />
-                    </button>
-                  </div>
-
-                  {/* Clean Price Display */}
-                  <div className="absolute bottom-3 right-3">
-                    <div className="bg-white/95 backdrop-blur-sm text-[#0F2B1E] px-3 py-1 rounded-lg font-semibold">
-                      ${meal.price}
-                    </div>
-                  </div>
-
-                  {/* Rating */}
-                  <div className="absolute bottom-3 left-3">
-                    <div className="bg-white/95 backdrop-blur-sm px-3 py-1 rounded-lg flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{meal.rating}</span>
-                    </div>
-                  </div>
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  {meal.isPremium && (
+                    <span className="bg-gradient-to-r from-[#D4B46A] to-[#B8935A] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      Premium
+                    </span>
+                  )}
+                  {meal.isNew && (
+                    <span className="bg-[#FF6B35] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      New
+                    </span>
+                  )}
+                  {meal.isTopRated && (
+                    <span className="bg-[#0F2B1E] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      Top-Rated
+                    </span>
+                  )}
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-[#0F2B1E] mb-2 font-playfair">
-                    {meal.name}
-                  </h3>
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed line-clamp-2">
-                    {meal.description}
-                  </p>
-
-                  {/* Key Highlights */}
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {meal.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 bg-gray-50 text-gray-700 text-xs rounded-md font-medium border"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="absolute bottom-4 right-4">
+                  <div className="bg-white/95 backdrop-blur-sm text-[#0F2B1E] px-4 py-2 rounded-full font-bold text-lg shadow-lg">
+                    ${meal.price}
                   </div>
-
-                  {/* Clean Nutrition Info */}
-                  <div className="flex items-center justify-between mb-4 text-sm text-gray-600 border-t pt-4">
-                    <div className="text-center">
-                      <div className="font-semibold text-[#0F2B1E]">{meal.calories}</div>
-                      <div className="text-xs">Calories</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-[#0F2B1E]">{meal.protein}g</div>
-                      <div className="text-xs">Protein</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-[#0F2B1E]">{meal.cookTime}</div>
-                      <div className="text-xs">Prep Time</div>
-                    </div>
-                  </div>
-
-                  {/* Simple Add to Cart Button */}
-                  <button
-                    onClick={() => handleAddToCart(meal)}
-                    className="w-full bg-[#0F2B1E] hover:bg-[#1a4d33] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add to Cart
-                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* Empty State */}
-        {!isLoading && filteredMeals.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-8xl mb-6">🔍</div>
-            <h3 className="text-3xl font-bold text-[#0F2B1E] mb-4 font-playfair">
-              No meals found
-            </h3>
-            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
-              We couldn't find any meals matching your criteria. Try adjusting your filters or search terms.
-            </p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-[#0F2B1E] text-white px-8 py-3 rounded-xl hover:bg-[#1a4d33] transition-colors duration-300 font-semibold"
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-[#0F2B1E] mb-2">
+                  {meal.name}
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                  {meal.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {meal.tags.map(tag => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
+                  <span>{meal.calories} cal</span>
+                  <span>{meal.protein}g protein</span>
+                </div>
+
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-2xl font-bold text-[#0F2B1E]">
+                    ${meal.price.toFixed(2)}
+                  </span>
+                  {(() => {
+                    const cartItem = items.find(
+                      item => item.id === meal.id.toString()
+                    )
+                    const quantity = cartItem?.quantity || 0
+
+                    return quantity > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() =>
+                            updateQuantity(
+                              meal.id.toString(),
+                              Math.max(0, quantity - 1)
+                            )
+                          }
+                          className="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition-colors"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="w-8 text-center font-bold text-[#0F2B1E]">
+                          {quantity}
+                        </span>
+                        <button
+                          onClick={() =>
+                            updateQuantity(meal.id.toString(), quantity + 1)
+                          }
+                          className="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center transition-colors"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleAddToCart(meal)}
+                        className="bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] hover:from-[#1a4d33] hover:to-[#0F2B1E] text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add
+                      </button>
+                    )
+                  })()}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {hasMore && (
+          <div className="text-center mb-16">
+            <button
+              onClick={loadMoreMeals}
+              disabled={isLoading}
+              className="bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] hover:from-[#1a4d33] hover:to-[#0F2B1E] text-white font-bold px-12 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 mx-auto"
             >
-              Reset Filters
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Loading More Meals...
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-5 w-5" />
+                  Load More Meals ({allMeals.length -
+                    displayedMeals.length}{' '}
+                  remaining)
+                </>
+              )}
             </button>
           </div>
         )}
 
-        {/* Simple CTA Section */}
-        {!isLoading && filteredMeals.length > 0 && (
-          <div className="mt-16 bg-[#F5F2E8] rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-semibold text-[#0F2B1E] mb-3 font-playfair">Need Help Choosing?</h2>
-            <p className="text-gray-600 mb-6">
-              Our nutrition team can help create a personalized meal plan for your goals
-            </p>
-            <button className="bg-[#0F2B1E] hover:bg-[#1a4d33] text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200">
-              Get Personalized Plan
-            </button>
+        {!hasMore && (
+          <div className="text-center mb-16">
+            <div className="inline-block bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] text-white px-8 py-3 rounded-xl">
+              🎉 You've seen all {allMeals.length} delicious meals!
+            </div>
           </div>
+        )}
+
+        <div className="mt-16 bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] rounded-2xl p-8 text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+          <p className="text-lg mb-6 opacity-90">
+            Build your personalized meal plan with our fresh, chef-prepared
+            meals
+          </p>
+          <button className="bg-[#D4B46A] hover:bg-[#B8935A] text-[#0F2B1E] font-bold px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105">
+            Start Your Plan
+          </button>
+        </div>
+        </>
         )}
       </div>
-
     </div>
-  );
+  )
 }

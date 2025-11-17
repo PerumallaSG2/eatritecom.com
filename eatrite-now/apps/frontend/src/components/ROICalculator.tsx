@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Calculator, 
-  DollarSign, 
-  Clock, 
-  TrendingUp, 
-  ShoppingCart, 
+import React, { useState, useEffect } from 'react'
+import {
+  Calculator,
+  DollarSign,
+  Clock,
+  TrendingUp,
+  ShoppingCart,
   CheckCircle,
-  ArrowRight
-} from 'lucide-react';
-import { FadeIn, StaggeredAnimation } from './AnimationComponents';
+  ArrowRight,
+} from 'lucide-react'
+import { FadeIn, StaggeredAnimation } from './AnimationComponents'
 
 interface ROICalculation {
-  weeklySavings: number;
-  monthlySavings: number;
-  yearlySavings: number;
-  timeSaved: number;
-  gasSavings: number;
-  totalValue: number;
+  weeklySavings: number
+  monthlySavings: number
+  yearlySavings: number
+  timeSaved: number
+  gasSavings: number
+  totalValue: number
 }
 
 interface UserInputs {
-  householdSize: number;
-  currentGrocerySpend: number;
-  restaurantVisits: number;
-  avgRestaurantCost: number;
-  cookingHoursPerWeek: number;
-  groceryTripsPerWeek: number;
+  householdSize: number
+  currentGrocerySpend: number
+  restaurantVisits: number
+  avgRestaurantCost: number
+  cookingHoursPerWeek: number
+  groceryTripsPerWeek: number
 }
 
 export const ROICalculator: React.FC = () => {
@@ -35,8 +35,8 @@ export const ROICalculator: React.FC = () => {
     restaurantVisits: 3,
     avgRestaurantCost: 45,
     cookingHoursPerWeek: 6,
-    groceryTripsPerWeek: 2
-  });
+    groceryTripsPerWeek: 2,
+  })
 
   const [results, setResults] = useState<ROICalculation>({
     weeklySavings: 0,
@@ -44,34 +44,37 @@ export const ROICalculator: React.FC = () => {
     yearlySavings: 0,
     timeSaved: 0,
     gasSavings: 0,
-    totalValue: 0
-  });
+    totalValue: 0,
+  })
 
-  const [isCalculated, setIsCalculated] = useState(false);
+  const [isCalculated, setIsCalculated] = useState(false)
 
-  const factor75WeeklyCost = inputs.householdSize <= 2 ? 162 : inputs.householdSize * 81;
+  const factor75WeeklyCost =
+    inputs.householdSize <= 2 ? 162 : inputs.householdSize * 81
 
   useEffect(() => {
-    calculateROI();
-  }, [inputs]);
+    calculateROI()
+  }, [inputs])
 
   const calculateROI = () => {
-    const weeklyGroceryCost = inputs.currentGrocerySpend;
-    const weeklyRestaurantCost = inputs.restaurantVisits * inputs.avgRestaurantCost;
-    const currentWeeklySpend = weeklyGroceryCost + weeklyRestaurantCost;
-    
-    const weeklySavings = Math.max(0, currentWeeklySpend - factor75WeeklyCost);
-    const monthlySavings = weeklySavings * 4.33;
-    const yearlySavings = weeklySavings * 52;
-    
+    const weeklyGroceryCost = inputs.currentGrocerySpend
+    const weeklyRestaurantCost =
+      inputs.restaurantVisits * inputs.avgRestaurantCost
+    const currentWeeklySpend = weeklyGroceryCost + weeklyRestaurantCost
+
+    const weeklySavings = Math.max(0, currentWeeklySpend - factor75WeeklyCost)
+    const monthlySavings = weeklySavings * 4.33
+    const yearlySavings = weeklySavings * 52
+
     // Time calculations (valued at $25/hour)
-    const timeSaved = inputs.cookingHoursPerWeek + (inputs.groceryTripsPerWeek * 1.5); // 1.5 hours per grocery trip
-    const timeValue = timeSaved * 25 * 52; // Annual time value
-    
+    const timeSaved =
+      inputs.cookingHoursPerWeek + inputs.groceryTripsPerWeek * 1.5 // 1.5 hours per grocery trip
+    const timeValue = timeSaved * 25 * 52 // Annual time value
+
     // Gas savings (estimated $5 per grocery trip)
-    const gasSavings = inputs.groceryTripsPerWeek * 5 * 52;
-    
-    const totalValue = yearlySavings + timeValue + gasSavings;
+    const gasSavings = inputs.groceryTripsPerWeek * 5 * 52
+
+    const totalValue = yearlySavings + timeValue + gasSavings
 
     setResults({
       weeklySavings,
@@ -79,14 +82,14 @@ export const ROICalculator: React.FC = () => {
       yearlySavings,
       timeSaved,
       gasSavings,
-      totalValue
-    });
-  };
+      totalValue,
+    })
+  }
 
   const handleCalculate = () => {
-    calculateROI();
-    setIsCalculated(true);
-  };
+    calculateROI()
+    setIsCalculated(true)
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -94,8 +97,8 @@ export const ROICalculator: React.FC = () => {
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
-  };
+    }).format(amount)
+  }
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8 shadow-xl">
@@ -108,7 +111,8 @@ export const ROICalculator: React.FC = () => {
             </h2>
           </div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover how much you could save with Factor75 vs. your current grocery and restaurant spending
+            Discover how much you could save with Factor75 vs. your current
+            grocery and restaurant spending
           </p>
         </div>
       </FadeIn>
@@ -117,8 +121,10 @@ export const ROICalculator: React.FC = () => {
         {/* Input Section */}
         <FadeIn delay={0.2}>
           <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Tell us about your current spending</h3>
-            
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">
+              Tell us about your current spending
+            </h3>
+
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -126,7 +132,12 @@ export const ROICalculator: React.FC = () => {
                 </label>
                 <select
                   value={inputs.householdSize}
-                  onChange={(e) => setInputs({...inputs, householdSize: parseInt(e.target.value)})}
+                  onChange={e =>
+                    setInputs({
+                      ...inputs,
+                      householdSize: parseInt(e.target.value),
+                    })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value={1}>1 person</option>
@@ -146,7 +157,12 @@ export const ROICalculator: React.FC = () => {
                   <input
                     type="number"
                     value={inputs.currentGrocerySpend}
-                    onChange={(e) => setInputs({...inputs, currentGrocerySpend: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setInputs({
+                        ...inputs,
+                        currentGrocerySpend: parseInt(e.target.value) || 0,
+                      })
+                    }
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="150"
                   />
@@ -160,7 +176,12 @@ export const ROICalculator: React.FC = () => {
                 <input
                   type="number"
                   value={inputs.restaurantVisits}
-                  onChange={(e) => setInputs({...inputs, restaurantVisits: parseInt(e.target.value) || 0})}
+                  onChange={e =>
+                    setInputs({
+                      ...inputs,
+                      restaurantVisits: parseInt(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="3"
                 />
@@ -175,7 +196,12 @@ export const ROICalculator: React.FC = () => {
                   <input
                     type="number"
                     value={inputs.avgRestaurantCost}
-                    onChange={(e) => setInputs({...inputs, avgRestaurantCost: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setInputs({
+                        ...inputs,
+                        avgRestaurantCost: parseInt(e.target.value) || 0,
+                      })
+                    }
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="45"
                   />
@@ -191,7 +217,12 @@ export const ROICalculator: React.FC = () => {
                   <input
                     type="number"
                     value={inputs.cookingHoursPerWeek}
-                    onChange={(e) => setInputs({...inputs, cookingHoursPerWeek: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setInputs({
+                        ...inputs,
+                        cookingHoursPerWeek: parseInt(e.target.value) || 0,
+                      })
+                    }
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="6"
                   />
@@ -207,7 +238,12 @@ export const ROICalculator: React.FC = () => {
                   <input
                     type="number"
                     value={inputs.groceryTripsPerWeek}
-                    onChange={(e) => setInputs({...inputs, groceryTripsPerWeek: parseInt(e.target.value) || 0})}
+                    onChange={e =>
+                      setInputs({
+                        ...inputs,
+                        groceryTripsPerWeek: parseInt(e.target.value) || 0,
+                      })
+                    }
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="2"
                   />
@@ -229,8 +265,12 @@ export const ROICalculator: React.FC = () => {
         <FadeIn delay={0.4}>
           <div className="bg-white rounded-xl p-6 shadow-lg">
             <div className="text-center mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Your Potential Savings</h3>
-              <p className="text-sm text-gray-600">Factor75 Cost: {formatCurrency(factor75WeeklyCost)}/week</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Your Potential Savings
+              </h3>
+              <p className="text-sm text-gray-600">
+                Factor75 Cost: {formatCurrency(factor75WeeklyCost)}/week
+              </p>
             </div>
 
             {isCalculated ? (
@@ -241,7 +281,9 @@ export const ROICalculator: React.FC = () => {
                   <div className="text-3xl font-bold text-green-700 mb-1">
                     {formatCurrency(results.totalValue)}
                   </div>
-                  <div className="text-sm text-green-600 font-medium">Total Annual Value</div>
+                  <div className="text-sm text-green-600 font-medium">
+                    Total Annual Value
+                  </div>
                 </div>
 
                 {/* Savings Breakdown */}
@@ -258,7 +300,9 @@ export const ROICalculator: React.FC = () => {
                     <div className="text-xl font-bold text-purple-700">
                       {results.timeSaved}h
                     </div>
-                    <div className="text-xs text-purple-600">Weekly Time Saved</div>
+                    <div className="text-xs text-purple-600">
+                      Weekly Time Saved
+                    </div>
                   </div>
                 </div>
 
@@ -267,19 +311,22 @@ export const ROICalculator: React.FC = () => {
                   <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <span className="text-sm text-gray-700">
-                      Save {formatCurrency(results.weeklySavings)} per week on food costs
+                      Save {formatCurrency(results.weeklySavings)} per week on
+                      food costs
                     </span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <span className="text-sm text-gray-700">
-                      Reclaim {results.timeSaved} hours weekly for family/hobbies
+                      Reclaim {results.timeSaved} hours weekly for
+                      family/hobbies
                     </span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <span className="text-sm text-gray-700">
-                      Save {formatCurrency(results.gasSavings)} annually on gas/transportation
+                      Save {formatCurrency(results.gasSavings)} annually on
+                      gas/transportation
                     </span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
@@ -306,7 +353,7 @@ export const ROICalculator: React.FC = () => {
         </FadeIn>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ROICalculator;
+export default ROICalculator

@@ -1,31 +1,31 @@
-import express, { Router } from 'express';
-import { db } from '../services/database';
-import { FallbackDataService } from '../services/fallbackData';
+import express, { Router } from 'express'
+import { db } from '../services/database'
+import { FallbackDataService } from '../services/fallbackData'
 
-const router: Router = express.Router();
+const router: Router = express.Router()
 
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    await db.query('SELECT 1');
-    return true;
+    await db.query('SELECT 1')
+    return true
   } catch {
-    return false;
+    return false
   }
-};
+}
 
-// @route   GET /api/categories  
+// @route   GET /api/categories
 // @desc    Get all active categories
 // @access  Public
 router.get('/', async (req, res) => {
   try {
     // Check if database is available
-    const dbAvailable = await isDatabaseAvailable();
-    
+    const dbAvailable = await isDatabaseAvailable()
+
     if (!dbAvailable) {
       // Use fallback data
-      const result = FallbackDataService.getCategories();
-      return res.json(result);
+      const result = FallbackDataService.getCategories()
+      return res.json(result)
     }
 
     const query = `
@@ -37,20 +37,20 @@ router.get('/', async (req, res) => {
       WHERE c.is_active = 1
       GROUP BY c.id, c.name, c.description, c.image_url, c.is_active, c.created_at
       ORDER BY c.name
-    `;
-    
-    const result = await db.query(query);
-    
+    `
+
+    const result = await db.query(query)
+
     return res.json({
       success: true,
-      data: result.recordset
-    });
+      data: result.recordset,
+    })
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error('Error fetching categories:', error)
     // Fall back to mock data if database fails
-    const fallbackResult = FallbackDataService.getCategories();
-    return res.json(fallbackResult);
+    const fallbackResult = FallbackDataService.getCategories()
+    return res.json(fallbackResult)
   }
-});
+})
 
-export default router;
+export default router

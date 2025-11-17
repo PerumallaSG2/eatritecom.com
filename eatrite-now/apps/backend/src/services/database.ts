@@ -3,10 +3,10 @@
  * Handles all database operations and connection management
  */
 
-import sql from 'mssql';
-import dotenv from 'dotenv';
+import sql from 'mssql'
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
 // Database configuration
 const dbConfig: sql.config = {
@@ -27,20 +27,20 @@ const dbConfig: sql.config = {
     min: 5,
     idleTimeoutMillis: 30000,
   },
-};
+}
 
 class DatabaseService {
-  private static instance: DatabaseService;
-  private pool: sql.ConnectionPool | null = null;
-  private isConnecting = false;
+  private static instance: DatabaseService
+  private pool: sql.ConnectionPool | null = null
+  private isConnecting = false
 
   private constructor() {}
 
   public static getInstance(): DatabaseService {
     if (!DatabaseService.instance) {
-      DatabaseService.instance = new DatabaseService();
+      DatabaseService.instance = new DatabaseService()
     }
-    return DatabaseService.instance;
+    return DatabaseService.instance
   }
 
   /**
@@ -48,31 +48,33 @@ class DatabaseService {
    */
   public async connect(): Promise<void> {
     if (this.pool?.connected) {
-      return;
+      return
     }
 
     if (this.isConnecting) {
       // Wait for existing connection attempt
       while (this.isConnecting) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 100))
       }
-      return;
+      return
     }
 
     try {
-      this.isConnecting = true;
-      console.log('🔌 Connecting to SQL Server database...');
-      
-      this.pool = new sql.ConnectionPool(dbConfig);
-      await this.pool.connect();
-      
-      console.log('✅ Database connected successfully');
-      console.log(`📊 Database: ${dbConfig.database} on ${dbConfig.server}:${dbConfig.port}`);
+      this.isConnecting = true
+      console.log('🔌 Connecting to SQL Server database...')
+
+      this.pool = new sql.ConnectionPool(dbConfig)
+      await this.pool.connect()
+
+      console.log('✅ Database connected successfully')
+      console.log(
+        `📊 Database: ${dbConfig.database} on ${dbConfig.server}:${dbConfig.port}`
+      )
     } catch (error) {
-      console.error('❌ Database connection failed:', error);
-      throw error;
+      console.error('❌ Database connection failed:', error)
+      throw error
     } finally {
-      this.isConnecting = false;
+      this.isConnecting = false
     }
   }
 
@@ -81,9 +83,9 @@ class DatabaseService {
    */
   public getPool(): sql.ConnectionPool {
     if (!this.pool?.connected) {
-      throw new Error('Database not connected. Call connect() first.');
+      throw new Error('Database not connected. Call connect() first.')
     }
-    return this.pool;
+    return this.pool
   }
 
   /**
@@ -91,42 +93,45 @@ class DatabaseService {
    */
   public async query(query: string, params?: any): Promise<sql.IResult<any>> {
     try {
-      const pool = this.getPool();
-      const request = pool.request();
-      
+      const pool = this.getPool()
+      const request = pool.request()
+
       // Add parameters if provided
       if (params) {
         Object.keys(params).forEach(key => {
-          request.input(key, params[key]);
-        });
+          request.input(key, params[key])
+        })
       }
-      
-      return await request.query(query);
+
+      return await request.query(query)
     } catch (error) {
-      console.error('❌ Database query error:', error);
-      throw error;
+      console.error('❌ Database query error:', error)
+      throw error
     }
   }
 
   /**
    * Execute a stored procedure
    */
-  public async executeProcedure(procedureName: string, params?: any): Promise<sql.IResult<any>> {
+  public async executeProcedure(
+    procedureName: string,
+    params?: any
+  ): Promise<sql.IResult<any>> {
     try {
-      const pool = this.getPool();
-      const request = pool.request();
-      
+      const pool = this.getPool()
+      const request = pool.request()
+
       // Add parameters if provided
       if (params) {
         Object.keys(params).forEach(key => {
-          request.input(key, params[key]);
-        });
+          request.input(key, params[key])
+        })
       }
-      
-      return await request.execute(procedureName);
+
+      return await request.execute(procedureName)
     } catch (error) {
-      console.error('❌ Stored procedure execution error:', error);
-      throw error;
+      console.error('❌ Stored procedure execution error:', error)
+      throw error
     }
   }
 
@@ -136,12 +141,12 @@ class DatabaseService {
   public async disconnect(): Promise<void> {
     try {
       if (this.pool) {
-        await this.pool.close();
-        this.pool = null;
-        console.log('🔌 Database disconnected');
+        await this.pool.close()
+        this.pool = null
+        console.log('🔌 Database disconnected')
       }
     } catch (error) {
-      console.error('❌ Error disconnecting from database:', error);
+      console.error('❌ Error disconnecting from database:', error)
     }
   }
 
@@ -150,34 +155,34 @@ class DatabaseService {
    */
   public async initializeSchema(): Promise<void> {
     try {
-      console.log('🏗️  Initializing database schema...');
-      
+      console.log('🏗️  Initializing database schema...')
+
       // Drop existing tables if they exist
       const dropQueries = [
-        'IF OBJECT_ID(\'OrderItems\', \'U\') IS NOT NULL DROP TABLE OrderItems',
-        'IF OBJECT_ID(\'Orders\', \'U\') IS NOT NULL DROP TABLE Orders',
-        'IF OBJECT_ID(\'UserSubscriptions\', \'U\') IS NOT NULL DROP TABLE UserSubscriptions',
-        'IF OBJECT_ID(\'MealNutrition\', \'U\') IS NOT NULL DROP TABLE MealNutrition',
-        'IF OBJECT_ID(\'Meals\', \'U\') IS NOT NULL DROP TABLE Meals',
-        'IF OBJECT_ID(\'Categories\', \'U\') IS NOT NULL DROP TABLE Categories',
-        'IF OBJECT_ID(\'Plans\', \'U\') IS NOT NULL DROP TABLE Plans',
-        'IF OBJECT_ID(\'Users\', \'U\') IS NOT NULL DROP TABLE Users',
-      ];
+        "IF OBJECT_ID('OrderItems', 'U') IS NOT NULL DROP TABLE OrderItems",
+        "IF OBJECT_ID('Orders', 'U') IS NOT NULL DROP TABLE Orders",
+        "IF OBJECT_ID('UserSubscriptions', 'U') IS NOT NULL DROP TABLE UserSubscriptions",
+        "IF OBJECT_ID('MealNutrition', 'U') IS NOT NULL DROP TABLE MealNutrition",
+        "IF OBJECT_ID('Meals', 'U') IS NOT NULL DROP TABLE Meals",
+        "IF OBJECT_ID('Categories', 'U') IS NOT NULL DROP TABLE Categories",
+        "IF OBJECT_ID('Plans', 'U') IS NOT NULL DROP TABLE Plans",
+        "IF OBJECT_ID('Users', 'U') IS NOT NULL DROP TABLE Users",
+      ]
 
       for (const dropQuery of dropQueries) {
-        await this.query(dropQuery);
+        await this.query(dropQuery)
       }
 
       // Create tables
-      await this.createTables();
-      
+      await this.createTables()
+
       // Insert seed data
-      await this.insertSeedData();
-      
-      console.log('✅ Database schema initialized successfully');
+      await this.insertSeedData()
+
+      console.log('✅ Database schema initialized successfully')
     } catch (error) {
-      console.error('❌ Error initializing database schema:', error);
-      throw error;
+      console.error('❌ Error initializing database schema:', error)
+      throw error
     }
   }
 
@@ -293,37 +298,44 @@ class DatabaseService {
 
       // Orders table
       `CREATE TABLE Orders (
-        id INT IDENTITY(1,1) PRIMARY KEY,
+        id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
         user_id INT FOREIGN KEY REFERENCES Users(id),
-        order_number NVARCHAR(50) UNIQUE NOT NULL,
+        user_email NVARCHAR(255),
+        first_name NVARCHAR(100),
+        last_name NVARCHAR(100),
+        phone NVARCHAR(20),
+        delivery_address NVARCHAR(500),
+        delivery_city NVARCHAR(100),
+        delivery_state NVARCHAR(50),
+        delivery_zip NVARCHAR(20),
+        order_number NVARCHAR(50) UNIQUE,
         status NVARCHAR(20) DEFAULT 'pending',
         total_amount DECIMAL(10,2) NOT NULL,
-        tax_amount DECIMAL(10,2) DEFAULT 0,
-        shipping_fee DECIMAL(10,2) DEFAULT 0,
+        subtotal DECIMAL(10,2) DEFAULT 0,
+        delivery_fee DECIMAL(10,2) DEFAULT 0,
+        tax DECIMAL(10,2) DEFAULT 0,
         discount_amount DECIMAL(10,2) DEFAULT 0,
         payment_method NVARCHAR(50),
         payment_status NVARCHAR(20) DEFAULT 'pending',
-        shipping_address NVARCHAR(MAX),
         delivery_date DATE,
         special_instructions NVARCHAR(MAX),
         created_at DATETIME2 DEFAULT GETDATE(),
         updated_at DATETIME2 DEFAULT GETDATE()
       )`,
 
-      // Order Items table
-      `CREATE TABLE OrderItems (
-        id INT IDENTITY(1,1) PRIMARY KEY,
-        order_id INT FOREIGN KEY REFERENCES Orders(id) ON DELETE CASCADE,
+      // Order Meals table (renamed from OrderItems for consistency)
+      `CREATE TABLE order_meals (
+        id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+        order_id UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Orders(id) ON DELETE CASCADE,
         meal_id INT FOREIGN KEY REFERENCES Meals(id),
         quantity INT NOT NULL DEFAULT 1,
-        unit_price DECIMAL(10,2) NOT NULL,
-        total_price DECIMAL(10,2) NOT NULL,
+        price_at_time DECIMAL(10,2) NOT NULL,
         created_at DATETIME2 DEFAULT GETDATE()
-      )`
-    ];
+      )`,
+    ]
 
     for (const query of queries) {
-      await this.query(query);
+      await this.query(query)
     }
   }
 
@@ -339,7 +351,7 @@ class DatabaseService {
       ('Dinner', 'Satisfying evening meals for optimal recovery', '/images/categories/dinner.jpg'),
       ('Snacks', 'Healthy snacks to keep you energized', '/images/categories/snacks.jpg'),
       ('Desserts', 'Guilt-free sweet treats', '/images/categories/desserts.jpg')
-    `);
+    `)
 
     // Insert plans
     await this.query(`
@@ -347,7 +359,7 @@ class DatabaseService {
       ('Basic Plan', 'Perfect for beginners looking to start their health journey', 299.99, 30, 10, 1800, '10 meals per week, Basic nutrition tracking, Email support', 0),
       ('Premium Plan', 'Our most popular choice for serious health enthusiasts', 499.99, 30, 16, 2000, '16 meals per week, Advanced nutrition tracking, Priority support, Custom meal plans', 1),
       ('Elite Plan', 'Ultimate nutrition experience with personalized coaching', 799.99, 30, 21, 2200, '21 meals per week, 1-on-1 nutrition coaching, Priority delivery, Custom recipes', 0)
-    `);
+    `)
 
     // Insert sample meals
     await this.query(`
@@ -357,7 +369,7 @@ class DatabaseService {
       (2, 'Grilled Salmon Salad', 'Fresh Atlantic salmon over mixed greens with quinoa', 'Atlantic salmon, mixed greens, quinoa, cucumber, cherry tomatoes, lemon vinaigrette', 25, 18.99, 'Chef Sarah', 'Medium', 'Lunch', 'Mediterranean', 0, 0, 1),
       (2, 'Buddha Bowl Supreme', 'Nutrient-packed bowl with roasted vegetables and tahini', 'Roasted sweet potato, chickpeas, kale, quinoa, tahini dressing, pumpkin seeds', 30, 15.99, 'Chef Alex', 'Medium', 'Lunch', 'Vegan', 1, 1, 1),
       (3, 'Herb-Crusted Chicken', 'Organic chicken breast with roasted vegetables', 'Organic chicken breast, herb crust, roasted vegetables, sweet potato mash', 35, 22.99, 'Chef Michael', 'Medium', 'Dinner', 'American', 0, 0, 1)
-    `);
+    `)
 
     // Insert nutrition data for meals
     await this.query(`
@@ -367,20 +379,20 @@ class DatabaseService {
       (3, 520, 35.8, 25.4, 28.2, 9.2, 8.1, 450),
       (4, 480, 18.2, 55.8, 20.1, 12.5, 12.2, 280),
       (5, 580, 42.5, 35.2, 22.8, 6.5, 5.8, 380)
-    `);
+    `)
   }
 }
 
 // Export singleton instance
-export const db = DatabaseService.getInstance();
+export const db = DatabaseService.getInstance()
 
 // Legacy exports for compatibility
 export const initializeDatabase = async () => {
-  await db.connect();
-  await db.initializeSchema();
-};
+  await db.connect()
+  await db.initializeSchema()
+}
 
-export const getPool = () => db.getPool();
-export const closeDatabase = () => db.disconnect();
+export const getPool = () => db.getPool()
+export const closeDatabase = () => db.disconnect()
 
-export default DatabaseService;
+export default DatabaseService

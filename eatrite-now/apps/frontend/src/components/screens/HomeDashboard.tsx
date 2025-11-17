@@ -3,11 +3,11 @@
  * Premium dashboard with featured meals, supplements, and wellness stats
  */
 
-import React, { useState } from 'react';
-import { 
-  EatRiteButton, 
-  EatRiteCard, 
-  EatRiteIcon, 
+import React, { useState } from 'react'
+import {
+  EatRiteButton,
+  EatRiteCard,
+  EatRiteIcon,
   EatRiteSectionHeader,
   EatRiteTabs,
   ProteinIcon,
@@ -16,45 +16,45 @@ import {
   LeafIcon,
   CalendarIcon,
   CartIcon,
-  UserIcon
-} from '../eatrite/EatRiteComponentLibrary';
-import { EatRiteDesignTokens } from '../../styles/design-system/eatrite-design-tokens';
+  UserIcon,
+} from '../eatrite/EatRiteComponentLibrary'
+import { EatRiteDesignTokens } from '../../styles/design-system/eatrite-design-tokens'
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
 interface Meal {
-  id: string;
-  name: string;
-  description: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  price: number;
-  image: string;
-  rating: number;
-  isPopular?: boolean;
-  isFavorite?: boolean;
+  id: string
+  name: string
+  description: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  price: number
+  image: string
+  rating: number
+  isPopular?: boolean
+  isFavorite?: boolean
 }
 
 interface Supplement {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  rating: number;
-  benefits: string[];
+  id: string
+  name: string
+  category: string
+  price: number
+  image: string
+  rating: number
+  benefits: string[]
 }
 
 interface NutritionStat {
-  label: string;
-  current: number;
-  target: number;
-  unit: string;
-  color: string;
+  label: string
+  current: number
+  target: number
+  unit: string
+  color: string
 }
 
 // ============================================================================
@@ -65,7 +65,8 @@ const sampleMeals: Meal[] = [
   {
     id: '1',
     name: 'Grilled Salmon Bowl',
-    description: 'Premium Atlantic salmon with quinoa, roasted vegetables, and avocado',
+    description:
+      'Premium Atlantic salmon with quinoa, roasted vegetables, and avocado',
     calories: 520,
     protein: 42,
     carbs: 28,
@@ -78,7 +79,8 @@ const sampleMeals: Meal[] = [
   {
     id: '2',
     name: 'Organic Chicken Power Bowl',
-    description: 'Free-range chicken breast with sweet potato and steamed broccoli',
+    description:
+      'Free-range chicken breast with sweet potato and steamed broccoli',
     calories: 450,
     protein: 38,
     carbs: 32,
@@ -91,7 +93,8 @@ const sampleMeals: Meal[] = [
   {
     id: '3',
     name: 'Mediterranean Veggie Wrap',
-    description: 'Hummus, grilled vegetables, feta cheese in whole wheat tortilla',
+    description:
+      'Hummus, grilled vegetables, feta cheese in whole wheat tortilla',
     calories: 380,
     protein: 16,
     carbs: 45,
@@ -100,7 +103,7 @@ const sampleMeals: Meal[] = [
     image: '/api/placeholder/300/200',
     rating: 4.4,
   },
-];
+]
 
 const sampleSupplements: Supplement[] = [
   {
@@ -121,18 +124,18 @@ const sampleSupplements: Supplement[] = [
     rating: 4.7,
     benefits: ['Heart Health', 'Brain Function', 'Anti-Inflammatory'],
   },
-];
+]
 
 // ============================================================================
 // MAIN DASHBOARD COMPONENT
 // ============================================================================
 
 interface HomeDashboardProps {
-  userName?: string;
-  onMealClick?: (meal: Meal) => void;
-  onSupplementClick?: (supplement: Supplement) => void;
-  onViewAllMeals?: () => void;
-  onViewAllSupplements?: () => void;
+  userName?: string
+  onMealClick?: (meal: Meal) => void
+  onSupplementClick?: (supplement: Supplement) => void
+  onViewAllMeals?: () => void
+  onViewAllSupplements?: () => void
 }
 
 export const HomeDashboard: React.FC<HomeDashboardProps> = ({
@@ -142,33 +145,57 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   onViewAllMeals,
   onViewAllSupplements,
 }) => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('overview')
 
   // Sample nutrition stats
   const nutritionStats: NutritionStat[] = [
-    { label: 'Calories', current: 1650, target: 2000, unit: 'kcal', color: EatRiteDesignTokens.colors.primary.gold },
-    { label: 'Protein', current: 85, target: 120, unit: 'g', color: EatRiteDesignTokens.colors.semantic.info },
-    { label: 'Carbs', current: 145, target: 200, unit: 'g', color: EatRiteDesignTokens.colors.semantic.success },
-    { label: 'Fats', current: 55, target: 65, unit: 'g', color: EatRiteDesignTokens.colors.semantic.warning },
-  ];
+    {
+      label: 'Calories',
+      current: 1650,
+      target: 2000,
+      unit: 'kcal',
+      color: EatRiteDesignTokens.colors.primary.gold,
+    },
+    {
+      label: 'Protein',
+      current: 85,
+      target: 120,
+      unit: 'g',
+      color: EatRiteDesignTokens.colors.semantic.info,
+    },
+    {
+      label: 'Carbs',
+      current: 145,
+      target: 200,
+      unit: 'g',
+      color: EatRiteDesignTokens.colors.semantic.success,
+    },
+    {
+      label: 'Fats',
+      current: 55,
+      target: 65,
+      unit: 'g',
+      color: EatRiteDesignTokens.colors.semantic.warning,
+    },
+  ]
 
   // Container styles
   const dashboardStyles: React.CSSProperties = {
     minHeight: '100vh',
     background: EatRiteDesignTokens.colors.gradients.surface,
     padding: EatRiteDesignTokens.spacing['2xl'],
-  };
+  }
 
   const contentStyles: React.CSSProperties = {
     maxWidth: '1200px',
     margin: '0 auto',
-  };
+  }
 
   // Header styles
   const headerStyles: React.CSSProperties = {
     marginBottom: EatRiteDesignTokens.spacing['4xl'],
     textAlign: 'center',
-  };
+  }
 
   const welcomeStyles: React.CSSProperties = {
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
@@ -179,25 +206,25 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
     marginBottom: EatRiteDesignTokens.spacing.md,
-  };
+  }
 
   const dateStyles: React.CSSProperties = {
     color: EatRiteDesignTokens.colors.text.secondary,
     fontSize: EatRiteDesignTokens.typography.scale.bodyLarge.size,
-  };
+  }
 
   // Grid styles
   const gridStyles: React.CSSProperties = {
     display: 'grid',
     gap: EatRiteDesignTokens.spacing['2xl'],
     marginBottom: EatRiteDesignTokens.spacing['4xl'],
-  };
+  }
 
   const sectionsGridStyles: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
     gap: EatRiteDesignTokens.spacing['2xl'],
-  };
+  }
 
   return (
     <div style={dashboardStyles}>
@@ -209,11 +236,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           </div>
           <h1 style={welcomeStyles}>Welcome back, {userName}!</h1>
           <p style={dateStyles}>
-            {new Date().toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
+            {new Date().toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
             })}
           </p>
         </header>
@@ -222,10 +249,26 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <div style={{ marginBottom: EatRiteDesignTokens.spacing['3xl'] }}>
           <EatRiteTabs
             items={[
-              { id: 'overview', label: 'Overview', icon: <UserIcon size="sm" color="inherit" /> },
-              { id: 'meals', label: 'Meals', icon: <LeafIcon size="sm" color="inherit" /> },
-              { id: 'nutrition', label: 'Nutrition', icon: <ProteinIcon size="sm" color="inherit" /> },
-              { id: 'progress', label: 'Progress', icon: <CalendarIcon size="sm" color="inherit" /> },
+              {
+                id: 'overview',
+                label: 'Overview',
+                icon: <UserIcon size="sm" color="inherit" />,
+              },
+              {
+                id: 'meals',
+                label: 'Meals',
+                icon: <LeafIcon size="sm" color="inherit" />,
+              },
+              {
+                id: 'nutrition',
+                label: 'Nutrition',
+                icon: <ProteinIcon size="sm" color="inherit" />,
+              },
+              {
+                id: 'progress',
+                label: 'Progress',
+                icon: <CalendarIcon size="sm" color="inherit" />,
+              },
             ]}
             activeTab={activeTab}
             onChange={setActiveTab}
@@ -236,17 +279,17 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <div style={gridStyles}>
           {/* Quick Stats Overview */}
           <QuickStatsSection nutritionStats={nutritionStats} />
-          
+
           <div style={sectionsGridStyles}>
             {/* Featured Meals Section */}
-            <FeaturedMealsSection 
-              meals={sampleMeals} 
+            <FeaturedMealsSection
+              meals={sampleMeals}
               onMealClick={onMealClick}
               onViewAll={onViewAllMeals}
             />
-            
+
             {/* Supplements Section */}
-            <SupplementsSection 
+            <SupplementsSection
               supplements={sampleSupplements}
               onSupplementClick={onSupplementClick}
               onViewAll={onViewAllSupplements}
@@ -255,38 +298,40 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
           {/* Today's Recommendations */}
           <RecommendationsSection />
-          
+
           {/* Quick Actions */}
           <QuickActionsSection />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // ============================================================================
 // QUICK STATS SECTION
 // ============================================================================
 
 interface QuickStatsSectionProps {
-  nutritionStats: NutritionStat[];
+  nutritionStats: NutritionStat[]
 }
 
-const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({ nutritionStats }) => {
+const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({
+  nutritionStats,
+}) => {
   const sectionStyles: React.CSSProperties = {
     marginBottom: EatRiteDesignTokens.spacing['2xl'],
-  };
+  }
 
   const statsGridStyles: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: EatRiteDesignTokens.spacing.xl,
-  };
+  }
 
   const statCardStyles: React.CSSProperties = {
     textAlign: 'center',
     padding: EatRiteDesignTokens.spacing.xl,
-  };
+  }
 
   const statValueStyles: React.CSSProperties = {
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
@@ -294,13 +339,13 @@ const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({ nutritionStats })
     fontWeight: EatRiteDesignTokens.typography.scale.h3.weight,
     color: EatRiteDesignTokens.colors.primary.gold,
     marginBottom: EatRiteDesignTokens.spacing.sm,
-  };
+  }
 
   const statLabelStyles: React.CSSProperties = {
     color: EatRiteDesignTokens.colors.text.secondary,
     fontSize: EatRiteDesignTokens.typography.scale.body.size,
     marginBottom: EatRiteDesignTokens.spacing.md,
-  };
+  }
 
   const progressBarStyles: React.CSSProperties = {
     width: '100%',
@@ -308,15 +353,19 @@ const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({ nutritionStats })
     backgroundColor: 'rgba(212, 180, 106, 0.2)',
     borderRadius: EatRiteDesignTokens.borderRadius.full,
     overflow: 'hidden',
-  };
+  }
 
-  const getProgressFillStyles = (current: number, target: number, color: string): React.CSSProperties => ({
+  const getProgressFillStyles = (
+    current: number,
+    target: number,
+    color: string
+  ): React.CSSProperties => ({
     height: '100%',
     background: `linear-gradient(90deg, ${color}, ${EatRiteDesignTokens.colors.primary.gold})`,
     width: `${Math.min((current / target) * 100, 100)}%`,
     borderRadius: EatRiteDesignTokens.borderRadius.full,
     transition: `width ${EatRiteDesignTokens.animations.duration.slow} ${EatRiteDesignTokens.animations.easing.easeOut}`,
-  });
+  })
 
   return (
     <div style={sectionStyles}>
@@ -326,9 +375,9 @@ const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({ nutritionStats })
         icon={<ProteinIcon size="lg" color="gold" />}
         centered
       />
-      
+
       <div style={statsGridStyles}>
-        {nutritionStats.map((stat) => (
+        {nutritionStats.map(stat => (
           <EatRiteCard key={stat.label} variant="luxury" padding="lg" hover>
             <div style={statCardStyles}>
               <div style={statValueStyles}>
@@ -336,43 +385,49 @@ const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({ nutritionStats })
               </div>
               <div style={statLabelStyles}>{stat.label}</div>
               <div style={progressBarStyles}>
-                <div style={getProgressFillStyles(stat.current, stat.target, stat.color)} />
+                <div
+                  style={getProgressFillStyles(
+                    stat.current,
+                    stat.target,
+                    stat.color
+                  )}
+                />
               </div>
             </div>
           </EatRiteCard>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 // ============================================================================
 // FEATURED MEALS SECTION
 // ============================================================================
 
 interface FeaturedMealsSectionProps {
-  meals: Meal[];
-  onMealClick?: (meal: Meal) => void;
-  onViewAll?: () => void;
+  meals: Meal[]
+  onMealClick?: (meal: Meal) => void
+  onViewAll?: () => void
 }
 
-const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({ 
-  meals, 
-  onMealClick, 
-  onViewAll 
+const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
+  meals,
+  onMealClick,
+  onViewAll,
 }) => {
   const sectionStyles: React.CSSProperties = {
     marginBottom: EatRiteDesignTokens.spacing['2xl'],
-  };
+  }
 
   const mealsGridStyles: React.CSSProperties = {
     display: 'grid',
     gap: EatRiteDesignTokens.spacing.xl,
-  };
+  }
 
   const mealCardStyles: React.CSSProperties = {
     cursor: 'pointer',
-  };
+  }
 
   const mealImageStyles: React.CSSProperties = {
     width: '100%',
@@ -380,7 +435,7 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
     objectFit: 'cover',
     borderRadius: EatRiteDesignTokens.borderRadius.lg,
     marginBottom: EatRiteDesignTokens.spacing.lg,
-  };
+  }
 
   const mealTitleStyles: React.CSSProperties = {
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
@@ -388,20 +443,20 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
     fontWeight: EatRiteDesignTokens.typography.scale.h4.weight,
     color: EatRiteDesignTokens.colors.text.primary,
     marginBottom: EatRiteDesignTokens.spacing.sm,
-  };
+  }
 
   const mealDescStyles: React.CSSProperties = {
     color: EatRiteDesignTokens.colors.text.secondary,
     fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
     lineHeight: EatRiteDesignTokens.typography.scale.bodySmall.lineHeight,
     marginBottom: EatRiteDesignTokens.spacing.lg,
-  };
+  }
 
   const macrosStyles: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: EatRiteDesignTokens.spacing.lg,
-  };
+  }
 
   const macroStyles: React.CSSProperties = {
     display: 'flex',
@@ -409,7 +464,7 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
     gap: EatRiteDesignTokens.spacing.xs,
     fontSize: EatRiteDesignTokens.typography.scale.caption.size,
     color: EatRiteDesignTokens.colors.text.tertiary,
-  };
+  }
 
   const priceStyles: React.CSSProperties = {
     fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
@@ -417,7 +472,7 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
     fontWeight: EatRiteDesignTokens.typography.scale.h4.weight,
     color: EatRiteDesignTokens.colors.primary.gold,
     textAlign: 'right',
-  };
+  }
 
   return (
     <EatRiteCard variant="luxury" padding="xl" style={sectionStyles}>
@@ -431,22 +486,18 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
           </EatRiteButton>
         }
       />
-      
+
       <div style={mealsGridStyles}>
-        {meals.slice(0, 3).map((meal) => (
+        {meals.slice(0, 3).map(meal => (
           <div
             key={meal.id}
             style={mealCardStyles}
             onClick={() => onMealClick?.(meal)}
           >
-            <img 
-              src={meal.image} 
-              alt={meal.name}
-              style={mealImageStyles}
-            />
+            <img src={meal.image} alt={meal.name} style={mealImageStyles} />
             <h3 style={mealTitleStyles}>{meal.name}</h3>
             <p style={mealDescStyles}>{meal.description}</p>
-            
+
             <div style={macrosStyles}>
               <div style={macroStyles}>
                 <ProteinIcon size="xs" color="gold" />
@@ -461,9 +512,20 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
                 <span>{meal.fat}g</span>
               </div>
             </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: EatRiteDesignTokens.colors.text.tertiary, fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size }}>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                style={{
+                  color: EatRiteDesignTokens.colors.text.tertiary,
+                  fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
+                }}
+              >
                 {meal.calories} calories
               </span>
               <span style={priceStyles}>${meal.price}</span>
@@ -472,32 +534,32 @@ const FeaturedMealsSection: React.FC<FeaturedMealsSectionProps> = ({
         ))}
       </div>
     </EatRiteCard>
-  );
-};
+  )
+}
 
 // ============================================================================
 // SUPPLEMENTS SECTION
 // ============================================================================
 
 interface SupplementsSectionProps {
-  supplements: Supplement[];
-  onSupplementClick?: (supplement: Supplement) => void;
-  onViewAll?: () => void;
+  supplements: Supplement[]
+  onSupplementClick?: (supplement: Supplement) => void
+  onViewAll?: () => void
 }
 
-const SupplementsSection: React.FC<SupplementsSectionProps> = ({ 
-  supplements, 
-  onSupplementClick, 
-  onViewAll 
+const SupplementsSection: React.FC<SupplementsSectionProps> = ({
+  supplements,
+  onSupplementClick,
+  onViewAll,
 }) => {
   const sectionStyles: React.CSSProperties = {
     marginBottom: EatRiteDesignTokens.spacing['2xl'],
-  };
+  }
 
   const supplementsGridStyles: React.CSSProperties = {
     display: 'grid',
     gap: EatRiteDesignTokens.spacing.xl,
-  };
+  }
 
   return (
     <EatRiteCard variant="luxury" padding="xl" style={sectionStyles}>
@@ -511,16 +573,16 @@ const SupplementsSection: React.FC<SupplementsSectionProps> = ({
           </EatRiteButton>
         }
       />
-      
+
       <div style={supplementsGridStyles}>
-        {supplements.map((supplement) => (
+        {supplements.map(supplement => (
           <div
             key={supplement.id}
             style={{ cursor: 'pointer' }}
             onClick={() => onSupplementClick?.(supplement)}
           >
-            <img 
-              src={supplement.image} 
+            <img
+              src={supplement.image}
               alt={supplement.name}
               style={{
                 width: '100%',
@@ -530,33 +592,42 @@ const SupplementsSection: React.FC<SupplementsSectionProps> = ({
                 marginBottom: EatRiteDesignTokens.spacing.lg,
               }}
             />
-            <h3 style={{
-              fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
-              fontSize: EatRiteDesignTokens.typography.scale.h5.size,
-              fontWeight: EatRiteDesignTokens.typography.scale.h5.weight,
-              color: EatRiteDesignTokens.colors.text.primary,
-              marginBottom: EatRiteDesignTokens.spacing.sm,
-            }}>
-              {supplement.name}
-            </h3>
-            <p style={{
-              color: EatRiteDesignTokens.colors.text.tertiary,
-              fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
-              marginBottom: EatRiteDesignTokens.spacing.md,
-            }}>
-              {supplement.category}
-            </p>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-              <span style={{
+            <h3
+              style={{
                 fontFamily: EatRiteDesignTokens.typography.fontFamilies.heading,
                 fontSize: EatRiteDesignTokens.typography.scale.h5.size,
                 fontWeight: EatRiteDesignTokens.typography.scale.h5.weight,
-                color: EatRiteDesignTokens.colors.primary.gold,
-              }}>
+                color: EatRiteDesignTokens.colors.text.primary,
+                marginBottom: EatRiteDesignTokens.spacing.sm,
+              }}
+            >
+              {supplement.name}
+            </h3>
+            <p
+              style={{
+                color: EatRiteDesignTokens.colors.text.tertiary,
+                fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
+                marginBottom: EatRiteDesignTokens.spacing.md,
+              }}
+            >
+              {supplement.category}
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily:
+                    EatRiteDesignTokens.typography.fontFamilies.heading,
+                  fontSize: EatRiteDesignTokens.typography.scale.h5.size,
+                  fontWeight: EatRiteDesignTokens.typography.scale.h5.weight,
+                  color: EatRiteDesignTokens.colors.primary.gold,
+                }}
+              >
                 ${supplement.price}
               </span>
               <EatRiteButton variant="outline" size="sm">
@@ -567,8 +638,8 @@ const SupplementsSection: React.FC<SupplementsSectionProps> = ({
         ))}
       </div>
     </EatRiteCard>
-  );
-};
+  )
+}
 
 // ============================================================================
 // RECOMMENDATIONS SECTION
@@ -576,19 +647,19 @@ const SupplementsSection: React.FC<SupplementsSectionProps> = ({
 
 const RecommendationsSection: React.FC = () => {
   const recommendations = [
-    { 
-      title: 'Increase Protein Intake', 
+    {
+      title: 'Increase Protein Intake',
       description: 'Add 15g more protein to reach your daily goal',
       action: 'View Protein-Rich Meals',
-      icon: <ProteinIcon size="md" color="gold" />
+      icon: <ProteinIcon size="md" color="gold" />,
     },
-    { 
-      title: 'Stay Hydrated', 
+    {
+      title: 'Stay Hydrated',
       description: 'Drink 2 more glasses of water today',
       action: 'Set Reminder',
-      icon: <LeafIcon size="md" color="gold" />
+      icon: <LeafIcon size="md" color="gold" />,
     },
-  ];
+  ]
 
   return (
     <EatRiteCard variant="luxury" padding="xl">
@@ -597,11 +668,13 @@ const RecommendationsSection: React.FC = () => {
         subtitle="Personalized suggestions to optimize your nutrition"
         icon={<UserIcon size="md" color="gold" />}
       />
-      
-      <div style={{ 
-        display: 'grid', 
-        gap: EatRiteDesignTokens.spacing.lg,
-      }}>
+
+      <div
+        style={{
+          display: 'grid',
+          gap: EatRiteDesignTokens.spacing.lg,
+        }}
+      >
         {recommendations.map((rec, index) => (
           <div
             key={index}
@@ -610,26 +683,31 @@ const RecommendationsSection: React.FC = () => {
               alignItems: 'center',
               gap: EatRiteDesignTokens.spacing.lg,
               padding: EatRiteDesignTokens.spacing.lg,
-              backgroundColor: EatRiteDesignTokens.colors.surface.darkGreenLight,
+              backgroundColor:
+                EatRiteDesignTokens.colors.surface.darkGreenLight,
               borderRadius: EatRiteDesignTokens.borderRadius.lg,
               border: `1px solid rgba(212, 180, 106, 0.2)`,
             }}
           >
             {rec.icon}
             <div style={{ flex: 1 }}>
-              <h4 style={{
-                fontFamily: EatRiteDesignTokens.typography.fontFamilies.body,
-                fontSize: EatRiteDesignTokens.typography.scale.body.size,
-                fontWeight: 600,
-                color: EatRiteDesignTokens.colors.text.primary,
-                marginBottom: EatRiteDesignTokens.spacing.xs,
-              }}>
+              <h4
+                style={{
+                  fontFamily: EatRiteDesignTokens.typography.fontFamilies.body,
+                  fontSize: EatRiteDesignTokens.typography.scale.body.size,
+                  fontWeight: 600,
+                  color: EatRiteDesignTokens.colors.text.primary,
+                  marginBottom: EatRiteDesignTokens.spacing.xs,
+                }}
+              >
                 {rec.title}
               </h4>
-              <p style={{
-                color: EatRiteDesignTokens.colors.text.secondary,
-                fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
-              }}>
+              <p
+                style={{
+                  color: EatRiteDesignTokens.colors.text.secondary,
+                  fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
+                }}
+              >
                 {rec.description}
               </p>
             </div>
@@ -640,8 +718,8 @@ const RecommendationsSection: React.FC = () => {
         ))}
       </div>
     </EatRiteCard>
-  );
-};
+  )
+}
 
 // ============================================================================
 // QUICK ACTIONS SECTION
@@ -649,11 +727,27 @@ const RecommendationsSection: React.FC = () => {
 
 const QuickActionsSection: React.FC = () => {
   const actions = [
-    { label: 'Build New Meal Plan', icon: <CalendarIcon size="md" color="inherit" />, variant: 'primary' as const },
-    { label: 'Track Today\'s Meals', icon: <LeafIcon size="md" color="inherit" />, variant: 'secondary' as const },
-    { label: 'View Progress Report', icon: <ProteinIcon size="md" color="inherit" />, variant: 'outline' as const },
-    { label: 'Browse Supplements', icon: <CartIcon size="md" color="inherit" />, variant: 'outline' as const },
-  ];
+    {
+      label: 'Build New Meal Plan',
+      icon: <CalendarIcon size="md" color="inherit" />,
+      variant: 'primary' as const,
+    },
+    {
+      label: "Track Today's Meals",
+      icon: <LeafIcon size="md" color="inherit" />,
+      variant: 'secondary' as const,
+    },
+    {
+      label: 'View Progress Report',
+      icon: <ProteinIcon size="md" color="inherit" />,
+      variant: 'outline' as const,
+    },
+    {
+      label: 'Browse Supplements',
+      icon: <CartIcon size="md" color="inherit" />,
+      variant: 'outline' as const,
+    },
+  ]
 
   return (
     <EatRiteCard variant="luxury" padding="xl">
@@ -663,12 +757,14 @@ const QuickActionsSection: React.FC = () => {
         icon={<UserIcon size="md" color="gold" />}
         centered
       />
-      
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: EatRiteDesignTokens.spacing.lg,
-      }}>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: EatRiteDesignTokens.spacing.lg,
+        }}
+      >
         {actions.map((action, index) => (
           <EatRiteButton
             key={index}
@@ -687,7 +783,7 @@ const QuickActionsSection: React.FC = () => {
         ))}
       </div>
     </EatRiteCard>
-  );
-};
+  )
+}
 
-export default HomeDashboard;
+export default HomeDashboard

@@ -1,43 +1,36 @@
-import React, { useState } from 'react';
-import {
-  CreditCard,
-  Plus,
-  Edit3,
-  Trash2,
-  Shield,
-  MapPin
-} from 'lucide-react';
-import { FadeIn, StaggeredAnimation } from './AnimationComponents';
+import React, { useState } from 'react'
+import { CreditCard, Plus, Edit3, Trash2, Shield, MapPin } from 'lucide-react'
+import { FadeIn, StaggeredAnimation } from './AnimationComponents'
 
 interface PaymentMethod {
-  id: string;
-  type: 'visa' | 'mastercard' | 'amex' | 'discover';
-  last4: string;
-  expiryMonth: number;
-  expiryYear: number;
-  holderName: string;
-  isDefault: boolean;
+  id: string
+  type: 'visa' | 'mastercard' | 'amex' | 'discover'
+  last4: string
+  expiryMonth: number
+  expiryYear: number
+  holderName: string
+  isDefault: boolean
 }
 
 interface BillingAddress {
-  id: string;
-  firstName: string;
-  lastName: string;
-  address1: string;
-  address2?: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  isDefault: boolean;
+  id: string
+  firstName: string
+  lastName: string
+  address1: string
+  address2?: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+  isDefault: boolean
 }
 
 interface NewPaymentMethod {
-  cardNumber: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cvv: string;
-  holderName: string;
+  cardNumber: string
+  expiryMonth: string
+  expiryYear: string
+  cvv: string
+  holderName: string
 }
 
 const mockPaymentMethods: PaymentMethod[] = [
@@ -48,7 +41,7 @@ const mockPaymentMethods: PaymentMethod[] = [
     expiryMonth: 12,
     expiryYear: 2026,
     holderName: 'John Doe',
-    isDefault: true
+    isDefault: true,
   },
   {
     id: 'pm-2',
@@ -57,9 +50,9 @@ const mockPaymentMethods: PaymentMethod[] = [
     expiryMonth: 8,
     expiryYear: 2025,
     holderName: 'John Doe',
-    isDefault: false
-  }
-];
+    isDefault: false,
+  },
+]
 
 const mockBillingAddresses: BillingAddress[] = [
   {
@@ -72,26 +65,30 @@ const mockBillingAddresses: BillingAddress[] = [
     state: 'NY',
     zipCode: '10001',
     country: 'US',
-    isDefault: true
-  }
-];
+    isDefault: true,
+  },
+]
 
 export const PaymentMethods: React.FC = () => {
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(mockPaymentMethods);
-  const [billingAddresses, setBillingAddresses] = useState<BillingAddress[]>(mockBillingAddresses);
-  const [showAddCard, setShowAddCard] = useState(false);
-  const [showAddAddress, setShowAddAddress] = useState(false);
-  const [_editingAddress, _setEditingAddress] = useState<string | null>(null);
-  
+  const [paymentMethods, setPaymentMethods] =
+    useState<PaymentMethod[]>(mockPaymentMethods)
+  const [billingAddresses, setBillingAddresses] =
+    useState<BillingAddress[]>(mockBillingAddresses)
+  const [showAddCard, setShowAddCard] = useState(false)
+  const [showAddAddress, setShowAddAddress] = useState(false)
+  const [_editingAddress, _setEditingAddress] = useState<string | null>(null)
+
   const [newPaymentMethod, setNewPaymentMethod] = useState<NewPaymentMethod>({
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
     cvv: '',
-    holderName: ''
-  });
+    holderName: '',
+  })
 
-  const [newAddress, setNewAddress] = useState<Omit<BillingAddress, 'id' | 'isDefault'>>({
+  const [newAddress, setNewAddress] = useState<
+    Omit<BillingAddress, 'id' | 'isDefault'>
+  >({
     firstName: '',
     lastName: '',
     address1: '',
@@ -99,98 +96,105 @@ export const PaymentMethods: React.FC = () => {
     city: '',
     state: '',
     zipCode: '',
-    country: 'US'
-  });
+    country: 'US',
+  })
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const getCardIcon = (type: string) => {
     const cardIcons = {
       visa: '💳',
       mastercard: '💳',
       amex: '💳',
-      discover: '💳'
-    };
-    return cardIcons[type as keyof typeof cardIcons] || '💳';
-  };
+      discover: '💳',
+    }
+    return cardIcons[type as keyof typeof cardIcons] || '💳'
+  }
 
   const getCardType = (cardNumber: string): PaymentMethod['type'] => {
-    const cleaned = cardNumber.replace(/\s/g, '');
-    if (cleaned.match(/^4/)) return 'visa';
-    if (cleaned.match(/^5[1-5]/)) return 'mastercard';
-    if (cleaned.match(/^3[47]/)) return 'amex';
-    if (cleaned.match(/^6011/)) return 'discover';
-    return 'visa';
-  };
+    const cleaned = cardNumber.replace(/\s/g, '')
+    if (cleaned.match(/^4/)) return 'visa'
+    if (cleaned.match(/^5[1-5]/)) return 'mastercard'
+    if (cleaned.match(/^3[47]/)) return 'amex'
+    if (cleaned.match(/^6011/)) return 'discover'
+    return 'visa'
+  }
 
   const formatCardNumber = (value: string) => {
-    const cleaned = value.replace(/\s/g, '');
-    const chunks = cleaned.match(/.{1,4}/g) || [];
-    return chunks.join(' ').substr(0, 19); // Max 16 digits + 3 spaces
-  };
+    const cleaned = value.replace(/\s/g, '')
+    const chunks = cleaned.match(/.{1,4}/g) || []
+    return chunks.join(' ').substr(0, 19) // Max 16 digits + 3 spaces
+  }
 
-  const validatePaymentMethod = (method: NewPaymentMethod): Record<string, string> => {
-    const errors: Record<string, string> = {};
-    
-    const cleanedCardNumber = method.cardNumber.replace(/\s/g, '');
+  const validatePaymentMethod = (
+    method: NewPaymentMethod
+  ): Record<string, string> => {
+    const errors: Record<string, string> = {}
+
+    const cleanedCardNumber = method.cardNumber.replace(/\s/g, '')
     if (!cleanedCardNumber) {
-      errors.cardNumber = 'Card number is required';
+      errors.cardNumber = 'Card number is required'
     } else if (cleanedCardNumber.length < 13 || cleanedCardNumber.length > 19) {
-      errors.cardNumber = 'Invalid card number';
+      errors.cardNumber = 'Invalid card number'
     }
 
     if (!method.expiryMonth) {
-      errors.expiryMonth = 'Month is required';
-    } else if (parseInt(method.expiryMonth) < 1 || parseInt(method.expiryMonth) > 12) {
-      errors.expiryMonth = 'Invalid month';
+      errors.expiryMonth = 'Month is required'
+    } else if (
+      parseInt(method.expiryMonth) < 1 ||
+      parseInt(method.expiryMonth) > 12
+    ) {
+      errors.expiryMonth = 'Invalid month'
     }
 
     if (!method.expiryYear) {
-      errors.expiryYear = 'Year is required';
+      errors.expiryYear = 'Year is required'
     } else if (parseInt(method.expiryYear) < new Date().getFullYear()) {
-      errors.expiryYear = 'Card is expired';
+      errors.expiryYear = 'Card is expired'
     }
 
     if (!method.cvv) {
-      errors.cvv = 'CVV is required';
+      errors.cvv = 'CVV is required'
     } else if (method.cvv.length < 3 || method.cvv.length > 4) {
-      errors.cvv = 'Invalid CVV';
+      errors.cvv = 'Invalid CVV'
     }
 
     if (!method.holderName.trim()) {
-      errors.holderName = 'Cardholder name is required';
+      errors.holderName = 'Cardholder name is required'
     }
 
-    return errors;
-  };
+    return errors
+  }
 
-  const validateAddress = (address: Omit<BillingAddress, 'id' | 'isDefault'>): Record<string, string> => {
-    const errors: Record<string, string> = {};
-    
-    if (!address.firstName.trim()) errors.firstName = 'First name is required';
-    if (!address.lastName.trim()) errors.lastName = 'Last name is required';
-    if (!address.address1.trim()) errors.address1 = 'Address is required';
-    if (!address.city.trim()) errors.city = 'City is required';
-    if (!address.state.trim()) errors.state = 'State is required';
-    if (!address.zipCode.trim()) errors.zipCode = 'ZIP code is required';
-    
-    return errors;
-  };
+  const validateAddress = (
+    address: Omit<BillingAddress, 'id' | 'isDefault'>
+  ): Record<string, string> => {
+    const errors: Record<string, string> = {}
+
+    if (!address.firstName.trim()) errors.firstName = 'First name is required'
+    if (!address.lastName.trim()) errors.lastName = 'Last name is required'
+    if (!address.address1.trim()) errors.address1 = 'Address is required'
+    if (!address.city.trim()) errors.city = 'City is required'
+    if (!address.state.trim()) errors.state = 'State is required'
+    if (!address.zipCode.trim()) errors.zipCode = 'ZIP code is required'
+
+    return errors
+  }
 
   const handleAddPaymentMethod = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    const validationErrors = validatePaymentMethod(newPaymentMethod);
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    const validationErrors = validatePaymentMethod(newPaymentMethod)
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setIsSubmitting(false);
-      return;
+      setErrors(validationErrors)
+      setIsSubmitting(false)
+      return
     }
 
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
     const newCard: PaymentMethod = {
       id: `pm-${Date.now()}`,
@@ -199,43 +203,43 @@ export const PaymentMethods: React.FC = () => {
       expiryMonth: parseInt(newPaymentMethod.expiryMonth),
       expiryYear: parseInt(newPaymentMethod.expiryYear),
       holderName: newPaymentMethod.holderName,
-      isDefault: paymentMethods.length === 0
-    };
+      isDefault: paymentMethods.length === 0,
+    }
 
-    setPaymentMethods([...paymentMethods, newCard]);
+    setPaymentMethods([...paymentMethods, newCard])
     setNewPaymentMethod({
       cardNumber: '',
       expiryMonth: '',
       expiryYear: '',
       cvv: '',
-      holderName: ''
-    });
-    setErrors({});
-    setShowAddCard(false);
-    setIsSubmitting(false);
-  };
+      holderName: '',
+    })
+    setErrors({})
+    setShowAddCard(false)
+    setIsSubmitting(false)
+  }
 
   const handleAddAddress = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    const validationErrors = validateAddress(newAddress);
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    const validationErrors = validateAddress(newAddress)
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setIsSubmitting(false);
-      return;
+      setErrors(validationErrors)
+      setIsSubmitting(false)
+      return
     }
 
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
     const address: BillingAddress = {
       id: `addr-${Date.now()}`,
       ...newAddress,
-      isDefault: billingAddresses.length === 0
-    };
+      isDefault: billingAddresses.length === 0,
+    }
 
-    setBillingAddresses([...billingAddresses, address]);
+    setBillingAddresses([...billingAddresses, address])
     setNewAddress({
       firstName: '',
       lastName: '',
@@ -244,34 +248,38 @@ export const PaymentMethods: React.FC = () => {
       city: '',
       state: '',
       zipCode: '',
-      country: 'US'
-    });
-    setErrors({});
-    setShowAddAddress(false);
-    setIsSubmitting(false);
-  };
+      country: 'US',
+    })
+    setErrors({})
+    setShowAddAddress(false)
+    setIsSubmitting(false)
+  }
 
   const handleDeletePaymentMethod = (id: string) => {
-    setPaymentMethods(paymentMethods.filter(pm => pm.id !== id));
-  };
+    setPaymentMethods(paymentMethods.filter(pm => pm.id !== id))
+  }
 
   const handleSetDefaultPaymentMethod = (id: string) => {
-    setPaymentMethods(paymentMethods.map(pm => ({
-      ...pm,
-      isDefault: pm.id === id
-    })));
-  };
+    setPaymentMethods(
+      paymentMethods.map(pm => ({
+        ...pm,
+        isDefault: pm.id === id,
+      }))
+    )
+  }
 
   const handleDeleteAddress = (id: string) => {
-    setBillingAddresses(billingAddresses.filter(addr => addr.id !== id));
-  };
+    setBillingAddresses(billingAddresses.filter(addr => addr.id !== id))
+  }
 
   const handleSetDefaultAddress = (id: string) => {
-    setBillingAddresses(billingAddresses.map(addr => ({
-      ...addr,
-      isDefault: addr.id === id
-    })));
-  };
+    setBillingAddresses(
+      billingAddresses.map(addr => ({
+        ...addr,
+        isDefault: addr.id === id,
+      }))
+    )
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -292,9 +300,12 @@ export const PaymentMethods: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Shield className="w-5 h-5 text-blue-600" />
             <div>
-              <h3 className="text-sm font-medium text-blue-800">Secure Payment Processing</h3>
+              <h3 className="text-sm font-medium text-blue-800">
+                Secure Payment Processing
+              </h3>
               <p className="text-sm text-blue-600">
-                Your payment information is encrypted and processed securely through our PCI-compliant payment processor.
+                Your payment information is encrypted and processed securely
+                through our PCI-compliant payment processor.
               </p>
             </div>
           </div>
@@ -306,7 +317,9 @@ export const PaymentMethods: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md mb-8">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Payment Methods</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Payment Methods
+              </h2>
               <button
                 onClick={() => setShowAddCard(!showAddCard)}
                 className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
@@ -325,20 +338,28 @@ export const PaymentMethods: React.FC = () => {
               </div>
             ) : (
               <StaggeredAnimation className="space-y-4">
-                {paymentMethods.map((method) => (
+                {paymentMethods.map(method => (
                   <div
                     key={method.id}
                     className={`border rounded-lg p-4 ${
-                      method.isDefault ? 'border-green-500 bg-green-50' : 'border-gray-200'
+                      method.isDefault
+                        ? 'border-green-500 bg-green-50'
+                        : 'border-gray-200'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="text-2xl">{getCardIcon(method.type)}</div>
+                        <div className="text-2xl">
+                          {getCardIcon(method.type)}
+                        </div>
                         <div>
                           <div className="flex items-center space-x-2">
-                            <span className="font-medium capitalize">{method.type}</span>
-                            <span className="text-gray-600">•••• {method.last4}</span>
+                            <span className="font-medium capitalize">
+                              {method.type}
+                            </span>
+                            <span className="text-gray-600">
+                              •••• {method.last4}
+                            </span>
                             {method.isDefault && (
                               <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
                                 Default
@@ -346,16 +367,22 @@ export const PaymentMethods: React.FC = () => {
                             )}
                           </div>
                           <div className="text-sm text-gray-500">
-                            Expires {method.expiryMonth.toString().padStart(2, '0')}/{method.expiryYear}
+                            Expires{' '}
+                            {method.expiryMonth.toString().padStart(2, '0')}/
+                            {method.expiryYear}
                           </div>
-                          <div className="text-sm text-gray-500">{method.holderName}</div>
+                          <div className="text-sm text-gray-500">
+                            {method.holderName}
+                          </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         {!method.isDefault && (
                           <button
-                            onClick={() => handleSetDefaultPaymentMethod(method.id)}
+                            onClick={() =>
+                              handleSetDefaultPaymentMethod(method.id)
+                            }
                             className="text-sm text-blue-600 hover:text-blue-800"
                           >
                             Set as Default
@@ -378,7 +405,9 @@ export const PaymentMethods: React.FC = () => {
             {showAddCard && (
               <FadeIn>
                 <div className="mt-6 border-t border-gray-200 pt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Payment Method</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    Add New Payment Method
+                  </h3>
                   <form onSubmit={handleAddPaymentMethod} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="md:col-span-2">
@@ -389,20 +418,26 @@ export const PaymentMethods: React.FC = () => {
                           <input
                             type="text"
                             value={newPaymentMethod.cardNumber}
-                            onChange={(e) => setNewPaymentMethod({
-                              ...newPaymentMethod,
-                              cardNumber: formatCardNumber(e.target.value)
-                            })}
+                            onChange={e =>
+                              setNewPaymentMethod({
+                                ...newPaymentMethod,
+                                cardNumber: formatCardNumber(e.target.value),
+                              })
+                            }
                             placeholder="1234 5678 9012 3456"
                             className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                              errors.cardNumber ? 'border-red-300' : 'border-gray-300'
+                              errors.cardNumber
+                                ? 'border-red-300'
+                                : 'border-gray-300'
                             }`}
                             maxLength={19}
                           />
                           <CreditCard className="absolute right-3 top-2.5 w-5 h-5 text-gray-400" />
                         </div>
                         {errors.cardNumber && (
-                          <p className="text-red-600 text-sm mt-1">{errors.cardNumber}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.cardNumber}
+                          </p>
                         )}
                       </div>
 
@@ -412,12 +447,16 @@ export const PaymentMethods: React.FC = () => {
                         </label>
                         <select
                           value={newPaymentMethod.expiryMonth}
-                          onChange={(e) => setNewPaymentMethod({
-                            ...newPaymentMethod,
-                            expiryMonth: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewPaymentMethod({
+                              ...newPaymentMethod,
+                              expiryMonth: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.expiryMonth ? 'border-red-300' : 'border-gray-300'
+                            errors.expiryMonth
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         >
                           <option value="">Month</option>
@@ -428,7 +467,9 @@ export const PaymentMethods: React.FC = () => {
                           ))}
                         </select>
                         {errors.expiryMonth && (
-                          <p className="text-red-600 text-sm mt-1">{errors.expiryMonth}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.expiryMonth}
+                          </p>
                         )}
                       </div>
 
@@ -438,26 +479,32 @@ export const PaymentMethods: React.FC = () => {
                         </label>
                         <select
                           value={newPaymentMethod.expiryYear}
-                          onChange={(e) => setNewPaymentMethod({
-                            ...newPaymentMethod,
-                            expiryYear: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewPaymentMethod({
+                              ...newPaymentMethod,
+                              expiryYear: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.expiryYear ? 'border-red-300' : 'border-gray-300'
+                            errors.expiryYear
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         >
                           <option value="">Year</option>
                           {Array.from({ length: 10 }, (_, i) => {
-                            const year = new Date().getFullYear() + i;
+                            const year = new Date().getFullYear() + i
                             return (
                               <option key={year} value={year}>
                                 {year}
                               </option>
-                            );
+                            )
                           })}
                         </select>
                         {errors.expiryYear && (
-                          <p className="text-red-600 text-sm mt-1">{errors.expiryYear}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.expiryYear}
+                          </p>
                         )}
                       </div>
 
@@ -468,12 +515,14 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newPaymentMethod.cvv}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '').substring(0, 4);
+                          onChange={e => {
+                            const value = e.target.value
+                              .replace(/\D/g, '')
+                              .substring(0, 4)
                             setNewPaymentMethod({
                               ...newPaymentMethod,
-                              cvv: value
-                            });
+                              cvv: value,
+                            })
                           }}
                           placeholder="123"
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -482,7 +531,9 @@ export const PaymentMethods: React.FC = () => {
                           maxLength={4}
                         />
                         {errors.cvv && (
-                          <p className="text-red-600 text-sm mt-1">{errors.cvv}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.cvv}
+                          </p>
                         )}
                       </div>
 
@@ -493,17 +544,23 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newPaymentMethod.holderName}
-                          onChange={(e) => setNewPaymentMethod({
-                            ...newPaymentMethod,
-                            holderName: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewPaymentMethod({
+                              ...newPaymentMethod,
+                              holderName: e.target.value,
+                            })
+                          }
                           placeholder="John Doe"
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.holderName ? 'border-red-300' : 'border-gray-300'
+                            errors.holderName
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         />
                         {errors.holderName && (
-                          <p className="text-red-600 text-sm mt-1">{errors.holderName}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.holderName}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -512,8 +569,8 @@ export const PaymentMethods: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setShowAddCard(false);
-                          setErrors({});
+                          setShowAddCard(false)
+                          setErrors({})
                         }}
                         className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                       >
@@ -540,7 +597,9 @@ export const PaymentMethods: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">Billing Addresses</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Billing Addresses
+              </h2>
               <button
                 onClick={() => setShowAddAddress(!showAddAddress)}
                 className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
@@ -559,11 +618,13 @@ export const PaymentMethods: React.FC = () => {
               </div>
             ) : (
               <StaggeredAnimation className="space-y-4">
-                {billingAddresses.map((address) => (
+                {billingAddresses.map(address => (
                   <div
                     key={address.id}
                     className={`border rounded-lg p-4 ${
-                      address.isDefault ? 'border-green-500 bg-green-50' : 'border-gray-200'
+                      address.isDefault
+                        ? 'border-green-500 bg-green-50'
+                        : 'border-gray-200'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -581,11 +642,13 @@ export const PaymentMethods: React.FC = () => {
                         <div className="text-sm text-gray-600 space-y-1">
                           <div>{address.address1}</div>
                           {address.address2 && <div>{address.address2}</div>}
-                          <div>{address.city}, {address.state} {address.zipCode}</div>
+                          <div>
+                            {address.city}, {address.state} {address.zipCode}
+                          </div>
                           <div>{address.country}</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         {!address.isDefault && (
                           <button
@@ -618,7 +681,9 @@ export const PaymentMethods: React.FC = () => {
             {showAddAddress && (
               <FadeIn>
                 <div className="mt-6 border-t border-gray-200 pt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Billing Address</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    Add New Billing Address
+                  </h3>
                   <form onSubmit={handleAddAddress} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -628,16 +693,22 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.firstName}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            firstName: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              firstName: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.firstName ? 'border-red-300' : 'border-gray-300'
+                            errors.firstName
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         />
                         {errors.firstName && (
-                          <p className="text-red-600 text-sm mt-1">{errors.firstName}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.firstName}
+                          </p>
                         )}
                       </div>
 
@@ -648,16 +719,22 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.lastName}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            lastName: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              lastName: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.lastName ? 'border-red-300' : 'border-gray-300'
+                            errors.lastName
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         />
                         {errors.lastName && (
-                          <p className="text-red-600 text-sm mt-1">{errors.lastName}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.lastName}
+                          </p>
                         )}
                       </div>
 
@@ -668,16 +745,22 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.address1}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            address1: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              address1: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.address1 ? 'border-red-300' : 'border-gray-300'
+                            errors.address1
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         />
                         {errors.address1 && (
-                          <p className="text-red-600 text-sm mt-1">{errors.address1}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.address1}
+                          </p>
                         )}
                       </div>
 
@@ -688,10 +771,12 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.address2}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            address2: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              address2: e.target.value,
+                            })
+                          }
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
@@ -703,16 +788,20 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.city}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            city: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              city: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                             errors.city ? 'border-red-300' : 'border-gray-300'
                           }`}
                         />
                         {errors.city && (
-                          <p className="text-red-600 text-sm mt-1">{errors.city}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.city}
+                          </p>
                         )}
                       </div>
 
@@ -723,16 +812,20 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.state}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            state: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              state: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                             errors.state ? 'border-red-300' : 'border-gray-300'
                           }`}
                         />
                         {errors.state && (
-                          <p className="text-red-600 text-sm mt-1">{errors.state}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.state}
+                          </p>
                         )}
                       </div>
 
@@ -743,16 +836,22 @@ export const PaymentMethods: React.FC = () => {
                         <input
                           type="text"
                           value={newAddress.zipCode}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            zipCode: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              zipCode: e.target.value,
+                            })
+                          }
                           className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                            errors.zipCode ? 'border-red-300' : 'border-gray-300'
+                            errors.zipCode
+                              ? 'border-red-300'
+                              : 'border-gray-300'
                           }`}
                         />
                         {errors.zipCode && (
-                          <p className="text-red-600 text-sm mt-1">{errors.zipCode}</p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {errors.zipCode}
+                          </p>
                         )}
                       </div>
 
@@ -762,10 +861,12 @@ export const PaymentMethods: React.FC = () => {
                         </label>
                         <select
                           value={newAddress.country}
-                          onChange={(e) => setNewAddress({
-                            ...newAddress,
-                            country: e.target.value
-                          })}
+                          onChange={e =>
+                            setNewAddress({
+                              ...newAddress,
+                              country: e.target.value,
+                            })
+                          }
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="US">United States</option>
@@ -778,8 +879,8 @@ export const PaymentMethods: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setShowAddAddress(false);
-                          setErrors({});
+                          setShowAddAddress(false)
+                          setErrors({})
                         }}
                         className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                       >
@@ -801,7 +902,7 @@ export const PaymentMethods: React.FC = () => {
         </div>
       </FadeIn>
     </div>
-  );
-};
+  )
+}
 
-export default PaymentMethods;
+export default PaymentMethods

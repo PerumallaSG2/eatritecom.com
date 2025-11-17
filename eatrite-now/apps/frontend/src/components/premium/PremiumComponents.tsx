@@ -3,7 +3,7 @@
  * Luxury components with inline styles matching the gold-on-dark-green brand
  */
 
-import React from 'react';
+import React from 'react'
 
 // Brand color constants
 const BRAND_COLORS = {
@@ -15,15 +15,16 @@ const BRAND_COLORS = {
   surfaceTertiary: '#1A3327',
   textSecondary: '#E0DDD5',
   textTertiary: '#B8B5AD',
-};
+}
 
 // 🔘 PREMIUM BUTTON
-interface PremiumButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'tertiary';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+interface PremiumButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'tertiary'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  isLoading?: boolean
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const PremiumButton: React.FC<PremiumButtonProps> = ({
@@ -42,14 +43,15 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
     md: { height: '44px', padding: '0 24px', fontSize: '16px' },
     lg: { height: '52px', padding: '0 32px', fontSize: '18px' },
     xl: { height: '60px', padding: '0 40px', fontSize: '20px' },
-  };
+  }
 
   const variantStyles = {
     primary: {
       backgroundColor: BRAND_COLORS.gold,
       color: BRAND_COLORS.softBlack,
       border: 'none',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 180, 106, 0.3)',
+      boxShadow:
+        '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 180, 106, 0.3)',
     },
     secondary: {
       backgroundColor: 'transparent',
@@ -63,7 +65,7 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
       border: 'none',
       boxShadow: '0 2px 4px -1px rgba(0, 0, 0, 0.3)',
     },
-  };
+  }
 
   const baseStyle: React.CSSProperties = {
     display: 'inline-flex',
@@ -80,22 +82,24 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
     ...sizeStyles[size],
     ...variantStyles[variant],
     ...style,
-  };
+  }
 
   return (
     <button
       style={baseStyle}
       disabled={disabled || isLoading}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         if (variant === 'primary') {
-          e.currentTarget.style.transform = 'translateY(-1px)';
-          e.currentTarget.style.boxShadow = '0 6px 12px -2px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 180, 106, 0.5)';
+          e.currentTarget.style.transform = 'translateY(-1px)'
+          e.currentTarget.style.boxShadow =
+            '0 6px 12px -2px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 180, 106, 0.5)'
         }
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         if (variant === 'primary') {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 180, 106, 0.3)';
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow =
+            '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 180, 106, 0.3)'
         }
       }}
       {...props}
@@ -113,20 +117,24 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
         />
       ) : (
         <>
-          {leftIcon && <span style={{ width: '20px', height: '20px' }}>{leftIcon}</span>}
+          {leftIcon && (
+            <span style={{ width: '20px', height: '20px' }}>{leftIcon}</span>
+          )}
           {children}
-          {rightIcon && <span style={{ width: '20px', height: '20px' }}>{rightIcon}</span>}
+          {rightIcon && (
+            <span style={{ width: '20px', height: '20px' }}>{rightIcon}</span>
+          )}
         </>
       )}
     </button>
-  );
-};
+  )
+}
 
 // 📄 PREMIUM CARD
 interface PremiumCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'elevated' | 'outlined';
-  padding?: 'sm' | 'md' | 'lg' | 'xl';
-  goldAccent?: boolean;
+  variant?: 'default' | 'elevated' | 'outlined'
+  padding?: 'sm' | 'md' | 'lg' | 'xl'
+  goldAccent?: boolean
 }
 
 export const PremiumCard: React.FC<PremiumCardProps> = ({
@@ -142,25 +150,27 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
     md: '24px',
     lg: '32px',
     xl: '40px',
-  };
+  }
 
   const variantStyles = {
     default: {
       backgroundColor: BRAND_COLORS.surfaceSecondary,
       border: `1px solid rgba(212, 180, 106, 0.2)`,
-      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
+      boxShadow:
+        '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
     },
     elevated: {
       background: `linear-gradient(145deg, ${BRAND_COLORS.surfaceSecondary}, ${BRAND_COLORS.surfaceTertiary})`,
       border: `1px solid rgba(212, 180, 106, 0.1)`,
-      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+      boxShadow:
+        '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
     },
     outlined: {
       backgroundColor: BRAND_COLORS.darkGreen,
       border: `1px solid ${BRAND_COLORS.gold}`,
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
     },
-  };
+  }
 
   const baseStyle: React.CSSProperties = {
     borderRadius: '20px',
@@ -169,44 +179,47 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
     transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
     ...variantStyles[variant],
     ...style,
-  };
+  }
 
   const accentStyle: React.CSSProperties = goldAccent
     ? {
         borderLeft: `4px solid ${BRAND_COLORS.gold}`,
         paddingLeft: `calc(${paddingStyles[padding]} - 4px)`,
       }
-    : {};
+    : {}
 
   return (
     <div
       style={{ ...baseStyle, ...accentStyle }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-2px)'
         if (variant === 'default') {
-          e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)';
+          e.currentTarget.style.boxShadow =
+            '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)'
         }
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'translateY(0)'
         if (variant === 'default') {
-          e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)';
+          e.currentTarget.style.boxShadow =
+            '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)'
         }
       }}
       {...props}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 // 📝 PREMIUM INPUT
-interface PremiumInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  helper?: string;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+interface PremiumInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+  error?: string
+  helper?: string
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const PremiumInput: React.FC<PremiumInputProps> = ({
@@ -218,13 +231,13 @@ export const PremiumInput: React.FC<PremiumInputProps> = ({
   style,
   ...props
 }) => {
-  const [focused, setFocused] = React.useState(false);
+  const [focused, setFocused] = React.useState(false)
 
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
-  };
+  }
 
   const labelStyle: React.CSSProperties = {
     fontFamily: '"Playfair Display", serif',
@@ -232,13 +245,13 @@ export const PremiumInput: React.FC<PremiumInputProps> = ({
     fontWeight: 500,
     color: BRAND_COLORS.offWhite,
     marginBottom: '4px',
-  };
+  }
 
   const inputContainerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
-  };
+  }
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
@@ -256,7 +269,7 @@ export const PremiumInput: React.FC<PremiumInputProps> = ({
     transition: 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
     boxShadow: focused ? `0 0 0 2px ${BRAND_COLORS.gold}40` : 'none',
     ...style,
-  };
+  }
 
   const iconStyle: React.CSSProperties = {
     position: 'absolute',
@@ -266,52 +279,44 @@ export const PremiumInput: React.FC<PremiumInputProps> = ({
     height: '20px',
     color: BRAND_COLORS.textTertiary,
     pointerEvents: 'none',
-  };
+  }
 
   const helperStyle: React.CSSProperties = {
     fontSize: '12px',
     color: error ? '#CC4444' : BRAND_COLORS.textSecondary,
     fontFamily: '"Inter", sans-serif',
-  };
+  }
 
   return (
     <div style={containerStyle}>
       {label && <label style={labelStyle}>{label}</label>}
-      
+
       <div style={inputContainerStyle}>
         {leftIcon && (
-          <span style={{ ...iconStyle, left: '12px' }}>
-            {leftIcon}
-          </span>
+          <span style={{ ...iconStyle, left: '12px' }}>{leftIcon}</span>
         )}
-        
+
         <input
           style={inputStyle}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           {...props}
         />
-        
+
         {rightIcon && (
-          <span style={{ ...iconStyle, right: '12px' }}>
-            {rightIcon}
-          </span>
+          <span style={{ ...iconStyle, right: '12px' }}>{rightIcon}</span>
         )}
       </div>
-      
-      {(error || helper) && (
-        <span style={helperStyle}>
-          {error || helper}
-        </span>
-      )}
+
+      {(error || helper) && <span style={helperStyle}>{error || helper}</span>}
     </div>
-  );
-};
+  )
+}
 
 // 🏷️ PREMIUM BADGE
 interface PremiumBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
@@ -325,7 +330,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
     sm: { padding: '4px 8px', fontSize: '12px', height: '20px' },
     md: { padding: '6px 12px', fontSize: '14px', height: '24px' },
     lg: { padding: '8px 16px', fontSize: '16px', height: '32px' },
-  };
+  }
 
   const variantStyles = {
     primary: {
@@ -349,7 +354,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
       backgroundColor: '#CC4444',
       color: BRAND_COLORS.offWhite,
     },
-  };
+  }
 
   const baseStyle: React.CSSProperties = {
     display: 'inline-flex',
@@ -362,26 +367,26 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
     ...sizeStyles[size],
     ...variantStyles[variant],
     ...style,
-  };
+  }
 
   return (
     <span style={baseStyle} {...props}>
       {children}
     </span>
-  );
-};
+  )
+}
 
 // Add CSS animation keyframes to the document
 if (typeof document !== 'undefined') {
-  const style = document.createElement('style');
+  const style = document.createElement('style')
   style.textContent = `
     @keyframes spin {
       to {
         transform: rotate(360deg);
       }
     }
-  `;
-  document.head.appendChild(style);
+  `
+  document.head.appendChild(style)
 }
 
 // Export components
@@ -390,4 +395,4 @@ export const EatRitePremiumComponents = {
   PremiumCard,
   PremiumInput,
   PremiumBadge,
-};
+}

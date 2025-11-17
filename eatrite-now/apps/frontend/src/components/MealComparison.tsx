@@ -1,100 +1,119 @@
-import React, { useState } from 'react';
-import { Plus, X, Zap, Activity, TrendingUp, Heart, Award, Star } from 'lucide-react';
-import OptimizedImage from './OptimizedImage';
+import React, { useState } from 'react'
+import {
+  Plus,
+  X,
+  Zap,
+  Activity,
+  TrendingUp,
+  Heart,
+  Award,
+  Star,
+} from 'lucide-react'
+import OptimizedImage from './OptimizedImage'
 
 interface Meal {
-  id: string;
-  name: string;
-  description: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  fiber?: number;
-  sodium?: number;
-  price: number;
-  image_url: string;
-  dietary_tags?: string;
-  is_popular?: boolean;
-  rating?: number;
+  id: string
+  name: string
+  description: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  fiber?: number
+  sodium?: number
+  price: number
+  image_url: string
+  dietary_tags?: string
+  is_popular?: boolean
+  rating?: number
 }
 
 interface MealComparisonProps {
-  availableMeals: Meal[];
-  initialMeals?: Meal[];
-  onAddToCart?: (meal: Meal) => void;
+  availableMeals: Meal[]
+  initialMeals?: Meal[]
+  onAddToCart?: (meal: Meal) => void
 }
 
 const MealComparison: React.FC<MealComparisonProps> = ({
   availableMeals,
   initialMeals = [],
-  onAddToCart
+  onAddToCart,
 }) => {
-  const [selectedMeals, setSelectedMeals] = useState<Meal[]>(initialMeals);
-  const [showMealSelector, setShowMealSelector] = useState(false);
+  const [selectedMeals, setSelectedMeals] = useState<Meal[]>(initialMeals)
+  const [showMealSelector, setShowMealSelector] = useState(false)
 
   const addMealToComparison = (meal: Meal) => {
-    if (selectedMeals.length < 4 && !selectedMeals.find(m => m.id === meal.id)) {
-      setSelectedMeals([...selectedMeals, meal]);
+    if (
+      selectedMeals.length < 4 &&
+      !selectedMeals.find(m => m.id === meal.id)
+    ) {
+      setSelectedMeals([...selectedMeals, meal])
     }
-    setShowMealSelector(false);
-  };
+    setShowMealSelector(false)
+  }
 
   const removeMealFromComparison = (mealId: string) => {
-    setSelectedMeals(selectedMeals.filter(meal => meal.id !== mealId));
-  };
+    setSelectedMeals(selectedMeals.filter(meal => meal.id !== mealId))
+  }
 
-  const getComparisonValue = (value: number, values: number[], higher_is_better: boolean = true) => {
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    
-    if (min === max) return 'neutral';
-    
+  const getComparisonValue = (
+    value: number,
+    values: number[],
+    higher_is_better: boolean = true
+  ) => {
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+
+    if (min === max) return 'neutral'
+
     if (higher_is_better) {
-      return value === max ? 'best' : value === min ? 'worst' : 'neutral';
+      return value === max ? 'best' : value === min ? 'worst' : 'neutral'
     } else {
-      return value === min ? 'best' : value === max ? 'worst' : 'neutral';
+      return value === min ? 'best' : value === max ? 'worst' : 'neutral'
     }
-  };
+  }
 
   const getValueColor = (comparison: string) => {
     switch (comparison) {
-      case 'best': return 'text-green-600 bg-green-50';
-      case 'worst': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-700 bg-gray-50';
+      case 'best':
+        return 'text-green-600 bg-green-50'
+      case 'worst':
+        return 'text-red-600 bg-red-50'
+      default:
+        return 'text-gray-700 bg-gray-50'
     }
-  };
+  }
 
   const nutritionMetrics = [
-    { 
-      key: 'calories', 
-      label: 'Calories', 
-      icon: <Zap className="w-4 h-4" />, 
-      unit: '', 
-      higherIsBetter: false 
+    {
+      key: 'calories',
+      label: 'Calories',
+      icon: <Zap className="w-4 h-4" />,
+      unit: '',
+      higherIsBetter: false,
     },
-    { 
-      key: 'protein', 
-      label: 'Protein', 
-      icon: <Activity className="w-4 h-4" />, 
-      unit: 'g', 
-      higherIsBetter: true 
+    {
+      key: 'protein',
+      label: 'Protein',
+      icon: <Activity className="w-4 h-4" />,
+      unit: 'g',
+      higherIsBetter: true,
     },
-    { 
-      key: 'carbs', 
-      label: 'Carbs', 
-      icon: <TrendingUp className="w-4 h-4" />, 
-      unit: 'g', 
-      higherIsBetter: false 
+    {
+      key: 'carbs',
+      label: 'Carbs',
+      icon: <TrendingUp className="w-4 h-4" />,
+      unit: 'g',
+      higherIsBetter: false,
     },
-    { 
-      key: 'fat', 
-      label: 'Fat', 
-      icon: <Heart className="w-4 h-4" />, 
-      unit: 'g', 
-      higherIsBetter: false 
-    }
-  ];
+    {
+      key: 'fat',
+      label: 'Fat',
+      icon: <Heart className="w-4 h-4" />,
+      unit: 'g',
+      higherIsBetter: false,
+    },
+  ]
 
   if (selectedMeals.length === 0) {
     return (
@@ -103,9 +122,12 @@ const MealComparison: React.FC<MealComparisonProps> = ({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Award className="w-8 h-8 text-blue-600" />
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Compare Meals</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
+            Compare Meals
+          </h3>
           <p className="text-gray-600 mb-6">
-            Select up to 4 meals to compare their nutrition facts, pricing, and ratings side by side.
+            Select up to 4 meals to compare their nutrition facts, pricing, and
+            ratings side by side.
           </p>
           <button
             onClick={() => setShowMealSelector(true)}
@@ -116,7 +138,7 @@ const MealComparison: React.FC<MealComparisonProps> = ({
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -125,7 +147,9 @@ const MealComparison: React.FC<MealComparisonProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold mb-1">Meal Comparison</h2>
-            <p className="text-blue-100">Compare nutrition facts and features</p>
+            <p className="text-blue-100">
+              Compare nutrition facts and features
+            </p>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm bg-white/20 px-2 py-1 rounded">
@@ -173,8 +197,12 @@ const MealComparison: React.FC<MealComparisonProps> = ({
                         className="w-full h-32 object-cover rounded-lg"
                       />
                     </div>
-                    <h4 className="font-medium text-gray-900 mb-1">{meal.name}</h4>
-                    <p className="text-sm text-gray-600 mb-2">{meal.calories} cal • ${meal.price}</p>
+                    <h4 className="font-medium text-gray-900 mb-1">
+                      {meal.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {meal.calories} cal • ${meal.price}
+                    </p>
                   </button>
                 ))}
             </div>
@@ -187,9 +215,14 @@ const MealComparison: React.FC<MealComparisonProps> = ({
         <table className="w-full">
           <thead>
             <tr className="bg-gray-50">
-              <th className="text-left p-4 font-medium text-gray-700 min-w-[200px]">Meal</th>
+              <th className="text-left p-4 font-medium text-gray-700 min-w-[200px]">
+                Meal
+              </th>
               {selectedMeals.map(meal => (
-                <th key={meal.id} className="text-center p-4 min-w-[200px] relative">
+                <th
+                  key={meal.id}
+                  className="text-center p-4 min-w-[200px] relative"
+                >
                   <button
                     onClick={() => removeMealFromComparison(meal.id)}
                     className="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
@@ -203,19 +236,24 @@ const MealComparison: React.FC<MealComparisonProps> = ({
                       className="w-full h-32 object-cover rounded-lg mx-auto"
                     />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{meal.name}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">
+                    {meal.name}
+                  </h3>
                   <p className="text-sm text-gray-600">${meal.price}</p>
                 </th>
               ))}
             </tr>
           </thead>
-          
+
           <tbody>
             {/* Description */}
             <tr className="border-t border-gray-200">
               <td className="p-4 font-medium text-gray-700">Description</td>
               {selectedMeals.map(meal => (
-                <td key={meal.id} className="p-4 text-center text-sm text-gray-600">
+                <td
+                  key={meal.id}
+                  className="p-4 text-center text-sm text-gray-600"
+                >
                   {meal.description}
                 </td>
               ))}
@@ -238,28 +276,40 @@ const MealComparison: React.FC<MealComparisonProps> = ({
 
             {/* Nutrition Metrics */}
             {nutritionMetrics.map((metric, index) => {
-              const values = selectedMeals.map(meal => meal[metric.key as keyof Meal] as number);
-              
+              const values = selectedMeals.map(
+                meal => meal[metric.key as keyof Meal] as number
+              )
+
               return (
-                <tr key={metric.key} className={`border-t border-gray-200 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
+                <tr
+                  key={metric.key}
+                  className={`border-t border-gray-200 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+                >
                   <td className="p-4 font-medium text-gray-700 flex items-center">
                     {metric.icon}
                     <span className="ml-2">{metric.label}</span>
                   </td>
-                  {selectedMeals.map((meal) => {
-                    const value = meal[metric.key as keyof Meal] as number;
-                    const comparison = getComparisonValue(value, values, metric.higherIsBetter);
-                    
+                  {selectedMeals.map(meal => {
+                    const value = meal[metric.key as keyof Meal] as number
+                    const comparison = getComparisonValue(
+                      value,
+                      values,
+                      metric.higherIsBetter
+                    )
+
                     return (
                       <td key={meal.id} className="p-4 text-center">
-                        <div className={`inline-flex items-center px-3 py-1 rounded-full font-medium ${getValueColor(comparison)}`}>
-                          {value}{metric.unit}
+                        <div
+                          className={`inline-flex items-center px-3 py-1 rounded-full font-medium ${getValueColor(comparison)}`}
+                        >
+                          {value}
+                          {metric.unit}
                         </div>
                       </td>
-                    );
+                    )
                   })}
                 </tr>
-              );
+              )
             })}
 
             {/* Dietary Tags */}
@@ -268,14 +318,17 @@ const MealComparison: React.FC<MealComparisonProps> = ({
               {selectedMeals.map(meal => (
                 <td key={meal.id} className="p-4 text-center">
                   <div className="flex flex-wrap justify-center gap-1">
-                    {meal.dietary_tags?.split(',').slice(0, 2).map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full"
-                      >
-                        {tag.trim()}
-                      </span>
-                    )) || <span className="text-gray-400 text-sm">None</span>}
+                    {meal.dietary_tags
+                      ?.split(',')
+                      .slice(0, 2)
+                      .map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full"
+                        >
+                          {tag.trim()}
+                        </span>
+                      )) || <span className="text-gray-400 text-sm">None</span>}
                   </div>
                 </td>
               ))}
@@ -316,7 +369,7 @@ const MealComparison: React.FC<MealComparisonProps> = ({
         </table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MealComparison;
+export default MealComparison

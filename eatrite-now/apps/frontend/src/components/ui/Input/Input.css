@@ -39,7 +39,7 @@
   border: 1px solid var(--color-surface-border, #404040);
   border-radius: var(--radius-md, 0.375rem);
   color: var(--color-text-primary, #ffffff);
-  transition: 
+  transition:
     border-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1)),
     box-shadow var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1)),
     background-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
@@ -186,7 +186,10 @@
 
 /* Premium Input (with gold accent) */
 .eatrite-input--premium {
-  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  background: var(
+    --gradient-surface,
+    linear-gradient(135deg, #1a1a1a 0%, #262626 100%)
+  );
   border-color: var(--color-primary-700, #a1742f);
   position: relative;
 }
@@ -198,12 +201,15 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
 }
 
 .eatrite-input--premium:focus {
   border-color: var(--color-primary-400, #e8b85c);
-  box-shadow: 
+  box-shadow:
     0 0 0 3px var(--color-interactive-focus, rgba(212, 160, 71, 0.2)),
     var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
 }
@@ -227,7 +233,7 @@
   cursor: pointer;
 }
 
-.eatrite-file-input input[type="file"] {
+.eatrite-file-input input[type='file'] {
   position: absolute;
   opacity: 0;
   width: 100%;
@@ -278,16 +284,16 @@
   .eatrite-input {
     border-width: 2px;
   }
-  
+
   .eatrite-input:focus {
     outline: 2px solid var(--color-primary-400, #e8b85c);
     outline-offset: 2px;
   }
-  
+
   .eatrite-input--error {
     border-color: #ff6b6b;
   }
-  
+
   .eatrite-input--success {
     border-color: #51cf66;
   }

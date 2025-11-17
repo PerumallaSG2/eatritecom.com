@@ -59,10 +59,13 @@
 
 /* Premium Card (with gold accent) */
 .eatrite-card--premium {
-  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  background: var(
+    --gradient-surface,
+    linear-gradient(135deg, #1a1a1a 0%, #262626 100%)
+  );
   border-color: var(--color-primary-700, #a1742f);
-  box-shadow: 
-    var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8)), 
+  box-shadow:
+    var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.8)),
     0 0 20px rgba(212, 160, 71, 0.1);
   position: relative;
 }
@@ -74,20 +77,23 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
 }
 
 .eatrite-card--premium:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.8)), 
+  box-shadow:
+    var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.8)),
     var(--shadow-goldSm, 0 0 10px rgba(212, 160, 71, 0.4));
 }
 
 /* Interactive Card (clickable) */
 .eatrite-card--interactive {
   cursor: pointer;
-  transition: 
+  transition:
     var(--transition-normal, 300ms cubic-bezier(0.4, 0, 0.2, 1)),
     border-color var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
 }
@@ -157,14 +163,20 @@
 .eatrite-card--stats {
   padding: var(--spacing-6, 1.5rem);
   text-align: center;
-  background: var(--gradient-surface, linear-gradient(135deg, #1a1a1a 0%, #262626 100%));
+  background: var(
+    --gradient-surface,
+    linear-gradient(135deg, #1a1a1a 0%, #262626 100%)
+  );
 }
 
 .eatrite-card--stats .stat-value {
   font-size: 2rem;
   font-weight: 700;
   font-family: var(--font-serif, Georgia, serif);
-  background: var(--gradient-gold, linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%));
+  background: var(
+    --gradient-gold,
+    linear-gradient(135deg, #f4d03f 0%, #d4a047 50%, #b8903d 100%)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -201,8 +213,12 @@
 }
 
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 /* Mobile Responsive */
@@ -210,11 +226,11 @@
   .eatrite-card--lg {
     padding: var(--spacing-6, 1.5rem);
   }
-  
+
   .eatrite-card--xl {
     padding: var(--spacing-6, 1.5rem);
   }
-  
+
   .eatrite-card--meal .meal-image {
     height: 160px;
   }
@@ -225,11 +241,11 @@
   .eatrite-card {
     transition: none;
   }
-  
+
   .eatrite-card:hover {
     transform: none;
   }
-  
+
   .eatrite-card--loading::after {
     animation: none;
   }
@@ -240,11 +256,11 @@
   .eatrite-card {
     border-width: 2px;
   }
-  
+
   .eatrite-card--premium {
     border-color: var(--color-primary-400, #e8b85c);
   }
-  
+
   .eatrite-card--interactive:focus-visible {
     outline-width: 3px;
   }

@@ -3,12 +3,12 @@
  * Demonstrates the luxury design system in action
  */
 
-import React from 'react';
-import { EatRiteButton } from '../ui/Button/EatRiteButton';
-import { EatRiteCard } from '../ui/Card/EatRiteCard';
-import { EatRiteInput } from '../ui/Input/EatRiteInput';
-import EatRiteIcons from '../icons/EatRiteIcons';
-import './ExampleScreens.css';
+import React from 'react'
+import { EatRiteButton } from '../ui/Button/EatRiteButton'
+import { EatRiteCard } from '../ui/Card/EatRiteCard'
+import { EatRiteInput } from '../ui/Input/EatRiteInput'
+import EatRiteIcons from '../icons/EatRiteIcons'
+import './ExampleScreens.css'
 
 const EatRiteHomeScreen: React.FC = () => {
   return (
@@ -17,41 +17,44 @@ const EatRiteHomeScreen: React.FC = () => {
       <section className="eatrite-hero">
         <div className="eatrite-hero__content">
           <div className="eatrite-hero__brand">
-            <EatRiteIcons.ThreeLeaves size="xl" color="gold" className="eatrite-icon--glow" />
-            <h1 className="eatrite-hero__title">
-              EatRite
-            </h1>
+            <EatRiteIcons.ThreeLeaves
+              size="xl"
+              color="gold"
+              className="eatrite-icon--glow"
+            />
+            <h1 className="eatrite-hero__title">EatRite</h1>
           </div>
-          
+
           <h2 className="eatrite-hero__subtitle">
             Luxury Nutrition, Delivered
           </h2>
-          
+
           <p className="eatrite-hero__description">
-            Experience premium, chef-crafted meals designed to nourish your body 
+            Experience premium, chef-crafted meals designed to nourish your body
             and elevate your lifestyle. Pure ingredients, exceptional taste.
           </p>
-          
+
           <div className="eatrite-hero__actions">
-            <EatRiteButton 
-              variant="primary" 
+            <EatRiteButton
+              variant="primary"
               size="lg"
               leftIcon={<EatRiteIcons.Leaf size="md" />}
             >
               Start Your Journey
             </EatRiteButton>
-            <EatRiteButton 
-              variant="secondary" 
-              size="lg"
-            >
+            <EatRiteButton variant="secondary" size="lg">
               View Menu
             </EatRiteButton>
           </div>
         </div>
-        
+
         <div className="eatrite-hero__image">
           <div className="eatrite-hero__image-placeholder">
-            <EatRiteIcons.Bowl size="xl" color="gold" className="eatrite-icon--glow" />
+            <EatRiteIcons.Bowl
+              size="xl"
+              color="gold"
+              className="eatrite-icon--glow"
+            />
           </div>
         </div>
       </section>
@@ -77,7 +80,7 @@ const EatRiteHomeScreen: React.FC = () => {
             Discover meals crafted for your lifestyle
           </p>
         </div>
-        
+
         <div className="eatrite-categories__grid">
           <EatRiteCard variant="premium" className="eatrite-category-card">
             <div className="eatrite-category-card__icon">
@@ -128,7 +131,7 @@ const EatRiteHomeScreen: React.FC = () => {
             This week's premium creations
           </p>
         </div>
-        
+
         <div className="eatrite-meals-grid">
           <EatRiteCard variant="interactive" className="eatrite-meal-card">
             <div className="eatrite-meal-card__image">
@@ -138,7 +141,9 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
             </div>
             <div className="eatrite-meal-card__content">
-              <h4 className="eatrite-meal-card__title">Mediterranean Quinoa Bowl</h4>
+              <h4 className="eatrite-meal-card__title">
+                Mediterranean Quinoa Bowl
+              </h4>
               <p className="eatrite-meal-card__description">
                 Organic quinoa, roasted vegetables, tahini drizzle
               </p>
@@ -154,7 +159,10 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
               <div className="eatrite-meal-card__actions">
                 <span className="eatrite-price">$18.99</span>
-                <EatRiteButton size="sm" leftIcon={<EatRiteIcons.Plus size="sm" />}>
+                <EatRiteButton
+                  size="sm"
+                  leftIcon={<EatRiteIcons.Plus size="sm" />}
+                >
                   Add to Cart
                 </EatRiteButton>
               </div>
@@ -169,7 +177,9 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
             </div>
             <div className="eatrite-meal-card__content">
-              <h4 className="eatrite-meal-card__title">Grass-Fed Steak & Vegetables</h4>
+              <h4 className="eatrite-meal-card__title">
+                Grass-Fed Steak & Vegetables
+              </h4>
               <p className="eatrite-meal-card__description">
                 Prime cut with seasonal roasted vegetables, herb butter
               </p>
@@ -185,7 +195,10 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
               <div className="eatrite-meal-card__actions">
                 <span className="eatrite-price">$32.99</span>
-                <EatRiteButton size="sm" leftIcon={<EatRiteIcons.Plus size="sm" />}>
+                <EatRiteButton
+                  size="sm"
+                  leftIcon={<EatRiteIcons.Plus size="sm" />}
+                >
                   Add to Cart
                 </EatRiteButton>
               </div>
@@ -200,7 +213,9 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
             </div>
             <div className="eatrite-meal-card__content">
-              <h4 className="eatrite-meal-card__title">Wild Mushroom Risotto</h4>
+              <h4 className="eatrite-meal-card__title">
+                Wild Mushroom Risotto
+              </h4>
               <p className="eatrite-meal-card__description">
                 Creamy arborio rice with seasonal wild mushrooms, truffle oil
               </p>
@@ -216,7 +231,10 @@ const EatRiteHomeScreen: React.FC = () => {
               </div>
               <div className="eatrite-meal-card__actions">
                 <span className="eatrite-price">$24.99</span>
-                <EatRiteButton size="sm" leftIcon={<EatRiteIcons.Plus size="sm" />}>
+                <EatRiteButton
+                  size="sm"
+                  leftIcon={<EatRiteIcons.Plus size="sm" />}
+                >
                   Add to Cart
                 </EatRiteButton>
               </div>
@@ -265,15 +283,22 @@ const EatRiteHomeScreen: React.FC = () => {
         <EatRiteCard variant="premium" className="eatrite-cta-card">
           <div className="eatrite-cta__content">
             <div className="eatrite-cta__icon">
-              <EatRiteIcons.ThreeLeaves size="xl" color="gold" className="eatrite-icon--glow" />
+              <EatRiteIcons.ThreeLeaves
+                size="xl"
+                color="gold"
+                className="eatrite-icon--glow"
+              />
             </div>
-            <h3 className="eatrite-cta__title">Ready to transform your nutrition?</h3>
+            <h3 className="eatrite-cta__title">
+              Ready to transform your nutrition?
+            </h3>
             <p className="eatrite-cta__description">
-              Join thousands who've discovered the perfect balance of luxury, health, and convenience.
+              Join thousands who've discovered the perfect balance of luxury,
+              health, and convenience.
             </p>
             <div className="eatrite-cta__actions">
-              <EatRiteButton 
-                variant="primary" 
+              <EatRiteButton
+                variant="primary"
                 size="lg"
                 leftIcon={<EatRiteIcons.ArrowRight size="md" />}
               >
@@ -287,7 +312,7 @@ const EatRiteHomeScreen: React.FC = () => {
         </EatRiteCard>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default EatRiteHomeScreen;
+export default EatRiteHomeScreen
