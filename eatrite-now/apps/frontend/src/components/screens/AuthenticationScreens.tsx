@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react'
 import { Facebook, Apple, Mail } from 'lucide-react'
-import EatRiteIcons from '../icons/EatRiteIcons'
+// import EatRiteIcons from '../icons/EatRiteIcons'
 
 // ============================================================================
 // LOGIN SCREEN
@@ -52,6 +52,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 Sign in to EatRite
               </h1>
             </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
+                {error}
+              </div>
+            )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">

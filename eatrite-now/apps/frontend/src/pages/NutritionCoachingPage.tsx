@@ -1,11 +1,8 @@
 import { useState } from 'react'
 import {
-  Calendar,
-  Clock,
   CheckCircle,
   Star,
   ArrowRight,
-  User,
   Phone,
   Video,
   MessageCircle,

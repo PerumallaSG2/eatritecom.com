@@ -275,7 +275,7 @@ export const EatRiteButton: React.FC<ButtonProps> = ({
     transition: `all ${EatRiteDesignTokens.animations.duration.normal} ${EatRiteDesignTokens.animations.easing.luxury}`,
     border: 'none',
     opacity: disabled ? 0.5 : 1,
-    ...EatRiteDesignTokens.components.button.padding[size],
+    padding: size === 'sm' ? '0.5rem 1rem' : size === 'lg' ? '1rem 2rem' : '0.75rem 1.5rem',
   }
 
   const variantStyles: Record<string, React.CSSProperties> = {
@@ -630,7 +630,6 @@ export const EatRiteTabs: React.FC<TabsProps> = ({
   activeTab,
   onChange,
   variant = 'underline',
-  size = 'md',
   className = '',
 }) => {
   const containerStyles: React.CSSProperties = {

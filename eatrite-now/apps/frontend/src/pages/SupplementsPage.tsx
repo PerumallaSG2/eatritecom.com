@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Star, Shield, Award, Leaf, Plus, Minus } from 'lucide-react'
+import { Star, Shield, Award, Leaf, Plus } from 'lucide-react'
 
 const SupplementsPage = () => {
   const [activeCategory, setActiveCategory] = useState('all')

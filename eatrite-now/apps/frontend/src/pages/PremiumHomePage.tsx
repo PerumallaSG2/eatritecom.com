@@ -96,21 +96,7 @@ const ArrowRightIcon = ({ className = 'w-5 h-5' }) => (
   </svg>
 )
 
-const FilterIcon = ({ className = 'w-5 h-5' }) => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.586a1 1 0 01-.293.707l-2 2A1 1 0 0111 21v-6.586a1 1 0 00-.293-.707L4.293 7.293A1 1 0 014 6.586V4z"
-    />
-  </svg>
-)
+// Unused FilterIcon component removed
 
 interface Meal {
   id: string
@@ -129,7 +115,7 @@ export const PremiumHomePage = () => {
   const { addToCart } = useCart()
   const [popularMeals, setPopularMeals] = useState<Meal[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeFilter, setActiveFilter] = useState('all')
+  // const [activeFilter, setActiveFilter] = useState('all')
 
   useEffect(() => {
     const fetchPopularMeals = async () => {
@@ -154,16 +140,16 @@ export const PremiumHomePage = () => {
     fetchPopularMeals()
   }, [])
 
-  const mealFilters = [
-    { id: 'all', label: 'All Meals', icon: <LeafIcon className="w-4 h-4" /> },
-    { id: 'vegan', label: 'Vegan', icon: <LeafIcon className="w-4 h-4" /> },
-    {
-      id: 'protein',
-      label: 'High-Protein',
-      icon: <StarIcon className="w-4 h-4" />,
-    },
-    { id: 'keto', label: 'Keto', icon: <HeartIcon className="w-4 h-4" /> },
-  ]
+  // const mealFilters = [
+  //   { id: 'all', label: 'All Meals', icon: <LeafIcon className="w-4 h-4" /> },
+  //   { id: 'vegan', label: 'Vegan', icon: <LeafIcon className="w-4 h-4" /> },
+  //   {
+  //     id: 'protein',
+  //     label: 'High-Protein',
+  //     icon: <StarIcon className="w-4 h-4" />,
+  //   },
+  //   { id: 'keto', label: 'Keto', icon: <HeartIcon className="w-4 h-4" /> },
+  // ]
 
   const testimonials = [
     {

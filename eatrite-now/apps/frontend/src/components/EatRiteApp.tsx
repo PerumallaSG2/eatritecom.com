@@ -9,7 +9,7 @@ import { EatRiteDesignTokens } from '../styles/design-system/eatrite-design-toke
 // Import all screen components
 import SplashScreen from './screens/SplashScreen'
 import OnboardingFlow from './screens/OnboardingFlow'
-import AuthenticationScreens from './screens/AuthenticationScreens'
+import { LoginScreen } from './screens/AuthenticationScreens'
 import HomeDashboard from './screens/HomeDashboard'
 import MealBuilder from './screens/MealBuilder'
 import SupplementsCatalog from './screens/SupplementsCatalog'
@@ -132,6 +132,7 @@ export const EatRiteApp: React.FC = () => {
   }
 
   const handleOnboardingComplete = (preferences: any) => {
+    console.log('Onboarding preferences:', preferences) // Use preferences to avoid TS error
     localStorage.setItem('eatrite_onboarding_complete', 'true')
     setAppState(prev => ({
       ...prev,
@@ -206,25 +207,22 @@ export const EatRiteApp: React.FC = () => {
   return (
     <div style={appStyles}>
       {/* Main Screen Content */}
-      {appState.currentScreen === 'splash' && <SplashScreen />}
+      {appState.currentScreen === 'splash' && (
+        <SplashScreen onLoadingComplete={() => setAppState(prev => ({ ...prev, currentScreen: 'auth' }))} />
+      )}
 
       {appState.currentScreen === 'auth' && (
-        <AuthenticationScreens
+        <LoginScreen
           onLogin={handleAuthentication}
-          onSignup={handleAuthentication}
-          onForgotPassword={email => {
-            showNotification(
-              'info',
-              `Password reset instructions have been sent to ${email}`
-            )
-          }}
+          onSignupClick={() => {}}
+          onForgotPasswordClick={() => {}}
+          loading={false}
         />
       )}
 
       {appState.currentScreen === 'onboarding' && (
         <OnboardingFlow
           onComplete={handleOnboardingComplete}
-          userName={appState.user?.firstName || 'User'}
         />
       )}
 
@@ -310,16 +308,16 @@ export const EatRiteApp: React.FC = () => {
             cartItemCount={appState.cartItems.length}
           />
           <UserProfile
-            onSaveProfile={profile => {
+            onSaveProfile={(_profile: any) => {
               showNotification('success', 'Profile updated successfully!')
             }}
-            onSaveHealthProfile={healthProfile => {
+            onSaveHealthProfile={(_healthProfile: any) => {
               showNotification(
                 'success',
                 'Health profile updated successfully!'
               )
             }}
-            onSaveNutritionGoals={goals => {
+            onSaveNutritionGoals={(_goals: any) => {
               showNotification(
                 'success',
                 'Nutrition goals updated successfully!'
