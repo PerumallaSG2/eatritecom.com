@@ -100,10 +100,20 @@ jobs:
       with:
         name: node-app
 
+    - name: Check Azure Credentials
+      run: |
+        if [ -z "${{ secrets.AZURE_CREDENTIALS }}" ]; then
+          echo "⚠️  Azure credentials not found"
+          echo "To enable deployment, add AZURE_CREDENTIALS secret to repository settings"
+          echo "For now, skipping deployment - build validation completed successfully ✅"
+          exit 0
+        fi
+
     - name: Azure Login
       uses: Azure/login@v2.3.0
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+      if: ${{ secrets.AZURE_CREDENTIALS != '' }}
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp
@@ -111,3 +121,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      if: ${{ secrets.AZURE_CREDENTIALS != '' }}
