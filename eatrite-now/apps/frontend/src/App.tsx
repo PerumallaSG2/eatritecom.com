@@ -1,54 +1,64 @@
 import { Routes, Route } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useState } from 'react'
 
 // Core Layout Components
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Loading from './components/Loading'
+import PageLayout from './components/PageLayout'
 
-// Core Pages
+// Critical Pages (loaded immediately)
 import HomePage from './pages/HomePage'
-import MenuPage from './pages/MenuPage'
-import PricingPage from './pages/PricingPage'
-import PlansPage from './pages/PlansPage'
-import FAQPage from './pages/FAQPage'
-import SupplementsPage from './pages/SupplementsPage'
-import ProfilePage from './pages/ProfilePage'
-import AccountPage from './pages/AccountPage'
 import LoginPage from './pages/LoginPage'
-import CheckoutPage from './pages/CheckoutPage'
-import CartPage from './pages/CartPage'
-import NutritionCoachingPage from './pages/NutritionCoachingPage'
 
-// Premium & Revolutionary Pages
-import { PremiumHomePage } from './pages/PremiumHomePage'
-import HomeDashboard from './pages/HomeDashboard'
-import HomepageVersionSwitcher from './pages/HomepageVersionSwitcher'
-import RevolutionaryMenuPage from './pages/RevolutionaryMenuPage'
-import RevolutionaryPricingPage from './pages/RevolutionaryPricingPage'
-import RevolutionaryPlansPage from './pages/RevolutionaryPlansPage'
+// Lazy-loaded Pages for Performance
+const MenuPage = lazy(() => import('./pages/MenuPage'))
+const PricingPage = lazy(() => import('./pages/PricingPage'))
+const PlansPage = lazy(() => import('./pages/PlansPage'))
+const FAQPage = lazy(() => import('./pages/FAQPage'))
+const SupplementsPage = lazy(() => import('./pages/SupplementsPage'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const AccountPage = lazy(() => import('./pages/AccountPage'))
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
+const CartPage = lazy(() => import('./pages/CartPage'))
+const NutritionCoachingPage = lazy(() => import('./pages/NutritionCoachingPage'))
+const OrderTrackingPage = lazy(() => import('./pages/OrderTrackingPage'))
+const MealDetailPage = lazy(() => import('./pages/MealDetailPage'))
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 
-// Corporate Pages
-import CorporateLandingPage from './pages/CorporateLandingPage'
-import EmployeeWellnessGamification from './pages/EmployeeWellnessGamification'
-import CorporateAnalyticsDashboard from './pages/CorporateAnalyticsDashboard'
+// Premium & Revolutionary Pages (Lazy)
+const PremiumHomePage = lazy(() => import('./pages/PremiumHomePage').then(module => ({ default: module.PremiumHomePage })))
+const HomeDashboard = lazy(() => import('./pages/HomeDashboard'))
+const HomepageVersionSwitcher = lazy(() => import('./pages/HomepageVersionSwitcher'))
+const RevolutionaryMenuPage = lazy(() => import('./pages/RevolutionaryMenuPage'))
+const RevolutionaryPricingPage = lazy(() => import('./pages/RevolutionaryPricingPage'))
+const RevolutionaryPlansPage = lazy(() => import('./pages/RevolutionaryPlansPage'))
 
-// Design System Components
-import DesignSystemShowcase from './components/design-system/DesignSystemShowcase'
-import PremiumHomeDashboard from './components/design-system/PremiumHomeDashboard'
-import PremiumMenuPage from './components/design-system/PremiumMenuPage'
-import PremiumCorporateDashboard from './components/design-system/PremiumCorporateDashboard'
-import PremiumEmployeeWellnessDashboard from './components/design-system/PremiumEmployeeWellnessDashboard'
-import PremiumTasteProfileQuiz from './components/design-system/PremiumTasteProfileQuiz'
-import PremiumLandingHero from './components/design-system/PremiumLandingHero'
+// Corporate Pages (Lazy)
+const CorporateLandingPage = lazy(() => import('./pages/CorporateLandingPage'))
+const EmployeeWellnessGamification = lazy(() => import('./pages/EmployeeWellnessGamification'))
+const CorporateAnalyticsDashboard = lazy(() => import('./pages/CorporateAnalyticsDashboard'))
 
-// Feature Components
-import { EatRiteApp as EatRiteUIApp } from './components/EatRiteApp'
-import MenuManagementSimplification from './components/MenuManagementSimplification'
-import TestimonialSystem from './components/TestimonialSystem'
-import CorporateROICalculator from './components/CorporateROICalculator'
-import DietaryProfileSetup from './components/DietaryProfileSetup'
-import B2BPartnershipROIDashboard from './components/B2BPartnershipROIDashboard'
-import CorporatePartnerships from './components/CorporatePartnerships'
-import InteractiveMealBuilder from './components/InteractiveMealBuilder'
+// Design System Components (Lazy)
+const DesignSystemShowcase = lazy(() => import('./components/design-system/DesignSystemShowcase'))
+const PremiumHomeDashboard = lazy(() => import('./components/design-system/PremiumHomeDashboard'))
+const PremiumMenuPage = lazy(() => import('./components/design-system/PremiumMenuPage'))
+const PremiumCorporateDashboard = lazy(() => import('./components/design-system/PremiumCorporateDashboard'))
+const PremiumEmployeeWellnessDashboard = lazy(() => import('./components/design-system/PremiumEmployeeWellnessDashboard'))
+const PremiumTasteProfileQuiz = lazy(() => import('./components/design-system/PremiumTasteProfileQuiz'))
+const PremiumLandingHero = lazy(() => import('./components/design-system/PremiumLandingHero'))
+
+// Feature Components (Lazy)
+const EatRiteUIApp = lazy(() => import('./components/EatRiteApp').then(module => ({ default: module.EatRiteApp })))
+const MenuManagementSimplification = lazy(() => import('./components/MenuManagementSimplification'))
+const TestimonialSystem = lazy(() => import('./components/TestimonialSystem'))
+const CorporateROICalculator = lazy(() => import('./components/CorporateROICalculator'))
+const DietaryProfileSetup = lazy(() => import('./components/DietaryProfileSetup'))
+const B2BPartnershipROIDashboard = lazy(() => import('./components/B2BPartnershipROIDashboard'))
+const CorporatePartnerships = lazy(() => import('./components/CorporatePartnerships'))
+const InteractiveMealBuilder = lazy(() => import('./components/InteractiveMealBuilder'))
 import MealComparison from './components/MealComparison'
 import NutritionCalculator from './components/NutritionCalculator'
 import AIPoweredMealRecommendations from './components/AIPoweredMealRecommendations'
@@ -62,6 +72,28 @@ import { AuthProvider } from './context/AuthContext'
 import { UserPreferencesProvider } from './context/UserPreferencesContext'
 import { EatRiteProvider } from './context/EatRiteThemeProvider'
 import { ToastProvider } from './context/ToastContext'
+import { MobileNavigationProvider } from './context/MobileNavigationContext'
+import { ThemeProvider } from './context/ThemeContext'
+import { OrderTrackingProvider } from './context/OrderTrackingContext'
+import { AnalyticsProvider } from './context/AnalyticsContext'
+
+// PWA Components
+import PWAInstaller from './components/PWAInstaller'
+import UpdateNotification from './components/UpdateNotification'
+import OfflineIndicator from './components/OfflineIndicator'
+
+// Error Handling
+import ErrorBoundary, { RouteErrorBoundary } from './components/ErrorBoundary'
+import { setupGlobalErrorHandlers } from './hooks/useErrorHandler'
+
+// Mobile Navigation
+import { BottomNavigation, MobileHeader } from './components/MobileNavigation'
+
+// Order Tracking Components
+import { OrderNotificationCenter, LiveOrderStatusIndicator } from './components/OrderNotifications'
+
+// PWA Hooks
+import { useServiceWorker, ServiceWorkerUpdateEvent } from './utils/serviceWorker'
 
 // Placeholder component for routes not yet implemented
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -102,270 +134,356 @@ const PlaceholderPage = ({ title }: { title: string }) => (
 )
 
 function App() {
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false)
+  const { register, onUpdate } = useServiceWorker()
+
+  useEffect(() => {
+    // Setup global error handlers
+    setupGlobalErrorHandlers()
+
+    // Register service worker on mount
+    register().then(({ registration, error }) => {
+      if (error) {
+        console.warn('Service Worker registration failed:', error.message)
+      } else if (registration) {
+        console.log('Service Worker registered successfully')
+      }
+    })
+
+    // Listen for updates
+    const unsubscribe = onUpdate((event: ServiceWorkerUpdateEvent) => {
+      if (event.type === 'update-available') {
+        setShowUpdateNotification(true)
+      }
+    })
+
+    return unsubscribe
+  }, [register, onUpdate])
+
+  const handleUpdateComplete = () => {
+    setShowUpdateNotification(false)
+  }
+
+  const handleUpdateDismiss = () => {
+    setShowUpdateNotification(false)
+  }
+
   return (
-    <EatRiteProvider>
-      <UserPreferencesProvider>
-        <AuthProvider>
-          <CartProvider>
-            <ToastProvider>
-              <div className="min-h-screen">
-                <Routes>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <EatRiteProvider>
+          <UserPreferencesProvider>
+            <AuthProvider>
+              <CartProvider>
+                <OrderTrackingProvider>
+                  <AnalyticsProvider>
+                    <ToastProvider>
+                    <MobileNavigationProvider>
+                    <div className="min-h-screen">
+                  {/* PWA Components */}
+                  <PWAInstaller />
+                  <OfflineIndicator />
+                  {showUpdateNotification && (
+                    <UpdateNotification
+                      onUpdate={handleUpdateComplete}
+                      onDismiss={handleUpdateDismiss}
+                    />
+                  )}
+                  
+                  <Suspense fallback={<Loading />}>
+                    <RouteErrorBoundary>
+                      <Routes>
                   {/* Premium Homepage - World-Class UI Design */}
                   <Route
                     path="/"
                     element={
-                      <div className="min-h-screen flex flex-col">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <HomePage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <HomePage />
+                      </PageLayout>
                     }
                   />
                   {/* Original Homepage - Alternative Route */}
                   <Route
                     path="/original"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <HomePage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="default">
+                        <HomePage />
+                      </PageLayout>
                     }
                   />
                   {/* Premium Brand Homepage - Alternative */}
-                  <Route path="/premium" element={<PremiumHomePage />} />
+                  <Route path="/premium" element={
+                    <PageLayout variant="premium">
+                      <PremiumHomePage />
+                    </PageLayout>
+                  } />
                   {/* New Premium Dashboard */}
-                  <Route path="/dashboard" element={<HomeDashboard />} />
+                  <Route path="/dashboard" element={
+                    <PageLayout variant="dashboard">
+                      <HomeDashboard />
+                    </PageLayout>
+                  } />
                   {/* Corporate Landing Page */}
-                  <Route path="/corporate" element={<CorporateLandingPage />} />
+                  <Route 
+                    path="/corporate" 
+                    element={
+                      <PageLayout variant="corporate">
+                        <CorporateLandingPage />
+                      </PageLayout>
+                    } 
+                  />
                   {/* Employee Wellness Gamification */}
                   <Route
                     path="/gamification"
-                    element={<EmployeeWellnessGamification />}
+                    element={
+                      <PageLayout variant="premium">
+                        <EmployeeWellnessGamification />
+                      </PageLayout>
+                    }
                   />
                   {/* Corporate Analytics Dashboard */}
                   <Route
-                    path="/analytics"
-                    element={<CorporateAnalyticsDashboard />}
+                    path="/corporate-analytics"
+                    element={
+                      <PageLayout variant="corporate">
+                        <CorporateAnalyticsDashboard />
+                      </PageLayout>
+                    }
                   />
                   {/* Menu Management System */}
                   <Route
                     path="/menu-management"
-                    element={<MenuManagementSimplification />}
+                    element={
+                      <PageLayout variant="dashboard">
+                        <MenuManagementSimplification />
+                      </PageLayout>
+                    }
                   />
                   {/* Testimonial System */}
-                  <Route path="/testimonials" element={<TestimonialSystem />} />
+                  <Route path="/testimonials" element={
+                    <PageLayout variant="premium">
+                      <TestimonialSystem />
+                    </PageLayout>
+                  } />
                   {/* Corporate ROI Calculator */}
                   <Route
                     path="/roi-calculator"
-                    element={<CorporateROICalculator />}
+                    element={
+                      <PageLayout variant="corporate">
+                        <CorporateROICalculator />
+                      </PageLayout>
+                    }
                   />
                   {/* Premium Design System */}
                   <Route
                     path="/design-system"
-                    element={<DesignSystemShowcase />}
+                    element={
+                      <PageLayout variant="premium">
+                        <DesignSystemShowcase />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/design/dashboard"
-                    element={<PremiumHomeDashboard />}
+                    element={
+                      <PageLayout variant="premium">
+                        <PremiumHomeDashboard />
+                      </PageLayout>
+                    }
                   />
-                  <Route path="/design/menu" element={<PremiumMenuPage />} />
+                  <Route path="/design/menu" element={
+                    <PageLayout variant="premium">
+                      <PremiumMenuPage />
+                    </PageLayout>
+                  } />
                   <Route
                     path="/design/corporate-dashboard"
-                    element={<PremiumCorporateDashboard />}
+                    element={
+                      <PageLayout variant="corporate">
+                        <PremiumCorporateDashboard />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/design/employee-dashboard"
-                    element={<PremiumEmployeeWellnessDashboard />}
+                    element={
+                      <PageLayout variant="dashboard">
+                        <PremiumEmployeeWellnessDashboard />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/design/taste-quiz"
-                    element={<PremiumTasteProfileQuiz />}
+                    element={
+                      <PageLayout variant="premium" showFooter={false}>
+                        <PremiumTasteProfileQuiz />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/design/landing"
-                    element={<PremiumLandingHero />}
+                    element={
+                      <PageLayout variant="premium">
+                        <PremiumLandingHero />
+                      </PageLayout>
+                    }
                   />{' '}
                   {/* New Premium EatRite UI System */}
-                  <Route path="/eatrite-ui" element={<EatRiteUIApp />} />
+                  <Route path="/eatrite-ui" element={
+                    <PageLayout variant="premium">
+                      <EatRiteUIApp />
+                    </PageLayout>
+                  } />
                   {/* Core App Pages - With Premium Styling */}
                   <Route
                     path="/menu"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <MenuPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <MenuPage />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/pricing"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <PricingPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <PricingPage />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/plans"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <PlansPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <PlansPage />
+                      </PageLayout>
                     }
                   />
                   {/* Revolutionary Pages - Alternative Design */}
                   <Route
                     path="/revolutionary"
-                    element={<HomepageVersionSwitcher />}
+                    element={
+                      <PageLayout variant="premium">
+                        <HomepageVersionSwitcher />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/revolutionary/menu"
-                    element={<RevolutionaryMenuPage />}
+                    element={
+                      <PageLayout variant="premium">
+                        <RevolutionaryMenuPage />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/revolutionary/pricing"
-                    element={<RevolutionaryPricingPage />}
+                    element={
+                      <PageLayout variant="premium">
+                        <RevolutionaryPricingPage />
+                      </PageLayout>
+                    }
                   />
                   <Route
                     path="/revolutionary/plans"
-                    element={<RevolutionaryPlansPage />}
+                    element={
+                      <PageLayout variant="premium">
+                        <RevolutionaryPlansPage />
+                      </PageLayout>
+                    }
                   />
                   {/* Feature Pages */}
                   <Route
                     path="/dietary-profile"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <DietaryProfileSetup />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <DietaryProfileSetup />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/meal-builder"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <InteractiveMealBuilder />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <InteractiveMealBuilder />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/meal-comparison"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <MealComparison
-                            availableMeals={[
-                              {
-                                id: '1',
-                                name: 'Premium Grilled Salmon',
-                                description:
-                                  'Fresh Atlantic salmon with quinoa and vegetables',
-                                calories: 450,
-                                protein: 35,
-                                carbs: 30,
-                                fat: 18,
-                                fiber: 8,
-                                sodium: 420,
-                                price: 24.99,
-                                image_url: '/images/salmon.jpg',
-                                dietary_tags: 'Keto, Gluten-Free',
-                                is_popular: true,
-                                rating: 4.8,
-                              },
-                              {
-                                id: '2',
-                                name: 'Organic Chicken Bowl',
-                                description:
-                                  'Free-range chicken with brown rice and seasonal vegetables',
-                                calories: 380,
-                                protein: 32,
-                                carbs: 35,
-                                fat: 12,
-                                fiber: 6,
-                                sodium: 380,
-                                price: 19.99,
-                                image_url: '/images/chicken.jpg',
-                                dietary_tags: 'Paleo, Gluten-Free',
-                                is_popular: false,
-                                rating: 4.6,
-                              },
-                            ]}
-                          />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <MealComparison
+                          availableMeals={[
+                            {
+                              id: '1',
+                              name: 'Premium Grilled Salmon',
+                              description:
+                                'Fresh Atlantic salmon with quinoa and vegetables',
+                              calories: 450,
+                              protein: 35,
+                              carbs: 30,
+                              fat: 18,
+                              fiber: 8,
+                              sodium: 420,
+                              price: 24.99,
+                              image_url: '/images/salmon.jpg',
+                              dietary_tags: 'Keto, Gluten-Free',
+                              is_popular: true,
+                              rating: 4.8,
+                            },
+                            {
+                              id: '2',
+                              name: 'Organic Chicken Bowl',
+                              description:
+                                'Free-range chicken with brown rice and seasonal vegetables',
+                              calories: 380,
+                              protein: 32,
+                              carbs: 35,
+                              fat: 12,
+                              fiber: 6,
+                              sodium: 380,
+                              price: 19.99,
+                              image_url: '/images/chicken.jpg',
+                              dietary_tags: 'Paleo, Gluten-Free',
+                              is_popular: false,
+                              rating: 4.6,
+                            },
+                          ]}
+                        />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/nutrition-calculator"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <NutritionCalculator />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <NutritionCalculator />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/ai-recommendations"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <AIPoweredMealRecommendations />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <AIPoweredMealRecommendations />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/order-tracking"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <OrderTracking />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="dashboard">
+                        <OrderTracking />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/health-goals"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <PersonalizedHealthGoals />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <PersonalizedHealthGoals />
+                      </PageLayout>
                     }
                   />
                   <Route
@@ -384,50 +502,34 @@ function App() {
                   <Route
                     path="/b2b-dashboard"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <B2BPartnershipROIDashboard />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="corporate">
+                        <B2BPartnershipROIDashboard />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/corporate-partnerships"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <CorporatePartnerships />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="corporate">
+                        <CorporatePartnerships />
+                      </PageLayout>
                     }
                   />
                   {/* Traditional Pages - With Navbar/Footer */}
                   <Route
                     path="/faq"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <FAQPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="default">
+                        <FAQPage />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/supplements"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <SupplementsPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <SupplementsPage />
+                      </PageLayout>
                     }
                   />
                   <Route
@@ -445,49 +547,49 @@ function App() {
                   <Route
                     path="/account"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <AccountPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="dashboard">
+                        <AccountPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <PageLayout variant="dashboard">
+                        <SettingsPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/privacy"
+                    element={
+                      <PageLayout variant="default">
+                        <PrivacyPolicyPage />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/business"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <PlaceholderPage title="EatRite for Business" />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="corporate">
+                        <PlaceholderPage title="EatRite for Business" />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/nutrition-coaching"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <NutritionCoachingPage />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <NutritionCoachingPage />
+                      </PageLayout>
                     }
                   />
                   <Route
                     path="/gift-cards"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <PlaceholderPage title="Luxury Gift Cards" />
-                        </main>
-                        <Footer />
-                      </div>
+                      <PageLayout variant="premium">
+                        <PlaceholderPage title="Luxury Gift Cards" />
+                      </PageLayout>
                     }
                   />
                   <Route
@@ -515,23 +617,76 @@ function App() {
                   <Route
                     path="/checkout"
                     element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <main className="flex-grow">
-                          <CheckoutPage />
-                        </main>
-                      </div>
+                      <PageLayout variant="minimal" showNavbar={false} showFooter={false}>
+                        <CheckoutPage />
+                      </PageLayout>
                     }
                   />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<LoginPage />} />
+                  <Route
+                    path="/track"
+                    element={
+                      <PageLayout variant="dashboard" showFooter={false}>
+                        <OrderTrackingPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/track/:orderId"
+                    element={
+                      <PageLayout variant="dashboard" showFooter={false}>
+                        <OrderTrackingPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/meal/:id"
+                    element={
+                      <PageLayout variant="premium">
+                        <MealDetailPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route
+                    path="/analytics"
+                    element={
+                      <PageLayout variant="dashboard">
+                        <AnalyticsPage />
+                      </PageLayout>
+                    }
+                  />
+                  <Route path="/login" element={
+                    <PageLayout variant="minimal" showNavbar={false} showFooter={false}>
+                      <LoginPage />
+                    </PageLayout>
+                  } />
+                  <Route path="/signup" element={
+                    <PageLayout variant="minimal" showNavbar={false} showFooter={false}>
+                      <LoginPage />
+                    </PageLayout>
+                  } />
                 </Routes>
-              </div>
-            </ToastProvider>
-          </CartProvider>
-        </AuthProvider>
-      </UserPreferencesProvider>
-    </EatRiteProvider>
-  )
+                      </RouteErrorBoundary>
+                    </Suspense>
+                    
+                    {/* Mobile Navigation Components */}
+                    <MobileHeader />
+                    <BottomNavigation />
+                    
+                    {/* Order Tracking Components */}
+                    <OrderNotificationCenter />
+                    <LiveOrderStatusIndicator />
+                  </div>
+                    </MobileNavigationProvider>
+                    </ToastProvider>
+                  </AnalyticsProvider>
+                </OrderTrackingProvider>
+              </CartProvider>
+            </AuthProvider>
+          </UserPreferencesProvider>
+        </EatRiteProvider>
+      </ThemeProvider>
+  </ErrorBoundary>
+    )
 }
 
 export default App
