@@ -17,25 +17,16 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   return (
-    <nav className="bg-white backdrop-blur-md sticky top-0 z-50 shadow-md border-b border-gray-100">
+    <nav className="bg-white backdrop-blur-md sticky top-0 z-50 shadow-md border-b border-gray-100 hidden md:block">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* EatRite Logo - Left Side */}
+          {/* EatRite Full Logo - Left Side */}
           <Link to="/" className="flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <EatRiteIcons.ThreeLeaves
-                size="md"
-                color="gold"
-              />
-              <span
-                className="text-xl font-bold text-gray-900 tracking-tight"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                }}
-              >
-                EatRite
-              </span>
-            </div>
+            <img
+              src="/eatrite-full-logo.svg"
+              alt="EatRite"
+              className="h-16 w-auto py-1"
+            />
           </Link>
 
           {/* Desktop Navigation - Centered */}
@@ -56,18 +47,25 @@ const Navbar = () => {
                 Our Plans
               </Link>
               <Link
-                to="/about"
+                to="/ai-recommendations"
                 className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                About Us
+                AI Recommendations
               </Link>
               <Link
-                to="/faqs"
+                to="/meal-builder"
                 className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                FAQs
+                Meal Builder
+              </Link>
+              <Link
+                to="/corporate"
+                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                B2B Solutions
               </Link>
               <Link
                 to="/supplements"
@@ -75,20 +73,6 @@ const Navbar = () => {
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
                 Supplements
-              </Link>
-              <Link
-                to="/business"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Factor for Business
-              </Link>
-              <Link
-                to="/nutrition-coaching"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Nutrition Coaching
               </Link>
 
 
@@ -203,20 +187,28 @@ const Navbar = () => {
               Our Plans
             </Link>
             <Link
-              to="/about"
+              to="/ai-recommendations"
               className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
               style={{ fontFamily: 'Inter, sans-serif' }}
               onClick={toggleMenu}
             >
-              About Us
+              AI Recommendations
             </Link>
             <Link
-              to="/faqs"
+              to="/meal-builder"
               className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
               style={{ fontFamily: 'Inter, sans-serif' }}
               onClick={toggleMenu}
             >
-              FAQs
+              Meal Builder
+            </Link>
+            <Link
+              to="/corporate"
+              className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              onClick={toggleMenu}
+            >
+              B2B Solutions
             </Link>
             <Link
               to="/supplements"
@@ -225,22 +217,6 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               Supplements
-            </Link>
-            <Link
-              to="/business"
-              className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-              onClick={toggleMenu}
-            >
-              Factor for Business
-            </Link>
-            <Link
-              to="/nutrition-coaching"
-              className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-              onClick={toggleMenu}
-            >
-              Nutrition Coaching
             </Link>
 
             {/* Mobile Account Actions */}

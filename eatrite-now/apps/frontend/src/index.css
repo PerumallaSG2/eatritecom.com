@@ -1,5 +1,6 @@
 /* Import EatRite Premium Design System */
 @import './styles/globals.css';
+@import './styles/mobile-optimizations.css';
 
 @tailwind base;
 @tailwind components;
@@ -341,7 +342,7 @@
     border-color: var(--interactive-beige);
   }
 
-  /* Premium Input System */
+  /* Premium Input System - Enhanced Visibility */
   .input {
     font-family:
       'Inter',
@@ -353,19 +354,168 @@
     border-radius: var(--border-radius-input);
     background-color: var(--surface-secondary);
     border: var(--border-width-thin) solid var(--interactive-outline);
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     font-size: var(--font-size-base);
     transition: all var(--transition-base);
     outline: none;
   }
 
   .input::placeholder {
-    color: var(--text-tertiary);
+    color: var(--text-tertiary) !important;
+    opacity: 0.7;
   }
 
   .input:focus {
     border-color: var(--interactive-gold);
     box-shadow: var(--shadow-input-focus);
+  }
+
+  /* Global Input Field Fixes for Visibility */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    background-color: white !important;
+    color: #1a1a1a !important;
+    border: 2px solid #d1d5db !important;
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="tel"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    background-color: white !important;
+    color: #1a1a1a !important;
+    border-color: var(--brand-gold) !important;
+    box-shadow: 0 0 0 3px rgba(212, 180, 106, 0.1) !important;
+    outline: none !important;
+  }
+
+  input[type="text"]::placeholder,
+  input[type="email"]::placeholder,
+  input[type="password"]::placeholder,
+  input[type="tel"]::placeholder,
+  input[type="number"]::placeholder,
+  textarea::placeholder {
+    color: #6b7280 !important;
+    opacity: 1 !important;
+  }
+
+  /* Fix for any remaining input visibility issues */
+  form input,
+  form textarea,
+  form select,
+  .form-input,
+  .form-control {
+    background-color: white !important;
+    color: #1f2937 !important;
+    border: 2px solid #e5e7eb !important;
+    padding: 12px 16px !important;
+    border-radius: 6px !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+  }
+
+  form input:focus,
+  form textarea:focus,
+  form select:focus,
+  .form-input:focus,
+  .form-control:focus {
+    background-color: white !important;
+    color: #1f2937 !important;
+    border-color: #d4b46a !important;
+  }
+
+  /* Search Input Specific Fixes - Prevent Icon Interference */
+  .search-input-container {
+    position: relative !important;
+  }
+
+  .search-input-container input {
+    background-color: white !important;
+    color: #1f2937 !important;
+    border: 2px solid #e5e7eb !important;
+    padding: 12px 16px 12px 44px !important; /* Extra left padding for icon */
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .search-input-container .search-icon {
+    position: absolute !important;
+    left: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #6b7280 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .search-input-container input:focus {
+    background-color: white !important;
+    color: #1f2937 !important;
+    border-color: #d4b46a !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(212, 180, 106, 0.1) !important;
+  }
+
+  /* Ensure all search inputs follow this pattern */
+  input[type="text"][placeholder*="search" i],
+  input[type="text"][placeholder*="Search" i] {
+    background-color: white !important;
+    color: #1f2937 !important;
+    padding-left: 44px !important;
+  }
+
+  /* Clear button positioning for search inputs */
+  .search-input-container .absolute.right-0 {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    padding-right: 12px !important;
+    z-index: 10 !important;
+  }
+
+  /* Make sure text never overlaps with icons */
+  .search-input-container input {
+    padding-right: 40px !important; /* Space for clear button */
+  }
+
+  /* Additional safety for icon positioning */
+  .search-input-container > svg,
+  .search-input-container > .search-icon {
+    position: absolute !important;
+    left: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+  }
+
+  /* Specific fixes for Tailwind classes that might override */
+  .bg-eatrite-surface-secondary input,
+  .bg-eatrite-surface-tertiary input,
+  .text-eatrite-text-placeholder input {
+    background-color: white !important;
+    color: #1f2937 !important;
   }
 
   /* Navigation System */
@@ -572,4 +722,478 @@
 
 .animate-pulse-gold {
   animation: gold-pulse 2s ease-in-out infinite;
+}
+
+/* Loading States & Animation System */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideInDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideInLeft {
+  from { 
+    opacity: 0; 
+    transform: translateX(-30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes slideInRight {
+  from { 
+    opacity: 0; 
+    transform: translateX(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes spin-dash {
+  0% { 
+    stroke-dasharray: 1, 200; 
+    stroke-dashoffset: 0; 
+  }
+  50% { 
+    stroke-dasharray: 89, 200; 
+    stroke-dashoffset: -35px; 
+  }
+  100% { 
+    stroke-dasharray: 89, 200; 
+    stroke-dashoffset: -124px; 
+  }
+}
+
+/* Skeleton loading shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slideInUp {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.animate-slideInDown {
+  animation: slideInDown 0.6s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-spin-dash {
+  animation: spin-dash 1.5s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 25%,
+    #e5e7eb 50%,
+    #f3f4f6 75%
+  );
+  background-size: 200px 100%;
+}
+
+/* Enhanced Pulse Animation */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Bounce Animation for Loading Dots */
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0); 
+  } 
+  40% { 
+    transform: scale(1); 
+  }
+}
+
+/* Smooth height transitions */
+.animate-height {
+  transition: height 0.3s ease-in-out;
+}
+
+/* Button press animation */
+.animate-press {
+  transition: transform 0.1s ease-in-out;
+}
+
+.animate-press:active {
+  transform: scale(0.98);
+}
+
+/* Staggered animation delays */
+.animate-stagger-1 { animation-delay: 0.1s; }
+.animate-stagger-2 { animation-delay: 0.2s; }
+.animate-stagger-3 { animation-delay: 0.3s; }
+.animate-stagger-4 { animation-delay: 0.4s; }
+.animate-stagger-5 { animation-delay: 0.5s; }
+
+/* Mobile Navigation Animations */
+.animate-scaleIn {
+  animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9);
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInLeft {
+  0% { 
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInRight {
+  0% { 
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideInUp {
+  animation: slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInUp {
+  0% { 
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideInDown {
+  animation: slideInDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideInDown {
+  0% { 
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Safe area inset support for devices with notches */
+.h-safe-area-inset-bottom {
+  height: env(safe-area-inset-bottom);
+}
+
+.pb-safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Touch target optimization */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile-specific responsive utilities */
+@media (max-width: 767px) {
+  .mobile-hidden { display: none !important; }
+  .mobile-block { display: block !important; }
+  .mobile-flex { display: flex !important; }
+  .mobile-grid { display: grid !important; }
+}
+
+/* Dark Mode & Theme System */
+
+/* Theme-based CSS custom properties will be injected by ThemeProvider */
+:root {
+  /* Default theme colors (fallback) */
+  --theme-primary: #0F2B1E;
+  --theme-primary-hover: #1a4d33;
+  --theme-secondary: #D4B46A;
+  --theme-secondary-hover: #B8935A;
+  --theme-accent: #FF6B35;
+  --theme-accent-hover: #E55A2B;
+  
+  --theme-background: #FFFFFF;
+  --theme-background-secondary: #F5F2E8;
+  --theme-background-tertiary: #FAFAFA;
+  --theme-surface: #FFFFFF;
+  --theme-surface-hover: #F8F9FA;
+  
+  --theme-text-primary: #1A1A1A;
+  --theme-text-secondary: #6B7280;
+  --theme-text-tertiary: #9CA3AF;
+  --theme-text-inverse: #FFFFFF;
+  
+  --theme-border: #E5E7EB;
+  --theme-border-light: #F3F4F6;
+  --theme-divider: #E5E7EB;
+  
+  --theme-success: #10B981;
+  --theme-warning: #F59E0B;
+  --theme-error: #EF4444;
+  --theme-info: #3B82F6;
+  
+  --theme-focus: #3B82F6;
+  --theme-selection: rgba(59, 130, 246, 0.1);
+  --theme-overlay: rgba(0, 0, 0, 0.5);
+}
+
+/* Theme transition animations */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme-aware utilities */
+.theme-bg-primary { background-color: var(--theme-primary); }
+.theme-bg-secondary { background-color: var(--theme-secondary); }
+.theme-bg-surface { background-color: var(--theme-surface); }
+.theme-bg-background { background-color: var(--theme-background); }
+
+.theme-text-primary { color: var(--theme-text-primary); }
+.theme-text-secondary { color: var(--theme-text-secondary); }
+.theme-text-accent { color: var(--theme-accent); }
+
+.theme-border { border-color: var(--theme-border); }
+.theme-border-light { border-color: var(--theme-border-light); }
+
+/* Dark mode specific adjustments */
+.dark {
+  color-scheme: dark;
+}
+
+.dark .prose {
+  --tw-prose-body: var(--theme-text-primary);
+  --tw-prose-headings: var(--theme-text-primary);
+  --tw-prose-lead: var(--theme-text-secondary);
+  --tw-prose-links: var(--theme-primary);
+  --tw-prose-bold: var(--theme-text-primary);
+  --tw-prose-counters: var(--theme-text-secondary);
+  --tw-prose-bullets: var(--theme-text-tertiary);
+  --tw-prose-hr: var(--theme-border);
+  --tw-prose-quotes: var(--theme-text-primary);
+  --tw-prose-quote-borders: var(--theme-border);
+  --tw-prose-captions: var(--theme-text-secondary);
+  --tw-prose-code: var(--theme-text-primary);
+  --tw-prose-pre-code: var(--theme-text-inverse);
+  --tw-prose-pre-bg: var(--theme-surface);
+  --tw-prose-th-borders: var(--theme-border);
+  --tw-prose-td-borders: var(--theme-border-light);
+}
+
+/* Theme-aware scrollbars */
+.theme-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.theme-scrollbar::-webkit-scrollbar-track {
+  background: var(--theme-background-secondary);
+  border-radius: 4px;
+}
+
+.theme-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--theme-text-tertiary);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.theme-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-secondary);
+}
+
+/* Selection colors */
+::selection {
+  background-color: var(--theme-selection);
+  color: var(--theme-text-primary);
+}
+
+::-moz-selection {
+  background-color: var(--theme-selection);
+  color: var(--theme-text-primary);
+}
+
+/* Focus styles */
+.theme-focus:focus {
+  outline: 2px solid var(--theme-focus);
+  outline-offset: 2px;
+}
+
+/* Theme transition classes */
+.theme-transition {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-transition-fast {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.theme-transition-slow {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+
+/* Theme-aware gradients */
+.theme-gradient-primary {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-hover));
+}
+
+.theme-gradient-secondary {
+  background: linear-gradient(135deg, var(--theme-secondary), var(--theme-secondary-hover));
+}
+
+.theme-gradient-surface {
+  background: linear-gradient(135deg, var(--theme-surface), var(--theme-background-secondary));
+}
+
+/* Dark mode image filters */
+.dark .theme-filter-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.dark .theme-filter-dim {
+  filter: brightness(0.8) contrast(1.1);
+}
+
+/* Theme-aware shadows */
+.theme-shadow-sm {
+  box-shadow: 0 1px 2px 0 var(--theme-overlay);
+}
+
+.theme-shadow {
+  box-shadow: 0 4px 6px -1px var(--theme-overlay), 0 2px 4px -1px var(--theme-overlay);
+}
+
+.theme-shadow-lg {
+  box-shadow: 0 10px 15px -3px var(--theme-overlay), 0 4px 6px -2px var(--theme-overlay);
+}
+
+/* Animation for theme switching */
+@keyframes themeSwitch {
+  0% { opacity: 0.8; transform: scale(0.95); }
+  50% { opacity: 0.9; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.theme-switch-animation {
+  animation: themeSwitch 0.3s ease-out;
+}
+
+/* System theme media queries for custom styles */
+@media (prefers-color-scheme: dark) {
+  .theme-system-dark {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .theme-system-light {
+    color-scheme: light;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  :root {
+    --theme-border: #000000;
+    --theme-border-light: #333333;
+  }
+  
+  .dark {
+    --theme-border: #FFFFFF;
+    --theme-border-light: #CCCCCC;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .theme-transition,
+  .theme-transition-fast,
+  .theme-transition-slow {
+    transition: none !important;
+  }
 }

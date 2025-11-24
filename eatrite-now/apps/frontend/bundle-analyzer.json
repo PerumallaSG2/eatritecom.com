@@ -1,0 +1,11 @@
+{
+  "name": "bundle-analyzer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "analyze": "vite-bundle-analyzer"
+  },
+  "devDependencies": {
+    "vite-bundle-analyzer": "^0.7.0"
+  }
+}

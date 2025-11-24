@@ -191,7 +191,7 @@ const CorporateLandingPage: React.FC = () => {
   const roiResults = calculateROI()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-32 bg-emerald-900">
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>

@@ -3,7 +3,7 @@
  * Premium user account management and preferences
  */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   EatRiteButton,
   EatRiteCard,
@@ -17,6 +17,8 @@ import {
   UserIcon,
 } from '../eatrite/EatRiteComponentLibrary'
 import { EatRiteDesignTokens } from '../../styles/design-system/eatrite-design-tokens'
+import { profileService } from '../../services/profileService'
+import { useAuth } from '../../context/AuthContext'
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -135,6 +137,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   onSaveNutritionGoals,
   onDeleteAccount,
 }) => {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
   const [userProfile, setUserProfile] = useState<UserProfile>(sampleUser)
   const [healthProfile, setHealthProfile] =
@@ -157,6 +160,179 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     allowDataAnalytics: true,
     marketingCommunications: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
+
+  // Load profile data on component mount
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user?.id) {
+        try {
+          setIsLoading(true)
+          
+          // Load profile data
+          const profileData = await profileService.getProfile(user.id)
+          if (profileData) {
+            // Update userProfile with loaded data
+            setUserProfile(prevProfile => ({
+              ...prevProfile,
+              firstName: user.name.split(' ')[0] || prevProfile.firstName,
+              lastName: user.name.split(' ').slice(1).join(' ') || prevProfile.lastName,
+              email: user.email,
+            }))
+            
+            // Update health profile with loaded data
+            if (profileData.heightCm || profileData.weightKg) {
+              setHealthProfile(prevHealth => ({
+                ...prevHealth,
+                height: profileData.heightCm || prevHealth.height,
+                weight: profileData.weightKg || prevHealth.weight,
+                activityLevel: profileData.activityLevel || prevHealth.activityLevel,
+                fitnessLevel: profileData.fitnessLevel || prevHealth.fitnessLevel,
+                healthGoals: profileData.healthGoals || prevHealth.healthGoals,
+                dietaryRestrictions: profileData.dietaryRestrictions || prevHealth.dietaryRestrictions,
+                allergies: profileData.allergies || prevHealth.allergies,
+                medicalConditions: profileData.medicalConditions || prevHealth.medicalConditions,
+              }))
+            }
+            
+            // Update nutrition goals with loaded data
+            if (profileData.dailyCalories) {
+              setNutritionGoals(prevNutrition => ({
+                ...prevNutrition,
+                dailyCalories: profileData.dailyCalories || prevNutrition.dailyCalories,
+                proteinPercentage: profileData.proteinPercentage || prevNutrition.proteinPercentage,
+                carbsPercentage: profileData.carbsPercentage || prevNutrition.carbsPercentage,
+                fatPercentage: profileData.fatPercentage || prevNutrition.fatPercentage,
+                waterIntake: profileData.waterIntakeMl || prevNutrition.waterIntake,
+                mealsPerDay: profileData.mealsPerDay || prevNutrition.mealsPerDay,
+                weightGoal: profileData.weightGoal || prevNutrition.weightGoal,
+                targetWeight: profileData.targetWeightKg || prevNutrition.targetWeight,
+              }))
+            }
+          }
+          
+          // Load settings
+          const settingsData = await profileService.getSettings(user.id)
+          if (settingsData) {
+            setNotificationSettings(settingsData)
+            setPrivacySettings({
+              profileVisibility: settingsData.profileVisibility || 'friends',
+              shareProgressData: settingsData.shareProgressData ?? true,
+              allowDataAnalytics: settingsData.allowDataAnalytics ?? true,
+              marketingCommunications: settingsData.marketingCommunications ?? false,
+            })
+          }
+        } catch (error) {
+          console.error('Failed to load profile:', error)
+        } finally {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    loadProfile()
+  }, [user])
+
+  // Save profile data
+  const handleSaveProfile = async (profile: UserProfile) => {
+    if (!user?.id) return
+
+    try {
+      setIsLoading(true)
+      
+      const profileUpdate = {
+        dateOfBirth: profile.dateOfBirth,
+        gender: profile.gender,
+        phone: profile.phone,
+      }
+      
+      await profileService.updateProfile(user.id, profileUpdate)
+      setSaveMessage('Profile updated successfully!')
+      
+      if (onSaveProfile) {
+        onSaveProfile(profile)
+      }
+      
+      setTimeout(() => setSaveMessage(''), 3000)
+    } catch (error) {
+      console.error('Profile save failed:', error)
+      setSaveMessage('Failed to save profile. Please try again.')
+      setTimeout(() => setSaveMessage(''), 3000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Save health profile
+  const handleSaveHealthProfile = async (profile: HealthProfile) => {
+    if (!user?.id) return
+
+    try {
+      setIsLoading(true)
+      
+      const healthUpdate = {
+        heightCm: profile.height,
+        weightKg: profile.weight,
+        activityLevel: profile.activityLevel,
+        fitnessLevel: profile.fitnessLevel,
+        healthGoals: profile.healthGoals,
+        dietaryRestrictions: profile.dietaryRestrictions,
+        allergies: profile.allergies,
+        medicalConditions: profile.medicalConditions,
+      }
+      
+      await profileService.updateProfile(user.id, healthUpdate)
+      setSaveMessage('Health profile updated successfully!')
+      
+      if (onSaveHealthProfile) {
+        onSaveHealthProfile(profile)
+      }
+      
+      setTimeout(() => setSaveMessage(''), 3000)
+    } catch (error) {
+      console.error('Health profile save failed:', error)
+      setSaveMessage('Failed to save health profile. Please try again.')
+      setTimeout(() => setSaveMessage(''), 3000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Save nutrition goals
+  const handleSaveNutritionGoals = async (goals: NutritionGoals) => {
+    if (!user?.id) return
+
+    try {
+      setIsLoading(true)
+      
+      const nutritionUpdate = {
+        dailyCalories: goals.dailyCalories,
+        proteinPercentage: goals.proteinPercentage,
+        carbsPercentage: goals.carbsPercentage,
+        fatPercentage: goals.fatPercentage,
+        waterIntakeMl: goals.waterIntake,
+        mealsPerDay: goals.mealsPerDay,
+        weightGoal: goals.weightGoal,
+        targetWeightKg: goals.targetWeight,
+      }
+      
+      await profileService.updateProfile(user.id, nutritionUpdate)
+      setSaveMessage('Nutrition goals updated successfully!')
+      
+      if (onSaveNutritionGoals) {
+        onSaveNutritionGoals(goals)
+      }
+      
+      setTimeout(() => setSaveMessage(''), 3000)
+    } catch (error) {
+      console.error('Nutrition goals save failed:', error)
+      setSaveMessage('Failed to save nutrition goals. Please try again.')
+      setTimeout(() => setSaveMessage(''), 3000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // Container styles
   const containerStyles: React.CSSProperties = {
@@ -209,6 +385,51 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         {/* Profile Header Card */}
         <ProfileHeaderCard user={userProfile} />
 
+        {/* Save Message */}
+        {saveMessage && (
+          <div style={{
+            backgroundColor: saveMessage.includes('Failed') ? '#FEE2E2' : '#ECFDF5',
+            color: saveMessage.includes('Failed') ? '#DC2626' : '#059669',
+            padding: EatRiteDesignTokens.spacing.md,
+            borderRadius: EatRiteDesignTokens.borderRadius.lg,
+            marginBottom: EatRiteDesignTokens.spacing.xl,
+            border: `1px solid ${saveMessage.includes('Failed') ? '#FECACA' : '#BBF7D0'}`,
+            textAlign: 'center' as const,
+            fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
+            fontWeight: 600,
+          }}>
+            {saveMessage}
+          </div>
+        )}
+
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div style={{
+            backgroundColor: EatRiteDesignTokens.colors.surface.darkGreenLight,
+            color: EatRiteDesignTokens.colors.text.primary,
+            padding: EatRiteDesignTokens.spacing.md,
+            borderRadius: EatRiteDesignTokens.borderRadius.lg,
+            marginBottom: EatRiteDesignTokens.spacing.xl,
+            border: `1px solid ${EatRiteDesignTokens.colors.primary.gold}20`,
+            textAlign: 'center' as const,
+            fontSize: EatRiteDesignTokens.typography.scale.bodySmall.size,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: EatRiteDesignTokens.spacing.sm,
+          }}>
+            <div style={{
+              width: '16px',
+              height: '16px',
+              border: `2px solid ${EatRiteDesignTokens.colors.primary.gold}`,
+              borderTop: '2px solid transparent',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }} />
+            Saving...
+          </div>
+        )}
+
         {/* Navigation Tabs */}
         <div style={{ marginBottom: EatRiteDesignTokens.spacing['2xl'] }}>
           <EatRiteTabs
@@ -250,7 +471,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           <PersonalInfoTab
             profile={userProfile}
             onChange={setUserProfile}
-            onSave={onSaveProfile}
+            onSave={handleSaveProfile}
           />
         )}
 
@@ -258,7 +479,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           <HealthProfileTab
             profile={healthProfile}
             onChange={setHealthProfile}
-            onSave={onSaveHealthProfile}
+            onSave={handleSaveHealthProfile}
           />
         )}
 
@@ -266,7 +487,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           <NutritionGoalsTab
             goals={nutritionGoals}
             onChange={setNutritionGoals}
-            onSave={onSaveNutritionGoals}
+            onSave={handleSaveNutritionGoals}
           />
         )}
 

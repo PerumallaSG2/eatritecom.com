@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import { Request, Response } from 'express'
-import { getPool } from '../services/database'
+import { db, getPool } from '../services/database.js'
+import { FallbackDataService } from '../services/fallbackData.js'
+import { OrderProcessor, OrderData as ProcessorOrderData } from '../services/orderProcessor.js'
 import sql from 'mssql'
 
 const router: Router = express.Router()
@@ -37,7 +39,70 @@ interface OrderData {
   cardName?: string
 }
 
-// Create a new order
+// Create a new order using enhanced OrderProcessor
+router.post('/process', async (req: Request, res: Response) => {
+  try {
+    // Transform request body to OrderProcessor format
+    const orderData: ProcessorOrderData = {
+      customer: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+      },
+      delivery_address: {
+        street: req.body.address,
+        apartment: req.body.apartment,
+        city: req.body.city,
+        state: req.body.state,
+        zipCode: req.body.zipCode,
+        deliveryInstructions: req.body.deliveryInstructions,
+      },
+      items: req.body.items.map((item: any) => ({
+        meal_id: item.id || item.meal_id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        customizations: item.customizations,
+        dietary_notes: item.dietary_notes,
+      })),
+      subtotal: req.body.subtotal || 0,
+      tax: req.body.tax || 0,
+      delivery_fee: req.body.delivery_fee || 0,
+      tip: req.body.tip || 0,
+      total: req.body.totalAmount || req.body.total,
+      delivery_date: req.body.delivery_date,
+      delivery_time_slot: req.body.delivery_time_slot,
+      special_instructions: req.body.special_instructions,
+    }
+
+    // Process the order using OrderProcessor
+    const processedOrder = await OrderProcessor.processOrder(orderData)
+
+    res.status(201).json({
+      success: true,
+      order: {
+        id: processedOrder.id,
+        order_number: processedOrder.order_number,
+        status: processedOrder.status,
+        total: processedOrder.pricing.total,
+        estimated_delivery: processedOrder.delivery.estimated_date,
+        payment_intent_id: processedOrder.payment.payment_intent_id,
+      },
+      message: 'Order processed successfully',
+    })
+
+  } catch (error) {
+    console.error('Error processing order:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to process order',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+// Legacy create order route (for backward compatibility)
 router.post('/', async (req: Request, res: Response) => {
   try {
     const orderData: OrderData = req.body
@@ -364,6 +429,180 @@ router.get('/:id', async (req: Request, res: Response) => {
     return res.status(500).json({
       error: 'Failed to fetch order',
       message: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+// Confirm order after payment success
+router.post('/confirm/:orderId', async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params
+    const { payment_intent_id } = req.body
+
+    if (!orderId || !payment_intent_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order ID and payment intent ID are required',
+      })
+    }
+
+    const confirmedOrder = await OrderProcessor.confirmOrder(orderId, payment_intent_id)
+
+    res.json({
+      success: true,
+      order: {
+        id: confirmedOrder.id,
+        order_number: confirmedOrder.order_number,
+        status: confirmedOrder.status,
+        payment_status: confirmedOrder.payment.status,
+        tracking_number: confirmedOrder.delivery.tracking_number,
+        estimated_delivery: confirmedOrder.delivery.estimated_date,
+      },
+      message: 'Order confirmed successfully',
+    })
+
+  } catch (error) {
+    console.error('Error confirming order:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to confirm order',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+// Update order status
+router.patch('/:orderId/status', async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params
+    const { status } = req.body
+
+    if (!orderId || !status) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order ID and status are required',
+      })
+    }
+
+    const updatedOrder = await OrderProcessor.updateOrderStatus(orderId, status)
+
+    res.json({
+      success: true,
+      order: {
+        id: updatedOrder.id,
+        order_number: updatedOrder.order_number,
+        status: updatedOrder.status,
+        delivery_status: updatedOrder.delivery.status,
+        updated_at: new Date(),
+      },
+      message: 'Order status updated successfully',
+    })
+
+  } catch (error) {
+    console.error('Error updating order status:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update order status',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+// Track order by order number
+router.get('/track/:orderNumber', async (req: Request, res: Response) => {
+  try {
+    const { orderNumber } = req.params
+
+    if (!orderNumber) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order number is required',
+      })
+    }
+
+    const order = await OrderProcessor.getOrderByNumber(orderNumber)
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      })
+    }
+
+    res.json({
+      success: true,
+      tracking: {
+        order_number: order.order_number,
+        status: order.status,
+        delivery_status: order.delivery.status,
+        estimated_delivery: order.delivery.estimated_date,
+        estimated_time_slot: order.delivery.estimated_time_slot,
+        tracking_number: order.delivery.tracking_number,
+        timeline: {
+          ordered: order.timestamps.created_at,
+          confirmed: order.timestamps.confirmed_at,
+          prepared: order.timestamps.prepared_at,
+          dispatched: order.timestamps.dispatched_at,
+          delivered: order.timestamps.delivered_at,
+        },
+        delivery_address: {
+          street: order.delivery_address.street,
+          city: order.delivery_address.city,
+          state: order.delivery_address.state,
+          zipCode: order.delivery_address.zipCode,
+        },
+        items: order.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        total: order.pricing.total,
+      },
+    })
+
+  } catch (error) {
+    console.error('Error tracking order:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to track order',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+  }
+})
+
+// Get customer orders by email
+router.get('/customer/:email', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.params
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required',
+      })
+    }
+
+    const orders = await OrderProcessor.getOrdersByCustomerEmail(email)
+
+    res.json({
+      success: true,
+      orders: orders.map(order => ({
+        id: order.id,
+        order_number: order.order_number,
+        status: order.status,
+        total: order.pricing.total,
+        created_at: order.timestamps.created_at,
+        estimated_delivery: order.delivery.estimated_date,
+        items_count: order.items.length,
+      })),
+    })
+
+  } catch (error) {
+    console.error('Error fetching customer orders:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch orders',
+      error: error instanceof Error ? error.message : 'Unknown error',
     })
   }
 })

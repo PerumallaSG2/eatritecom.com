@@ -1,14 +1,17 @@
 import { Link } from 'react-router-dom'
 import EnhancedHero from '../components/EnhancedHero'
 import PopularMeals from '../components/PopularMeals'
+import { PageTransition } from '../components/AnimatedComponents'
+import { FadeIn } from '../components/LoadingStates'
 
 import { Star, Clock, Shield, Heart, TrendingUp } from 'lucide-react'
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen">
-      {/* Enhanced Hero Section */}
-      <EnhancedHero />
+    <PageTransition>
+      <div className="min-h-screen">
+        {/* Enhanced Hero Section */}
+        <EnhancedHero />
 
       {/* Popular Meals Section with all enhancements */}
       <PopularMeals />
@@ -39,9 +42,11 @@ const HomePage = () => {
               </div>
             </div>
 
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-              Here's How EatRite's Prepared Meal Delivery Works
-            </h2>
+            <FadeIn>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+                Here's How EatRite's Prepared Meal Delivery Works
+              </h2>
+            </FadeIn>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -360,6 +365,7 @@ const HomePage = () => {
         </div>
       </section>
     </div>
+    </PageTransition>
   )
 }
 

@@ -6,15 +6,19 @@ import dotenv from 'dotenv'
 // Database temporarily disabled for development
 
 // Import routes
-import categoryRoutes from './routes/categories'
-import mealRoutes from './routes/meals'
-import planRoutes from './routes/plans'
-import orderRoutes from './routes/orders'
-import userRoutes from './routes/users'
+import categoryRoutes from './routes/categories.js'
+import mealRoutes from './routes/meals.js'
+import planRoutes from './routes/plans.js'
+import orderRoutes from './routes/orders.js'
+import userRoutes from './routes/users.js'
+import paymentRoutes from './routes/payments.js'
+import paymentsEnhanced from './routes/paymentsEnhanced.js'
+import cardTesting from './routes/cardTesting.js'
+import moneyFlow from './routes/moneyFlow.js'
 
 // Import middleware
-import { errorHandler } from './middleware/errorHandler'
-import { notFound } from './middleware/notFound'
+import { errorHandler } from './middleware/errorHandler.js'
+import { notFound } from './middleware/notFound.js'
 
 dotenv.config()
 
@@ -82,6 +86,10 @@ app.use('/api/meals', mealRoutes)
 app.use('/api/plans', planRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/payments', paymentRoutes)
+app.use('/api/payments/v2', paymentsEnhanced)
+app.use('/api/payments/test', cardTesting)
+app.use('/api/payments/money-flow', moneyFlow)
 
 // Error handling middleware
 app.use(notFound)
@@ -103,14 +111,20 @@ const startServer = async () => {
 
     // Try to initialize database connection (non-blocking)
     try {
-      const { initializeDatabase } = await import('./services/database')
+      // First try SQLite (new, reliable)
+      const { initializeDatabase } = await import('./services/sqliteDatabase.js')
       await initializeDatabase()
-      console.log('🎉 Database integration ready!')
-    } catch (dbError) {
-      console.log('⚠️  Database not available - using fallback mode')
-      console.log(
-        'ℹ️  To enable database features, ensure SQL Server is running on localhost:1433'
-      )
+      console.log('🎉 SQLite Database ready!')
+    } catch (sqliteError) {
+      console.log('⚠️  SQLite failed, trying SQL Server...')
+      try {
+        const { initializeDatabase } = await import('./services/database.js')
+        await initializeDatabase()
+        console.log('🎉 SQL Server Database ready!')
+      } catch (dbError) {
+        console.log('⚠️  No database available - using fallback mode')
+        console.log('ℹ️  Install SQLite or configure SQL Server for persistence')
+      }
     }
   } catch (error) {
     console.error('❌ Failed to start server:', error)
@@ -122,8 +136,14 @@ const startServer = async () => {
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...')
   try {
-    const { closeDatabase } = await import('./services/database')
-    await closeDatabase()
+    // Try to close SQLite first, then SQL Server
+    try {
+      const { closeDatabase } = await import('./services/sqliteDatabase.js')
+      await closeDatabase()
+    } catch (error) {
+      const { closeDatabase } = await import('./services/database.js')
+      await closeDatabase()
+    }
   } catch (error) {
     console.error('Error closing database:', error)
   }
@@ -133,8 +153,14 @@ process.on('SIGINT', async () => {
 process.on('SIGTERM', async () => {
   console.log('Shutting down gracefully...')
   try {
-    const { closeDatabase } = await import('./services/database')
-    await closeDatabase()
+    // Try to close SQLite first, then SQL Server
+    try {
+      const { closeDatabase } = await import('./services/sqliteDatabase.js')
+      await closeDatabase()
+    } catch (error) {
+      const { closeDatabase } = await import('./services/database.js')
+      await closeDatabase()
+    }
   } catch (error) {
     console.error('Error closing database:', error)
   }

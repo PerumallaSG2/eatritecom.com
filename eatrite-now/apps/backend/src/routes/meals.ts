@@ -1,13 +1,13 @@
 import express, { Router } from 'express'
-import { db } from '../services/database'
-import { FallbackDataService } from '../services/fallbackData'
+import { sqliteDB } from '../services/sqliteDatabase.js'
+import { FallbackDataService } from '../services/fallbackData.js'
 
 const router: Router = express.Router()
 
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    await db.query('SELECT 1')
+    sqliteDB.getDB()
     return true
   } catch {
     return false
@@ -30,45 +30,27 @@ router.get('/', async (req, res) => {
       return res.json(result)
     }
 
-    const { category, popular, limit, search } = req.query
-
-    let query = `
-      SELECT 
-        m.*,
-        c.name as category_name,
-        mn.calories, mn.protein, mn.carbohydrates, mn.fat, mn.fiber, mn.sugar, mn.sodium
-      FROM Meals m
-      LEFT JOIN Categories c ON m.category_id = c.id
-      LEFT JOIN MealNutrition mn ON m.id = mn.meal_id
-      WHERE m.is_available = 1
-    `
-
-    const params: any = {}
+    const { category, limit, search } = req.query
+    const filters: any = {}
 
     if (category) {
-      query += ' AND c.name = @category'
-      params.category = category
+      filters.category = category as string
     }
 
     if (search) {
-      query +=
-        ' AND (m.name LIKE @search OR m.description LIKE @search OR m.ingredients LIKE @search)'
-      params.search = `%${search}%`
+      filters.search = search as string
     }
-
-    query += ' ORDER BY m.created_at DESC'
 
     if (limit) {
-      query += ' OFFSET 0 ROWS FETCH NEXT @limit ROWS ONLY'
-      params.limit = parseInt(limit as string)
+      filters.limit = parseInt(limit as string)
     }
 
-    const result = await db.query(query, params)
+    const meals = sqliteDB.getMeals(filters)
 
     return res.json({
       success: true,
-      data: result.recordset,
-      total: result.recordset.length,
+      data: meals,
+      total: meals.length,
     })
   } catch (error) {
     console.error('Error fetching meals:', error)
@@ -98,21 +80,9 @@ router.get('/:id', async (req, res) => {
       return res.json(result)
     }
 
-    const query = `
-      SELECT 
-        m.*,
-        c.name as category_name,
-        mn.calories, mn.protein, mn.carbohydrates, mn.fat, mn.fiber, mn.sugar, mn.sodium,
-        mn.cholesterol, mn.vitamin_a, mn.vitamin_c, mn.calcium, mn.iron
-      FROM Meals m
-      LEFT JOIN Categories c ON m.category_id = c.id
-      LEFT JOIN MealNutrition mn ON m.id = mn.meal_id
-      WHERE m.id = @id AND m.is_available = 1
-    `
+    const meal = sqliteDB.getMealById(mealId)
 
-    const result = await db.query(query, { id: mealId })
-
-    if (result.recordset.length === 0) {
+    if (!meal) {
       return res.status(404).json({
         success: false,
         message: 'Meal not found',
@@ -121,7 +91,7 @@ router.get('/:id', async (req, res) => {
 
     return res.json({
       success: true,
-      data: result.recordset[0],
+      data: meal,
     })
   } catch (error) {
     console.error('Error fetching meal:', error)
@@ -144,32 +114,33 @@ router.get('/category/:category', async (req, res) => {
     const { category } = req.params
     const { limit } = req.query
 
-    let query = `
-      SELECT 
-        m.*,
-        c.name as category_name,
-        mn.calories, mn.protein, mn.carbohydrates, mn.fat
-      FROM Meals m
-      JOIN Categories c ON m.category_id = c.id
-      LEFT JOIN MealNutrition mn ON m.id = mn.meal_id
-      WHERE c.name = @category AND m.is_available = 1
-      ORDER BY m.created_at DESC
-    `
-
-    const params: any = { category }
+    const filters: any = { category }
 
     if (limit) {
-      query += ' OFFSET 0 ROWS FETCH NEXT @limit ROWS ONLY'
-      params.limit = parseInt(limit as string)
+      filters.limit = parseInt(limit as string)
     }
 
-    const result = await db.query(query, params)
+    // Check if database is available
+    const dbAvailable = await isDatabaseAvailable()
+
+    if (!dbAvailable) {
+      // Use fallback data
+      const result = FallbackDataService.getMeals(filters)
+      return res.json({
+        success: true,
+        data: result.data,
+        category,
+        total: result.data.length,
+      })
+    }
+
+    const meals = sqliteDB.getMeals(filters)
 
     res.json({
       success: true,
-      data: result.recordset,
+      data: meals,
       category,
-      total: result.recordset.length,
+      total: meals.length,
     })
   } catch (error) {
     console.error('Error fetching meals by category:', error)

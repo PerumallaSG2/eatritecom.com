@@ -346,22 +346,24 @@ export const InteractiveMealBuilder: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <FadeIn>
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-8">
-          <div className="text-center">
-            <ChefHat className="w-12 h-12 mx-auto mb-4" />
-            <h2 className="text-3xl font-bold mb-2">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-4 mb-4">
+            <div className="p-3 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl">
+              <ChefHat className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">
               Interactive Meal Builder
-            </h2>
-            <p className="text-green-100 text-lg">
-              Customize your perfect Factor75 meal and see instant pricing
-            </p>
+            </h1>
           </div>
+          <p className="text-gray-600 text-xl max-w-3xl mx-auto">
+            Customize your perfect meal and see instant pricing with our interactive builder
+          </p>
         </div>
       </FadeIn>
 
-      <div className="p-8">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Meal Builder */}
           <div className="lg:col-span-2">

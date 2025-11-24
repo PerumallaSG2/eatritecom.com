@@ -62,32 +62,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true)
 
     try {
-      // Note: password validation will be implemented in production
-      console.log('Login attempt with password length:', password.length)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Call backend login API
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
 
-      // For demo purposes, create a mock user
-      const mockUser: User = {
-        id: Date.now().toString(),
-        name:
-          email.split('@')[0].charAt(0).toUpperCase() +
-          email.split('@')[0].slice(1),
-        email: email,
-        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=D4B46A&color=0F2B1E`,
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.message || 'Login failed')
       }
 
-      // Simulate token
-      const mockToken = `eatrite_token_${Date.now()}`
+      // Create user object from response
+      const loggedInUser: User = {
+        id: result.data.user.id,
+        name: `${result.data.user.firstName} ${result.data.user.lastName}`,
+        email: result.data.user.email,
+        avatar: `https://ui-avatars.com/api/?name=${result.data.user.firstName}+${result.data.user.lastName}&background=D4B46A&color=0F2B1E`,
+      }
 
       // Store in localStorage
-      localStorage.setItem('eatrite_user', JSON.stringify(mockUser))
-      localStorage.setItem('eatrite_token', mockToken)
+      localStorage.setItem('eatrite_user', JSON.stringify(loggedInUser))
+      localStorage.setItem('eatrite_token', result.data.token)
 
-      setUser(mockUser)
+      setUser(loggedInUser)
     } catch (error) {
-      throw new Error('Login failed. Please check your credentials.')
+      throw new Error(error instanceof Error ? error.message : 'Login failed. Please check your credentials.')
     } finally {
       setIsLoading(false)
     }
@@ -101,27 +108,45 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Split name into first and last name
+      const [firstName, ...lastNameParts] = data.name.split(' ')
+      const lastName = lastNameParts.join(' ') || 'User'
 
-      // Create new user
-      const newUser: User = {
-        id: Date.now().toString(),
-        name: data.name,
-        email: data.email,
-        avatar: `https://ui-avatars.com/api/?name=${data.name}&background=D4B46A&color=0F2B1E`,
+      // Call backend registration API
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email: data.email,
+          password: data.password,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.message || 'Registration failed')
       }
 
-      // Simulate token
-      const mockToken = `eatrite_token_${Date.now()}`
+      // Create user object from response
+      const newUser: User = {
+        id: result.data.user.id,
+        name: `${result.data.user.firstName} ${result.data.user.lastName}`,
+        email: result.data.user.email,
+        avatar: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=D4B46A&color=0F2B1E`,
+      }
 
       // Store in localStorage
       localStorage.setItem('eatrite_user', JSON.stringify(newUser))
-      localStorage.setItem('eatrite_token', mockToken)
+      localStorage.setItem('eatrite_token', result.data.token)
 
       setUser(newUser)
     } catch (error) {
-      throw new Error('Signup failed. Please try again.')
+      throw new Error(error instanceof Error ? error.message : 'Signup failed. Please try again.')
     } finally {
       setIsLoading(false)
     }

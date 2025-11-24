@@ -1,5 +1,24 @@
 import { Request, Response, NextFunction } from 'express'
-import { AppError, ValidationError as CustomValidationError } from '../types'
+
+// Inline error classes to avoid ES module import issues
+class AppError extends Error {
+  constructor(
+    message: string,
+    public statusCode: number = 500,
+    public isOperational: boolean = true
+  ) {
+    super(message)
+    this.name = 'AppError'
+    Error.captureStackTrace(this, this.constructor)
+  }
+}
+
+class CustomValidationError extends AppError {
+  constructor(message: string, public errors: any[]) {
+    super(message, 400)
+    this.name = 'ValidationError'
+  }
+}
 
 interface ErrorResponse {
   success: false

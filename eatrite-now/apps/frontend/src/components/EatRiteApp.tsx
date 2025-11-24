@@ -10,6 +10,7 @@ import { EatRiteDesignTokens } from '../styles/design-system/eatrite-design-toke
 import SplashScreen from './screens/SplashScreen'
 import OnboardingFlow from './screens/OnboardingFlow'
 import { LoginScreen } from './screens/AuthenticationScreens'
+import SignupWithVerification from './SignupWithVerification'
 import HomeDashboard from './screens/HomeDashboard'
 import MealBuilder from './screens/MealBuilder'
 import SupplementsCatalog from './screens/SupplementsCatalog'
@@ -31,6 +32,7 @@ type AppScreen =
   | 'splash'
   | 'onboarding'
   | 'auth'
+  | 'signup'
   | 'dashboard'
   | 'meal-builder'
   | 'supplements'
@@ -131,6 +133,21 @@ export const EatRiteApp: React.FC = () => {
     )
   }
 
+  const handleSignupComplete = () => {
+    localStorage.setItem('eatrite_auth_token', 'sample_token')
+    setAppState(prev => ({
+      ...prev,
+      isAuthenticated: true,
+      hasCompletedOnboarding: false, // New users need onboarding
+      currentScreen: 'onboarding',
+    }))
+
+    showNotification(
+      'success',
+      'Account created successfully! Let us personalize your experience.'
+    )
+  }
+
   const handleOnboardingComplete = (preferences: any) => {
     console.log('Onboarding preferences:', preferences) // Use preferences to avoid TS error
     localStorage.setItem('eatrite_onboarding_complete', 'true')
@@ -214,9 +231,16 @@ export const EatRiteApp: React.FC = () => {
       {appState.currentScreen === 'auth' && (
         <LoginScreen
           onLogin={handleAuthentication}
-          onSignupClick={() => {}}
+          onSignupClick={() => navigateToScreen('signup')}
           onForgotPasswordClick={() => {}}
           loading={false}
+        />
+      )}
+
+      {appState.currentScreen === 'signup' && (
+        <SignupWithVerification
+          onSignupComplete={handleSignupComplete}
+          onBack={() => navigateToScreen('auth')}
         />
       )}
 

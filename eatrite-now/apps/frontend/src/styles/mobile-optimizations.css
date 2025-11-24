@@ -1,0 +1,275 @@
+/* Mobile Touch Optimization CSS */
+/* Add this to your main CSS file or import it */
+
+/* Touch target minimum size - Apple and Google recommend 44px */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Enhanced button styles for mobile */
+.mobile-button {
+  @apply touch-target px-6 py-3 rounded-lg font-medium transition-all duration-200;
+  /* Larger tap area for better mobile UX */
+  touch-action: manipulation; /* Prevent zoom on tap */
+  user-select: none; /* Prevent text selection */
+}
+
+.mobile-button:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* Primary button style */
+.mobile-button-primary {
+  @apply mobile-button bg-orange-500 text-white shadow-lg;
+}
+
+.mobile-button-primary:hover {
+  @apply bg-orange-600 shadow-xl;
+}
+
+.mobile-button-primary:active {
+  @apply bg-orange-700;
+}
+
+/* Secondary button style */
+.mobile-button-secondary {
+  @apply mobile-button bg-white text-orange-500 border-2 border-orange-500;
+}
+
+.mobile-button-secondary:hover {
+  @apply bg-orange-50;
+}
+
+.mobile-button-secondary:active {
+  @apply bg-orange-100;
+}
+
+/* Card touch interactions */
+.mobile-card {
+  @apply transition-all duration-200 cursor-pointer;
+  touch-action: manipulation;
+}
+
+.mobile-card:hover {
+  @apply shadow-lg;
+  transform: translateY(-2px);
+}
+
+.mobile-card:active {
+  @apply shadow-md;
+  transform: translateY(0);
+}
+
+/* Mobile form inputs */
+.mobile-input {
+  @apply h-12 px-4 text-base rounded-lg border-2 transition-all duration-200;
+  /* Larger height for easier touch */
+  touch-action: manipulation;
+}
+
+.mobile-input:focus {
+  @apply ring-4 ring-orange-200 border-orange-500 outline-none;
+}
+
+/* Mobile navigation items */
+.mobile-nav-item {
+  @apply touch-target px-4 py-3 transition-all duration-200;
+  touch-action: manipulation;
+}
+
+.mobile-nav-item:active {
+  @apply bg-gray-100;
+  transform: scale(0.98);
+}
+
+/* Prevent zoom on input focus (iOS Safari) */
+input, select, textarea {
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+/* Safe area padding for devices with notches */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Mobile scroll optimization */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  overflow-scrolling: touch;
+}
+
+/* Hide scrollbars on mobile while keeping functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Loading states for better UX */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Mobile-specific utilities */
+@media (max-width: 768px) {
+  /* Larger spacing for mobile */
+  .mobile-spacing {
+    @apply space-y-6;
+  }
+  
+  /* Mobile-optimized text sizes */
+  .mobile-heading {
+    @apply text-2xl font-bold leading-tight;
+  }
+  
+  .mobile-body {
+    @apply text-base leading-relaxed;
+  }
+  
+  .mobile-caption {
+    @apply text-sm text-gray-600;
+  }
+  
+  /* Mobile container padding */
+  .mobile-container {
+    @apply px-4 py-6;
+  }
+}
+
+/* Haptic feedback simulation through visual feedback */
+.haptic-light:active {
+  animation: haptic-pulse 0.15s ease;
+}
+
+.haptic-medium:active {
+  animation: haptic-bounce 0.2s ease;
+}
+
+.haptic-heavy:active {
+  animation: haptic-shake 0.3s ease;
+}
+
+@keyframes haptic-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes haptic-bounce {
+  0% { transform: scale(1) translateY(0); }
+  30% { transform: scale(1.1) translateY(-2px); }
+  60% { transform: scale(0.95) translateY(1px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes haptic-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* Disable text selection on interactive elements */
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Mobile-optimized focus styles */
+.mobile-focus:focus {
+  @apply outline-none ring-4 ring-orange-200;
+  outline-offset: 2px;
+}
+
+/* Swipe gesture areas */
+.swipe-area {
+  touch-action: pan-x pan-y;
+  -webkit-touch-callout: none;
+}
+
+/* Mobile modal/drawer optimizations */
+.mobile-modal {
+  @apply fixed inset-0 z-50;
+  touch-action: none; /* Prevent background scroll */
+}
+
+.mobile-drawer {
+  @apply fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mobile-drawer.open {
+  transform: translateY(0);
+}
+
+/* Enhanced mobile card interactions */
+.meal-card-mobile {
+  @apply mobile-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden;
+}
+
+.meal-card-mobile:hover {
+  @apply shadow-xl border-orange-200;
+}
+
+/* Mobile-optimized spacing utilities */
+.mobile-gap {
+  @apply gap-4;
+}
+
+.mobile-padding {
+  @apply p-4;
+}
+
+.mobile-margin {
+  @apply m-4;
+}
+
+/* Responsive touch zones for different screen sizes */
+@media (min-width: 375px) {
+  .touch-target-small {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+@media (min-width: 414px) {
+  .touch-target-large {
+    min-height: 52px;
+    min-width: 52px;
+  }
+}

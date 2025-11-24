@@ -3,6 +3,18 @@ import { Plus, ChevronDown, Minus } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useToast } from '../context/ToastContext'
 import MealFilters from '../components/MealFilters'
+import { 
+  AnimatedMenuLoader, 
+  PageTransition 
+} from '../components/AnimatedComponents'
+import { 
+  FadeIn, 
+  SlideIn, 
+  StaggeredList
+} from '../components/LoadingStates'
+import { useAsyncError, ErrorType } from '../hooks/useErrorHandler'
+import { PullToRefresh } from '../components/GestureComponents'
+import { useIsMobile } from '../context/MobileNavigationContext'
 
 interface Meal {
   id: number
@@ -211,7 +223,7 @@ interface FilterState {
 export default function MenuPage() {
   const [displayedMeals, setDisplayedMeals] = useState<Meal[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [hasMore, setHasMore] = useState(true)
   const [filteredMeals, setFilteredMeals] = useState<Meal[]>(allMeals)
   const [filters, setFilters] = useState<FilterState>({
@@ -221,6 +233,8 @@ export default function MenuPage() {
     sortBy: 'popular',
     calories: [200, 800],
   })
+
+  const { execute: executeAsync } = useAsyncError()
 
   // Apply filters whenever filters change
   useEffect(() => {
@@ -233,6 +247,7 @@ export default function MenuPage() {
 
   const { addToCart, items, updateQuantity } = useCart()
   const { showToast } = useToast()
+  const isMobile = useIsMobile()
 
   // Filter and sort meals based on current filters
   const applyFilters = (meals: Meal[], filterState: FilterState) => {
@@ -330,32 +345,72 @@ export default function MenuPage() {
   }
 
   useEffect(() => {
-    const initialMeals = allMeals.slice(0, mealsPerPage)
-    setDisplayedMeals(initialMeals)
-    setHasMore(allMeals.length > mealsPerPage)
+    // Simulate loading for better UX
+    setIsInitialLoading(true)
+    setTimeout(() => {
+      const initialMeals = allMeals.slice(0, mealsPerPage)
+      setDisplayedMeals(initialMeals)
+      setHasMore(allMeals.length > mealsPerPage)
+      setIsInitialLoading(false)
+    }, 1000) // 1 second loading simulation
   }, [])
 
   const loadMoreMeals = async () => {
-    if (isLoading || !hasMore) return
+    if (!hasMore) return
 
-    setIsLoading(true)
+    await executeAsync(async () => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800))
 
-    await new Promise(resolve => setTimeout(resolve, 800))
+      // Simulate occasional errors in development
+      if (import.meta.env.DEV && Math.random() < 0.15) {
+        throw new Error('Network error: Failed to fetch more meals')
+      }
 
-    const nextPageStart = currentPage * mealsPerPage
-    const nextPageEnd = nextPageStart + mealsPerPage
-    const newMeals = filteredMeals.slice(nextPageStart, nextPageEnd)
+      const nextPageStart = currentPage * mealsPerPage
+      const nextPageEnd = nextPageStart + mealsPerPage
+      const newMeals = filteredMeals.slice(nextPageStart, nextPageEnd)
 
-    if (newMeals.length > 0) {
-      setDisplayedMeals(prev => [...prev, ...newMeals])
-      setCurrentPage(prev => prev + 1)
-    }
+      if (newMeals.length > 0) {
+        setDisplayedMeals(prev => [...prev, ...newMeals])
+        setCurrentPage(prev => prev + 1)
+        
+        // Check if we've loaded all meals
+        if (nextPageEnd >= filteredMeals.length) {
+          setHasMore(false)
+        }
+      }
 
-    if (nextPageEnd >= filteredMeals.length) {
-      setHasMore(false)
-    }
+      return newMeals
+    }, ErrorType.NETWORK, {
+      showToast: true,
+      retryable: true,
+      fallbackMessage: 'Failed to load more meals. Please try again.'
+    })
+  }
 
-    setIsLoading(false)
+  // Refresh function for pull-to-refresh
+  const handleRefresh = async () => {
+    await executeAsync(async () => {
+      // Simulate network delay for refresh
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Simulate occasional refresh errors in development
+      if (import.meta.env.DEV && Math.random() < 0.1) {
+        throw new Error('Network error: Failed to refresh meals')
+      }
+
+      // Reset to initial state
+      setCurrentPage(1)
+      setDisplayedMeals(filteredMeals.slice(0, mealsPerPage))
+      setHasMore(filteredMeals.length > mealsPerPage)
+      
+      showToast('success', 'Refreshed!', 'Menu updated with latest meals')
+    }, ErrorType.NETWORK, {
+      showToast: true,
+      retryable: false,
+      fallbackMessage: 'Failed to refresh meals. Please try again.'
+    })
   }
 
   const handleAddToCart = (meal: Meal) => {
@@ -373,31 +428,42 @@ export default function MenuPage() {
     showToast('success', 'Added to Cart', `${meal.name} added to cart!`)
   }
 
-  return (
+  // Show loading animation on initial load
+  if (isInitialLoading) {
+    return <AnimatedMenuLoader itemCount={8} />
+  }
+
+  const MainContent = () => (
     <div className="min-h-screen bg-gradient-to-br from-[#F5F2E8] to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-24 md:pb-16">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-[#0F2B1E] mb-4">
-            Explore our Flexible Weekly Menu
-          </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
-            Choose from {allMeals.length} healthy, restaurant-quality meals
-            each week
-          </p>
-          <div className="flex justify-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-gradient-to-r from-[#D4B46A] to-[#B8935A] rounded-full"></div>
-              <span>Premium</span>
+          <FadeIn>
+            <h1 className="text-5xl md:text-6xl font-bold text-[#0F2B1E] mb-4">
+              Explore our Flexible Weekly Menu
+            </h1>
+          </FadeIn>
+          <SlideIn direction="up" delay={200}>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8">
+              Choose from {allMeals.length} healthy, restaurant-quality meals
+              each week
+            </p>
+          </SlideIn>
+          <SlideIn direction="up" delay={400}>
+            <div className="flex justify-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-2 animate-fadeIn animate-stagger-1">
+                <div className="w-4 h-4 bg-gradient-to-r from-[#D4B46A] to-[#B8935A] rounded-full"></div>
+                <span>Premium</span>
+              </div>
+              <div className="flex items-center gap-2 animate-fadeIn animate-stagger-2">
+                <div className="w-4 h-4 bg-[#FF6B35] rounded-full"></div>
+                <span>New</span>
+              </div>
+              <div className="flex items-center gap-2 animate-fadeIn animate-stagger-3">
+                <div className="w-4 h-4 bg-[#0F2B1E] rounded-full"></div>
+                <span>Top-Rated</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-[#FF6B35] rounded-full"></div>
-              <span>New</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-[#0F2B1E] rounded-full"></div>
-              <span>Top-Rated</span>
-            </div>
-          </div>
+          </SlideIn>
         </div>
 
         {/* Meal Filters */}
@@ -447,7 +513,7 @@ export default function MenuPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <StaggeredList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {displayedMeals.map(meal => (
             <div
               key={meal.id}
@@ -571,30 +637,20 @@ export default function MenuPage() {
               </div>
             </div>
           ))}
-        </div>
+        </StaggeredList>
 
         {hasMore && (
-          <div className="text-center mb-16">
-            <button
-              onClick={loadMoreMeals}
-              disabled={isLoading}
-              className="bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] hover:from-[#1a4d33] hover:to-[#0F2B1E] text-white font-bold px-12 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 mx-auto"
-            >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Loading More Meals...
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="h-5 w-5" />
-                  Load More Meals ({allMeals.length -
-                    displayedMeals.length}{' '}
-                  remaining)
-                </>
-              )}
-            </button>
-          </div>
+          <FadeIn>
+            <div className="text-center mb-16">
+              <button
+                onClick={loadMoreMeals}
+                className="bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] hover:from-[#1a4d33] hover:to-[#0F2B1E] text-white font-bold px-12 py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-3 mx-auto"
+              >
+                <ChevronDown className="h-5 w-5" />
+                Load More Meals ({allMeals.length - displayedMeals.length} remaining)
+              </button>
+            </div>
+          </FadeIn>
         )}
 
         {!hasMore && (
@@ -605,19 +661,34 @@ export default function MenuPage() {
           </div>
         )}
 
-        <div className="mt-16 bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] rounded-2xl p-8 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-lg mb-6 opacity-90">
-            Build your personalized meal plan with our fresh, chef-prepared
-            meals
-          </p>
-          <button className="bg-[#D4B46A] hover:bg-[#B8935A] text-[#0F2B1E] font-bold px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105">
-            Start Your Plan
-          </button>
-        </div>
-        </>
+          </>
         )}
+
+        <SlideIn direction="up" delay={300}>
+          <div className="mt-16 bg-gradient-to-r from-[#0F2B1E] to-[#1a4d33] rounded-2xl p-8 text-center text-white">
+            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Build your personalized meal plan with our fresh, chef-prepared
+              meals
+            </p>
+            <button className="bg-[#D4B46A] hover:bg-[#B8935A] text-[#0F2B1E] font-bold px-8 py-3 rounded-xl transition-all duration-300 hover:scale-105 animate-press">
+              Start Your Plan
+            </button>
+          </div>
+        </SlideIn>
       </div>
     </div>
+  )
+
+  return (
+    <PageTransition>
+      {isMobile ? (
+        <PullToRefresh onRefresh={handleRefresh}>
+          <MainContent />
+        </PullToRefresh>
+      ) : (
+        <MainContent />
+      )}
+    </PageTransition>
   )
 }

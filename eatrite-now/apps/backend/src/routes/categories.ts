@@ -1,13 +1,13 @@
 import express, { Router } from 'express'
-import { db } from '../services/database'
-import { FallbackDataService } from '../services/fallbackData'
+import { sqliteDB } from '../services/sqliteDatabase.js'
+import { FallbackDataService } from '../services/fallbackData.js'
 
 const router: Router = express.Router()
 
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    await db.query('SELECT 1')
+    sqliteDB.getDB()
     return true
   } catch {
     return false
@@ -28,22 +28,11 @@ router.get('/', async (req, res) => {
       return res.json(result)
     }
 
-    const query = `
-      SELECT 
-        c.*,
-        COUNT(m.id) as meal_count
-      FROM Categories c
-      LEFT JOIN Meals m ON c.id = m.category_id AND m.is_available = 1
-      WHERE c.is_active = 1
-      GROUP BY c.id, c.name, c.description, c.image_url, c.is_active, c.created_at
-      ORDER BY c.name
-    `
-
-    const result = await db.query(query)
+    const categories = sqliteDB.getCategories()
 
     return res.json({
       success: true,
-      data: result.recordset,
+      data: categories,
     })
   } catch (error) {
     console.error('Error fetching categories:', error)

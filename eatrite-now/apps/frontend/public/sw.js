@@ -378,6 +378,123 @@ function createOfflineResponse(request) {
   })
 }
 
+// Push Notification Event Handler
+self.addEventListener('push', event => {
+  console.log('[SW] Push message received')
+  
+  const options = {
+    body: 'Your EatRite order is ready!',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-96x96.png',
+    vibrate: [200, 100, 200],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'View Order',
+        icon: '/icons/checkmark.png'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: '/icons/close.png'
+      }
+    ]
+  }
+
+  let title = 'EatRite Notification'
+  
+  if (event.data) {
+    const payload = event.data.json()
+    title = payload.title || title
+    options.body = payload.body || options.body
+    options.icon = payload.icon || options.icon
+    options.data = { ...options.data, ...payload.data }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  )
+})
+
+// Notification Click Event Handler
+self.addEventListener('notificationclick', event => {
+  console.log('[SW] Notification clicked')
+  
+  event.notification.close()
+
+  if (event.action === 'explore') {
+    // Open the app to orders page
+    event.waitUntil(
+      clients.openWindow('/orders')
+    )
+  } else if (event.action === 'close') {
+    // Just close the notification
+    return
+  } else {
+    // Default action - open the app
+    event.waitUntil(
+      clients.matchAll().then(clientList => {
+        if (clientList.length > 0) {
+          return clientList[0].focus()
+        }
+        return clients.openWindow('/')
+      })
+    )
+  }
+})
+
+// Background Sync Event Handler
+self.addEventListener('sync', event => {
+  console.log('[SW] Background sync:', event.tag)
+  
+  if (event.tag === 'background-sync-orders') {
+    event.waitUntil(syncOrders())
+  }
+})
+
+// Helper: Sync orders when back online
+async function syncOrders() {
+  try {
+    // Get pending orders from IndexedDB or localStorage
+    const pendingOrders = await getPendingOrders()
+    
+    for (const order of pendingOrders) {
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(order)
+        })
+        
+        if (response.ok) {
+          await removePendingOrder(order.id)
+          console.log('[SW] Order synced:', order.id)
+        }
+      } catch (error) {
+        console.log('[SW] Failed to sync order:', order.id, error)
+      }
+    }
+  } catch (error) {
+    console.error('[SW] Background sync failed:', error)
+  }
+}
+
+// Helper: Get pending orders (implement based on your storage)
+async function getPendingOrders() {
+  // Implement based on your offline storage strategy
+  return []
+}
+
+// Helper: Remove synced order (implement based on your storage)
+async function removePendingOrder(orderId) {
+  // Implement based on your offline storage strategy
+  console.log('[SW] Removing synced order:', orderId)
+}
+
 // Message handler for communication with main thread
 self.addEventListener('message', event => {
   const { type, data } = event.data
@@ -401,10 +518,32 @@ self.addEventListener('message', event => {
       })
       break
 
+    case 'SUBSCRIBE_PUSH':
+      subscribePushNotifications(data)
+      break
+
     default:
       console.log('[SW] Unknown message type:', type)
   }
 })
+
+// Helper: Subscribe to push notifications
+async function subscribePushNotifications(subscription) {
+  try {
+    // Send subscription to your server
+    const response = await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(subscription)
+    })
+    
+    if (response.ok) {
+      console.log('[SW] Push subscription sent to server')
+    }
+  } catch (error) {
+    console.error('[SW] Failed to send push subscription:', error)
+  }
+}
 
 // Helper: Clear specific cache
 async function clearCache(cacheName) {

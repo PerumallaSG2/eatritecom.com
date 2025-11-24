@@ -1,5 +1,112 @@
 -- EatRite Database Schema (Simplified Factor75-inspired structure)
 
+-- ============================================================================
+-- USER AUTHENTICATION AND PROFILES
+-- ============================================================================
+
+-- Main users table for authentication
+CREATE TABLE users (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    email NVARCHAR(255) NOT NULL UNIQUE,
+    password_hash NVARCHAR(255) NOT NULL,
+    first_name NVARCHAR(100) NOT NULL,
+    last_name NVARCHAR(100) NOT NULL,
+    phone NVARCHAR(20),
+    is_active BIT DEFAULT 1,
+    email_verified BIT DEFAULT 0,
+    phone_verified BIT DEFAULT 0,
+    email_verification_token NVARCHAR(255),
+    email_verification_expires DATETIME2,
+    email_verification_attempts INT DEFAULT 0,
+    phone_verification_token NVARCHAR(255),
+    phone_verification_expires DATETIME2,
+    phone_verification_attempts INT DEFAULT 0,
+    password_reset_token NVARCHAR(255),
+    password_reset_expires DATETIME2,
+    last_otp_request_times NVARCHAR(MAX), -- JSON array of timestamps for rate limiting
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
+);
+
+-- Detailed user profiles
+CREATE TABLE user_profiles (
+    user_id UNIQUEIDENTIFIER PRIMARY KEY,
+    date_of_birth DATE,
+    gender NVARCHAR(20) CHECK (gender IN ('male', 'female', 'other', 'prefer-not-to-say')),
+    avatar_url NVARCHAR(500),
+    bio NVARCHAR(1000),
+    subscription_tier NVARCHAR(20) DEFAULT 'basic' CHECK (subscription_tier IN ('basic', 'premium', 'elite')),
+    
+    -- Health metrics
+    height_cm INT,
+    weight_kg DECIMAL(5,2),
+    activity_level NVARCHAR(20) CHECK (activity_level IN ('sedentary', 'lightly-active', 'moderately-active', 'very-active', 'extremely-active')),
+    fitness_level NVARCHAR(20) CHECK (fitness_level IN ('beginner', 'intermediate', 'advanced')),
+    
+    -- Goals and preferences
+    health_goals NVARCHAR(MAX), -- JSON array: ["weight-loss", "muscle-gain", "maintenance", etc.]
+    dietary_restrictions NVARCHAR(MAX), -- JSON array: ["vegetarian", "vegan", "keto", etc.]
+    allergies NVARCHAR(MAX), -- JSON array: ["nuts", "dairy", "gluten", etc.]
+    medical_conditions NVARCHAR(MAX), -- JSON array
+    
+    -- Nutrition goals
+    daily_calories INT,
+    protein_percentage DECIMAL(5,2),
+    carbs_percentage DECIMAL(5,2),
+    fat_percentage DECIMAL(5,2),
+    water_intake_ml INT,
+    meals_per_day INT DEFAULT 3,
+    weight_goal NVARCHAR(20) CHECK (weight_goal IN ('lose', 'maintain', 'gain')),
+    target_weight_kg DECIMAL(5,2),
+    
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- User notification and privacy settings
+CREATE TABLE user_settings (
+    user_id UNIQUEIDENTIFIER PRIMARY KEY,
+    
+    -- Notification preferences
+    email_notifications BIT DEFAULT 1,
+    push_notifications BIT DEFAULT 1,
+    meal_reminders BIT DEFAULT 1,
+    supplement_reminders BIT DEFAULT 0,
+    progress_updates BIT DEFAULT 1,
+    promotional_offers BIT DEFAULT 0,
+    weekly_reports BIT DEFAULT 1,
+    
+    -- Privacy settings
+    profile_visibility NVARCHAR(20) DEFAULT 'friends' CHECK (profile_visibility IN ('public', 'friends', 'private')),
+    share_progress_data BIT DEFAULT 1,
+    allow_data_analytics BIT DEFAULT 1,
+    marketing_communications BIT DEFAULT 0,
+    
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- User addresses for delivery
+CREATE TABLE user_addresses (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    user_id UNIQUEIDENTIFIER NOT NULL,
+    name NVARCHAR(100) NOT NULL, -- e.g., "Home", "Work", "Mom's House"
+    street_address NVARCHAR(255) NOT NULL,
+    apartment_unit NVARCHAR(50),
+    city NVARCHAR(100) NOT NULL,
+    state NVARCHAR(50) NOT NULL,
+    postal_code NVARCHAR(20) NOT NULL,
+    country NVARCHAR(50) DEFAULT 'United States',
+    delivery_instructions NVARCHAR(500),
+    is_default BIT DEFAULT 0,
+    created_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- MEAL SYSTEM
+-- ============================================================================
+
 -- Dietary preference categories
 CREATE TABLE dietary_preferences (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
@@ -65,13 +172,21 @@ CREATE TABLE meal_plans (
 -- User orders
 CREATE TABLE orders (
     id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    user_email NVARCHAR(255),
+    user_id UNIQUEIDENTIFIER NOT NULL,
     plan_id UNIQUEIDENTIFIER,
+    delivery_address_id UNIQUEIDENTIFIER,
     delivery_date DATE,
-    status NVARCHAR(50) DEFAULT 'pending', -- pending, confirmed, preparing, shipped, delivered
+    status NVARCHAR(50) DEFAULT 'pending', -- pending, confirmed, preparing, shipped, delivered, cancelled
     total_amount DECIMAL(10,2),
+    discount_amount DECIMAL(10,2) DEFAULT 0,
+    tax_amount DECIMAL(10,2) DEFAULT 0,
+    delivery_fee DECIMAL(10,2) DEFAULT 0,
+    order_notes NVARCHAR(1000),
     created_at DATETIME2 DEFAULT GETDATE(),
-    FOREIGN KEY (plan_id) REFERENCES meal_plans(id)
+    updated_at DATETIME2 DEFAULT GETDATE(),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (plan_id) REFERENCES meal_plans(id),
+    FOREIGN KEY (delivery_address_id) REFERENCES user_addresses(id)
 );
 
 -- Selected meals for each order
@@ -84,9 +199,24 @@ CREATE TABLE order_meals (
     FOREIGN KEY (meal_id) REFERENCES meals(id)
 );
 
--- Indexes for performance
+-- ============================================================================
+-- INDEXES FOR PERFORMANCE
+-- ============================================================================
+
+-- User indexes
+CREATE INDEX IX_users_email ON users(email);
+CREATE INDEX IX_users_active ON users(is_active);
+CREATE INDEX IX_user_addresses_user ON user_addresses(user_id);
+CREATE INDEX IX_user_addresses_default ON user_addresses(is_default);
+
+-- Meal indexes
 CREATE INDEX IX_meals_category ON meals(category_id);
 CREATE INDEX IX_meals_popular ON meals(is_popular);
 CREATE INDEX IX_meals_dietary_tags ON meals(dietary_tags);
+
+-- Order indexes
+CREATE INDEX IX_orders_user ON orders(user_id);
 CREATE INDEX IX_orders_status ON orders(status);
 CREATE INDEX IX_orders_delivery_date ON orders(delivery_date);
+CREATE INDEX IX_order_meals_order ON order_meals(order_id);
+CREATE INDEX IX_order_meals_meal ON order_meals(meal_id);

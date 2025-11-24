@@ -1,4 +1,10 @@
 import React from 'react'
+import { 
+  SpinnerDots, 
+  SpinnerCircle, 
+  FadeIn,
+  SlideIn 
+} from './LoadingStates'
 
 interface SkeletonProps {
   className?: string
@@ -170,52 +176,49 @@ export const PageLoader: React.FC<PageLoaderProps> = ({
 }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0F2B1E] to-[#0A2418]">
-      <div className="text-center space-y-8">
-        {/* Animated Logo */}
-        <div className="relative">
-          <div className="w-24 h-24 mx-auto mb-8">
-            <div className="absolute inset-0 bg-[#D4B46A] rounded-full animate-ping opacity-75"></div>
-            <div className="relative w-full h-full bg-gradient-to-r from-[#D4B46A] to-[#B8964E] rounded-full flex items-center justify-center">
-              <div className="w-12 h-12 bg-[#0F2B1E] rounded-full"></div>
+      <FadeIn>
+        <div className="text-center space-y-8">
+          {/* Animated Logo */}
+          <SlideIn direction="down">
+            <div className="relative">
+              <div className="w-24 h-24 mx-auto mb-8">
+                <div className="absolute inset-0 bg-[#D4B46A] rounded-full animate-ping opacity-75"></div>
+                <div className="relative w-full h-full bg-gradient-to-r from-[#D4B46A] to-[#B8964E] rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-[#0F2B1E] rounded-full"></div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </SlideIn>
 
-        {/* Loading Spinner */}
-        <LoadingSpinner size="xl" />
+          {/* Loading Spinner */}
+          <FadeIn delay={200}>
+            <SpinnerCircle size="lg" color="text-[#D4B46A]" />
+          </FadeIn>
 
-        {/* Message */}
-        <div className="space-y-4">
-          <h2
-            className="text-3xl font-bold text-[#F5F2E8]"
-            style={{ fontFamily: 'Playfair Display, serif' }}
-          >
-            EatRite
-          </h2>
-          <p
-            className="text-lg text-[#D4B46A] animate-pulse"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            {message}
-          </p>
-        </div>
+          {/* Message */}
+          <SlideIn direction="up" delay={400}>
+            <div className="space-y-4">
+              <h2
+                className="text-3xl font-bold text-[#F5F2E8]"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                EatRite
+              </h2>
+              <p
+                className="text-lg text-[#D4B46A] animate-pulse"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                {message}
+              </p>
+            </div>
+          </SlideIn>
 
-        {/* Progress Dots */}
-        <div className="flex justify-center space-x-2">
-          <div
-            className="w-2 h-2 bg-[#D4B46A] rounded-full animate-bounce"
-            style={{ animationDelay: '0ms' }}
-          ></div>
-          <div
-            className="w-2 h-2 bg-[#D4B46A] rounded-full animate-bounce"
-            style={{ animationDelay: '150ms' }}
-          ></div>
-          <div
-            className="w-2 h-2 bg-[#D4B46A] rounded-full animate-bounce"
-            style={{ animationDelay: '300ms' }}
-          ></div>
+          {/* Progress Dots */}
+          <FadeIn delay={600}>
+            <SpinnerDots size="md" color="text-[#D4B46A]" />
+          </FadeIn>
         </div>
-      </div>
+      </FadeIn>
     </div>
   )
 }

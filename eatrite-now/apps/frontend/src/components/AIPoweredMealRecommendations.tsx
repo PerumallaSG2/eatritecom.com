@@ -320,29 +320,31 @@ export const AIPoweredMealRecommendations: React.FC = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl overflow-hidden shadow-2xl">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-8">
+      <div className="text-center mb-8">
         <FadeIn>
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <Brain className="w-8 h-8" />
-              <h2 className="text-3xl font-bold">
-                AI-Powered Meal Recommendations
-              </h2>
-              <Sparkles className="w-8 h-8" />
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="p-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl">
+              <Brain className="w-8 h-8 text-white" />
             </div>
-            <p className="text-purple-100 text-lg">
-              Personalized meal suggestions powered by machine learning
-            </p>
+            <h1 className="text-4xl font-bold text-gray-900">
+              AI-Powered Meal Recommendations
+            </h1>
+            <div className="p-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl">
+              <Sparkles className="w-8 h-8 text-white" />
+            </div>
           </div>
+          <p className="text-gray-600 text-xl max-w-3xl mx-auto">
+            Personalized meal suggestions powered by machine learning and your unique preferences
+          </p>
         </FadeIn>
       </div>
 
-      <div className="p-8">
+      <div className="space-y-8">
         {/* User Profile Summary */}
         <FadeIn delay={0.1}>
-          <div className="bg-white rounded-2xl p-6 mb-8 shadow-lg">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
             <div className="flex items-center space-x-4 mb-4">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                 <User className="w-6 h-6 text-purple-600" />
