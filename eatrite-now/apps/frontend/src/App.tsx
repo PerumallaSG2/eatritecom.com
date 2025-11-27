@@ -71,7 +71,6 @@ import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 import { UserPreferencesProvider } from './context/UserPreferencesContext'
 import { EatRiteProvider } from './context/EatRiteThemeProvider'
-import { ToastProvider } from './context/ToastContext'
 import { MobileNavigationProvider } from './context/MobileNavigationContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { OrderTrackingProvider } from './context/OrderTrackingContext'
@@ -177,7 +176,6 @@ function App() {
               <CartProvider>
                 <OrderTrackingProvider>
                   <AnalyticsProvider>
-                    <ToastProvider>
                     <MobileNavigationProvider>
                     <div className="min-h-screen">
                   {/* PWA Components */}
@@ -677,7 +675,6 @@ function App() {
                     <LiveOrderStatusIndicator />
                   </div>
                     </MobileNavigationProvider>
-                    </ToastProvider>
                   </AnalyticsProvider>
                 </OrderTrackingProvider>
               </CartProvider>

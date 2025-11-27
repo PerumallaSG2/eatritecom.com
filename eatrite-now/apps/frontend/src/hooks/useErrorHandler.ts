@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { useToast } from '../context/ToastContext'
 
 // Error types for better categorization
 export enum ErrorType {
@@ -24,7 +23,6 @@ export interface AppError {
 }
 
 export interface ErrorHandlerOptions {
-  showToast?: boolean
   logError?: boolean
   retryable?: boolean
   fallbackMessage?: string
@@ -33,7 +31,6 @@ export interface ErrorHandlerOptions {
 // Custom hook for error handling
 export const useErrorHandler = () => {
   const [errors, setErrors] = useState<AppError[]>([])
-  const { showToast } = useToast()
 
   const createError = useCallback((
     error: Error | string,
@@ -41,7 +38,6 @@ export const useErrorHandler = () => {
     options: ErrorHandlerOptions = {}
   ): AppError => {
     const {
-      showToast: shouldShowToast = true,
       logError = true,
       retryable = false,
       fallbackMessage = 'An unexpected error occurred'
@@ -60,12 +56,8 @@ export const useErrorHandler = () => {
       console.error('Application Error:', appError, typeof error === 'object' ? error : null)
     }
 
-    if (shouldShowToast) {
-      showToast('error', 'Error', appError.userMessage || appError.message)
-    }
-
     return appError
-  }, [showToast])
+  }, [])
 
   const handleError = useCallback((
     error: Error | string,

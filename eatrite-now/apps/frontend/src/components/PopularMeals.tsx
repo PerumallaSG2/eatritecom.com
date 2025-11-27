@@ -8,12 +8,10 @@ import {
   Heart,
   Eye,
 } from 'lucide-react'
-import { useToast } from '../context/ToastContext'
 
 const PopularMeals: React.FC = () => {
   const [hoveredMeal, setHoveredMeal] = useState<number | null>(null)
   const [likedMeals, setLikedMeals] = useState<Set<number>>(new Set())
-  const { showToast } = useToast()
 
   const meals = [
     {
@@ -66,36 +64,20 @@ const PopularMeals: React.FC = () => {
     },
   ]
 
-  const toggleLike = (mealId: number) => {
+  const handleLike = (mealId: number) => {
     const newLiked = new Set(likedMeals)
-    const meal = meals.find(m => m.id === mealId)
 
     if (newLiked.has(mealId)) {
       newLiked.delete(mealId)
-      showToast(
-        'info',
-        'Removed from favorites',
-        `${meal?.name} has been removed from your favorites`
-      )
     } else {
       newLiked.add(mealId)
-      showToast(
-        'success',
-        'Added to favorites!',
-        `${meal?.name} has been saved to your favorites`
-      )
     }
     setLikedMeals(newLiked)
   }
 
   const handleAddToCart = (meal: (typeof meals)[0]) => {
     // Simulate adding to cart
-    showToast(
-      'success',
-      'Added to cart!',
-      `${meal.name} ($${meal.price}) has been added to your cart`,
-      3000
-    )
+    console.log(`Added ${meal.name} to cart`)
   }
 
   const getMealImage = (mealType: string, mealName: string) => {
@@ -183,7 +165,7 @@ const PopularMeals: React.FC = () => {
                 <button
                   onClick={e => {
                     e.stopPropagation()
-                    toggleLike(meal.id)
+                    handleLike(meal.id)
                   }}
                   className="absolute top-4 left-4 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
                 >

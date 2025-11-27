@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Plus, ChevronDown, Minus } from 'lucide-react'
 import { useCart } from '../context/CartContext'
-import { useToast } from '../context/ToastContext'
 import MealFilters from '../components/MealFilters'
 import { 
   AnimatedMenuLoader, 
@@ -246,7 +245,6 @@ export default function MenuPage() {
   }, [filters])
 
   const { addToCart, items, updateQuantity } = useCart()
-  const { showToast } = useToast()
   const isMobile = useIsMobile()
 
   // Filter and sort meals based on current filters
@@ -336,12 +334,6 @@ export default function MenuPage() {
     setDisplayedMeals(initialMeals)
     setCurrentPage(1)
     setHasMore(filtered.length > mealsPerPage)
-
-    showToast(
-      'info',
-      'Filters Applied',
-      `Found ${filtered.length} matching meals`
-    )
   }
 
   useEffect(() => {
@@ -383,7 +375,6 @@ export default function MenuPage() {
 
       return newMeals
     }, ErrorType.NETWORK, {
-      showToast: true,
       retryable: true,
       fallbackMessage: 'Failed to load more meals. Please try again.'
     })
@@ -404,10 +395,7 @@ export default function MenuPage() {
       setCurrentPage(1)
       setDisplayedMeals(filteredMeals.slice(0, mealsPerPage))
       setHasMore(filteredMeals.length > mealsPerPage)
-      
-      showToast('success', 'Refreshed!', 'Menu updated with latest meals')
     }, ErrorType.NETWORK, {
-      showToast: true,
       retryable: false,
       fallbackMessage: 'Failed to refresh meals. Please try again.'
     })
@@ -425,7 +413,6 @@ export default function MenuPage() {
     }
 
     addToCart(cartItem)
-    showToast('success', 'Added to Cart', `${meal.name} added to cart!`)
   }
 
   // Show loading animation on initial load
