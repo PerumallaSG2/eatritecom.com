@@ -3,7 +3,6 @@ import {
   Settings as SettingsIcon, 
   User, 
   Bell, 
-  Globe, 
   Palette,
   ChevronRight
 } from 'lucide-react'
