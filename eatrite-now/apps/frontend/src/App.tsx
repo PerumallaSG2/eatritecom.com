@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { VisitorTracker } from './utils/analytics'
 
 // Core Layout Components
 import Navbar from './components/Navbar'
@@ -27,6 +28,7 @@ const MealDetailPage = lazy(() => import('./pages/MealDetailPage'))
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const VisitorTrackingDashboard = lazy(() => import('./components/VisitorTrackingDashboard'))
 
 // Premium & Revolutionary Pages (Lazy)
 const PremiumHomePage = lazy(() => import('./pages/PremiumHomePage').then(module => ({ default: module.PremiumHomePage })))
@@ -89,7 +91,8 @@ import { setupGlobalErrorHandlers } from './hooks/useErrorHandler'
 import { BottomNavigation, MobileHeader } from './components/MobileNavigation'
 
 // Order Tracking Components
-import { OrderNotificationCenter, LiveOrderStatusIndicator } from './components/OrderNotifications'
+// Disabled order notifications to remove demo popups
+// import { OrderNotificationCenter, LiveOrderStatusIndicator } from './components/OrderNotifications'
 
 // PWA Hooks
 import { useServiceWorker, ServiceWorkerUpdateEvent } from './utils/serviceWorker'
@@ -139,6 +142,9 @@ function App() {
   useEffect(() => {
     // Setup global error handlers
     setupGlobalErrorHandlers()
+
+    // Track visitor on app load
+    VisitorTracker.trackVisitor()
 
     // Register service worker on mount
     register().then(({ registration, error }) => {
@@ -652,6 +658,12 @@ function App() {
                       </PageLayout>
                     }
                   />
+                  <Route
+                    path="/visitor-analytics"
+                    element={
+                      <VisitorTrackingDashboard />
+                    }
+                  />
                   <Route path="/login" element={
                     <PageLayout variant="minimal" showNavbar={false} showFooter={false}>
                       <LoginPage />
@@ -670,9 +682,9 @@ function App() {
                     <MobileHeader />
                     <BottomNavigation />
                     
-                    {/* Order Tracking Components */}
-                    <OrderNotificationCenter />
-                    <LiveOrderStatusIndicator />
+                    {/* Order Tracking Components - Disabled to remove demo popups */}
+                    {/* <OrderNotificationCenter /> */}
+                    {/* <LiveOrderStatusIndicator /> */}
                   </div>
                     </MobileNavigationProvider>
                   </AnalyticsProvider>

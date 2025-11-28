@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { sqliteDB } from '../services/sqliteDatabase.js'
+import { db } from '../services/database.js'
 import { FallbackDataService } from '../services/fallbackData.js'
 
 const router: Router = express.Router()
@@ -7,7 +7,7 @@ const router: Router = express.Router()
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    sqliteDB.getDB()
+    db.getPool()
     return true
   } catch {
     return false
@@ -45,7 +45,28 @@ router.get('/', async (req, res) => {
       filters.limit = parseInt(limit as string)
     }
 
-    const meals = sqliteDB.getMeals(filters)
+    let query = `
+      SELECT m.*, c.name as category_name, n.*
+      FROM meals m
+      LEFT JOIN categories c ON m.category_id = c.id  
+      LEFT JOIN nutrition n ON m.id = n.meal_id
+    `
+    let whereConditions = []
+    
+    if (filters.category) {
+      whereConditions.push(`c.name = '${filters.category}'`)
+    }
+    
+    if (whereConditions.length > 0) {
+      query += ` WHERE ${whereConditions.join(' AND ')}`
+    }
+    
+    if (filters.limit) {
+      query += ` ORDER BY m.name OFFSET 0 ROWS FETCH NEXT ${filters.limit} ROWS ONLY`
+    }
+
+    const result = await db.query(query)
+    const meals = result.recordset
 
     return res.json({
       success: true,
@@ -80,7 +101,15 @@ router.get('/:id', async (req, res) => {
       return res.json(result)
     }
 
-    const meal = sqliteDB.getMealById(mealId)
+    const result = await db.query(`
+      SELECT m.*, c.name as category_name, n.*
+      FROM meals m
+      LEFT JOIN categories c ON m.category_id = c.id  
+      LEFT JOIN nutrition n ON m.id = n.meal_id
+      WHERE m.id = ${mealId}
+    `)
+    
+    const meal = result.recordset[0]
 
     if (!meal) {
       return res.status(404).json({
@@ -134,7 +163,16 @@ router.get('/category/:category', async (req, res) => {
       })
     }
 
-    const meals = sqliteDB.getMeals(filters)
+    let query = `
+      SELECT m.*, c.name as category_name, n.*
+      FROM meals m
+      LEFT JOIN categories c ON m.category_id = c.id  
+      LEFT JOIN nutrition n ON m.id = n.meal_id
+      WHERE c.name = '${category}'
+    `
+    
+    const result = await db.query(query)
+    const meals = result.recordset
 
     res.json({
       success: true,

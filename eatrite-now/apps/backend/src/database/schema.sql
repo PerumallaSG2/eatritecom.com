@@ -1,6 +1,65 @@
 -- EatRite Database Schema (Simplified Factor75-inspired structure)
 
 -- ============================================================================
+-- VISITOR ANALYTICS AND TRACKING
+-- ============================================================================
+
+-- Visitor tracking table for website analytics
+CREATE TABLE visitor_logs (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    session_id NVARCHAR(100) NOT NULL,
+    ip_address NVARCHAR(45), -- IPv6 support
+    user_agent NVARCHAR(500),
+    referrer NVARCHAR(500),
+    page_url NVARCHAR(500) NOT NULL,
+    page_title NVARCHAR(200),
+    screen_resolution NVARCHAR(20),
+    device_type NVARCHAR(20), -- Mobile, Desktop, Tablet
+    browser_name NVARCHAR(50),
+    browser_version NVARCHAR(20),
+    operating_system NVARCHAR(50),
+    language NVARCHAR(10),
+    timezone NVARCHAR(50),
+    country NVARCHAR(2), -- ISO country code
+    city NVARCHAR(100),
+    visit_duration INT, -- seconds on page
+    is_bounce BIT DEFAULT 0, -- single page visit
+    is_new_visitor BIT DEFAULT 1,
+    utm_source NVARCHAR(100), -- Marketing campaign tracking
+    utm_medium NVARCHAR(100),
+    utm_campaign NVARCHAR(100),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
+);
+
+-- Indexes for performance
+CREATE INDEX IX_visitor_logs_session_id ON visitor_logs(session_id);
+CREATE INDEX IX_visitor_logs_created_at ON visitor_logs(created_at);
+CREATE INDEX IX_visitor_logs_ip_address ON visitor_logs(ip_address);
+CREATE INDEX IX_visitor_logs_device_type ON visitor_logs(device_type);
+
+-- Daily visitor summary table for quick analytics
+CREATE TABLE visitor_analytics (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    analytics_date DATE NOT NULL,
+    total_visitors INT DEFAULT 0,
+    unique_visitors INT DEFAULT 0,
+    page_views INT DEFAULT 0,
+    bounce_rate DECIMAL(5,2) DEFAULT 0, -- percentage
+    avg_session_duration INT DEFAULT 0, -- seconds
+    mobile_visitors INT DEFAULT 0,
+    desktop_visitors INT DEFAULT 0,
+    tablet_visitors INT DEFAULT 0,
+    top_referrer NVARCHAR(500),
+    top_page NVARCHAR(500),
+    created_at DATETIME2 DEFAULT GETDATE(),
+    updated_at DATETIME2 DEFAULT GETDATE()
+);
+
+-- Unique constraint for daily analytics
+CREATE UNIQUE INDEX IX_visitor_analytics_date ON visitor_analytics(analytics_date);
+
+-- ============================================================================
 -- USER AUTHENTICATION AND PROFILES
 -- ============================================================================
 

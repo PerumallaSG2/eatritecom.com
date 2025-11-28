@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { sqliteDB } from '../services/sqliteDatabase.js'
+import { db } from '../services/database.js'
 import { FallbackDataService } from '../services/fallbackData.js'
 
 const router: Router = express.Router()
@@ -7,7 +7,7 @@ const router: Router = express.Router()
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    sqliteDB.getDB()
+    db.getPool()
     return true
   } catch {
     return false
@@ -28,7 +28,8 @@ router.get('/', async (req, res) => {
       return res.json(result)
     }
 
-    const categories = sqliteDB.getCategories()
+    const result = await db.query('SELECT id, name, description, created_at FROM categories ORDER BY name')
+    const categories = result.recordset
 
     return res.json({
       success: true,

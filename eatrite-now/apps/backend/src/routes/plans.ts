@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { sqliteDB } from '../services/sqliteDatabase.js'
+import { db } from '../services/database.js'
 import { FallbackDataService } from '../services/fallbackData.js'
 
 const router: Router = express.Router()
@@ -7,7 +7,7 @@ const router: Router = express.Router()
 // Check if database is available
 const isDatabaseAvailable = async (): Promise<boolean> => {
   try {
-    sqliteDB.getDB()
+    db.getPool()
     return true
   } catch {
     return false
@@ -28,7 +28,8 @@ router.get('/', async (req, res) => {
       return res.json(result)
     }
 
-    const plans = sqliteDB.getPlans()
+    const result = await db.query('SELECT * FROM plans ORDER BY price')
+    const plans = result.recordset
 
     // Parse features from string to array
     const parsedPlans = plans.map((plan: any) => ({
@@ -70,7 +71,8 @@ router.get('/:id', async (req, res) => {
       return res.json(result)
     }
 
-    const planData = sqliteDB.getPlanById(planId)
+    const result = await db.query(`SELECT * FROM plans WHERE id = ${planId}`)
+    const planData = result.recordset[0]
 
     if (!planData) {
       return res.status(404).json({
@@ -148,7 +150,8 @@ router.post('/subscribe', async (req, res) => {
     }
 
     // Check if plan exists
-    const plan = sqliteDB.getPlanById(planId)
+    const result = await db.query(`SELECT * FROM plans WHERE id = ${planId}`)
+    const plan = result.recordset[0]
     if (!plan) {
       return res.status(404).json({
         success: false,

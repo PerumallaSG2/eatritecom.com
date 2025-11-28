@@ -15,6 +15,7 @@ import paymentRoutes from './routes/payments.js'
 import paymentsEnhanced from './routes/paymentsEnhanced.js'
 import cardTesting from './routes/cardTesting.js'
 import moneyFlow from './routes/moneyFlow.js'
+import analyticsRoutes from './routes/analytics.js'
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js'
@@ -90,6 +91,7 @@ app.use('/api/payments', paymentRoutes)
 app.use('/api/payments/v2', paymentsEnhanced)
 app.use('/api/payments/test', cardTesting)
 app.use('/api/payments/money-flow', moneyFlow)
+app.use('/api/analytics', analyticsRoutes)
 
 // Error handling middleware
 app.use(notFound)
@@ -109,22 +111,16 @@ const startServer = async () => {
       }
     })
 
-    // Try to initialize database connection (non-blocking)
+    // Initialize SQL Server database connection (required)
     try {
-      // First try SQLite (new, reliable)
-      const { initializeDatabase } = await import('./services/sqliteDatabase.js')
+      const { initializeDatabase } = await import('./services/database.js')
       await initializeDatabase()
-      console.log('🎉 SQLite Database ready!')
-    } catch (sqliteError) {
-      console.log('⚠️  SQLite failed, trying SQL Server...')
-      try {
-        const { initializeDatabase } = await import('./services/database.js')
-        await initializeDatabase()
-        console.log('🎉 SQL Server Database ready!')
-      } catch (dbError) {
-        console.log('⚠️  No database available - using fallback mode')
-        console.log('ℹ️  Install SQLite or configure SQL Server for persistence')
-      }
+      console.log('🎉 SQL Server Database ready!')
+    } catch (sqlServerError) {
+      console.error('❌ SQL Server connection failed:', sqlServerError instanceof Error ? sqlServerError.message : String(sqlServerError))
+      console.error('⚠️  Please ensure SQL Server is running and credentials are correct')
+      console.error('ℹ️  Required environment variables: DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE')
+      process.exit(1) // Exit if SQL Server is not available
     }
   } catch (error) {
     console.error('❌ Failed to start server:', error)
@@ -136,14 +132,9 @@ const startServer = async () => {
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...')
   try {
-    // Try to close SQLite first, then SQL Server
-    try {
-      const { closeDatabase } = await import('./services/sqliteDatabase.js')
-      await closeDatabase()
-    } catch (error) {
-      const { closeDatabase } = await import('./services/database.js')
-      await closeDatabase()
-    }
+    // Close SQL Server database
+    const { closeDatabase } = await import('./services/database.js')
+    await closeDatabase()
   } catch (error) {
     console.error('Error closing database:', error)
   }
@@ -153,14 +144,9 @@ process.on('SIGINT', async () => {
 process.on('SIGTERM', async () => {
   console.log('Shutting down gracefully...')
   try {
-    // Try to close SQLite first, then SQL Server
-    try {
-      const { closeDatabase } = await import('./services/sqliteDatabase.js')
-      await closeDatabase()
-    } catch (error) {
-      const { closeDatabase } = await import('./services/database.js')
-      await closeDatabase()
-    }
+    // Close SQL Server database
+    const { closeDatabase } = await import('./services/database.js')
+    await closeDatabase()
   } catch (error) {
     console.error('Error closing database:', error)
   }
