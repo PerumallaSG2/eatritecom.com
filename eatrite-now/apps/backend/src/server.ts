@@ -3,7 +3,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
-// Database temporarily disabled for development
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 // Import routes
 import categoryRoutes from './routes/categories.js'
@@ -15,7 +17,11 @@ import paymentRoutes from './routes/payments.js'
 import paymentsEnhanced from './routes/paymentsEnhanced.js'
 import cardTesting from './routes/cardTesting.js'
 import moneyFlow from './routes/moneyFlow.js'
-import analyticsRoutes from './routes/analytics.js'
+// import analyticsRoutes from './routes/analytics.js' // Disabled - visitor tracking not critical
+import billingRoutes from './routes/billing.js'
+import onboardingRoutes from './routes/onboarding.js'
+import adminRoutes from './routes/admin.js'
+import employeeRoutes from './routes/employee.js'
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js'
@@ -91,7 +97,11 @@ app.use('/api/payments', paymentRoutes)
 app.use('/api/payments/v2', paymentsEnhanced)
 app.use('/api/payments/test', cardTesting)
 app.use('/api/payments/money-flow', moneyFlow)
-app.use('/api/analytics', analyticsRoutes)
+// app.use('/api/analytics', analyticsRoutes) // Disabled - visitor tracking not critical
+app.use('/api/v1/billing', billingRoutes)
+app.use('/api/v1/onboarding', onboardingRoutes)
+app.use('/api/admin', adminRoutes)
+app.use('/api/employee', employeeRoutes)
 
 // Error handling middleware
 app.use(notFound)
@@ -111,16 +121,18 @@ const startServer = async () => {
       }
     })
 
-    // Initialize SQL Server database connection (required)
+    // Initialize PostgreSQL database connection via Prisma
     try {
-      const { initializeDatabase } = await import('./services/database.js')
-      await initializeDatabase()
-      console.log('🎉 SQL Server Database ready!')
-    } catch (sqlServerError) {
-      console.error('❌ SQL Server connection failed:', sqlServerError instanceof Error ? sqlServerError.message : String(sqlServerError))
-      console.error('⚠️  Please ensure SQL Server is running and credentials are correct')
-      console.error('ℹ️  Required environment variables: DB_SERVER, DB_USER, DB_PASSWORD, DB_DATABASE')
-      process.exit(1) // Exit if SQL Server is not available
+      const prismaModule = await import('@prisma/client')
+      // @ts-ignore - Dynamic import pattern for Prisma
+      const { PrismaClient } = prismaModule.default
+      const prisma = new PrismaClient()
+      await prisma.$connect()
+      console.log('✅ PostgreSQL Database connected via Prisma!')
+    } catch (dbError) {
+      console.warn('⚠️  Database connection failed:', dbError instanceof Error ? dbError.message : String(dbError))
+      console.warn('ℹ️  Server will continue with mock data. Set DATABASE_URL to connect.')
+      // Don't exit - allow server to run with mock data
     }
   } catch (error) {
     console.error('❌ Failed to start server:', error)
@@ -132,9 +144,8 @@ const startServer = async () => {
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...')
   try {
-    // Close SQL Server database
-    const { closeDatabase } = await import('./services/database.js')
-    await closeDatabase()
+    // Disconnect Prisma
+    await prisma.$disconnect()
   } catch (error) {
     console.error('Error closing database:', error)
   }
@@ -144,9 +155,8 @@ process.on('SIGINT', async () => {
 process.on('SIGTERM', async () => {
   console.log('Shutting down gracefully...')
   try {
-    // Close SQL Server database
-    const { closeDatabase } = await import('./services/database.js')
-    await closeDatabase()
+    // Disconnect Prisma
+    await prisma.$disconnect()
   } catch (error) {
     console.error('Error closing database:', error)
   }

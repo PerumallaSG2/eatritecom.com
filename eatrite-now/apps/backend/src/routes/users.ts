@@ -1,38 +1,18 @@
 import express, { Router } from 'express'
-import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
-// Inline type definitions to avoid ES module import issues
-interface User {
-  id: string
-  email: string
-  password_hash: string
-  first_name: string
-  last_name: string
-  phone?: string
-  is_active: boolean
-  email_verified: boolean
-  created_at: Date
-  updated_at: Date
-}
-
-interface UserProfile {
-  user_id: string
-  date_of_birth?: Date
-  gender?: 'male' | 'female' | 'other'
-  height?: number
-  weight?: number
-  activity_level?: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active'
-  dietary_restrictions?: string
-  health_goals?: string
-  allergies?: string
-  updated_at: Date
-}
+import { PrismaClient } from '@prisma/client'
+import { hashPassword, verifyPassword, validatePasswordStrength, needsRehash } from '../security/password.js'
 import { OTPUtils } from '../utils/otpUtils.js'
 import { EmailService } from '../services/emailService.js'
 import { SMSService } from '../services/smsService.js'
 
 const router: Router = express.Router()
+const prisma = new PrismaClient()
+
+// ============================================================================
+// TYPES AND INTERFACES
+// ============================================================================
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -93,35 +73,90 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequest>, res: Resp
       })
     }
 
-    // Validate password strength
-    if (password.length < 8) {
+    // Validate password strength using OWASP-compliant validation
+    const passwordValidation = validatePasswordStrength(password)
+    if (!passwordValidation.valid) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Password must be at least 8 characters long' 
+        message: passwordValidation.messages[0] || 'Password does not meet security requirements'
       })
     }
 
-    // Hash password
-    const saltRounds = 12
-    const passwordHash = await bcrypt.hash(password, saltRounds)
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    })
 
-    // For now, simulate database operations with mock data
-    // In production, you would use your SQL Server connection
-    const mockUser = {
-      id: `user_${Date.now()}`,
-      email: email.toLowerCase(),
-      firstName,
-      lastName,
-      phone: phone || null,
-      isActive: true,
-      emailVerified: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: 'An account with this email already exists'
+      })
     }
 
-    // Generate JWT token
+    // Hash password using bcrypt with cost factor 12 (OWASP recommended)
+    const passwordHash = await hashPassword(password)
+
+    // For new registrations, require company invitation or create demo company
+    // In production, users should be invited by company admins
+    // For now, create a default company for testing
+    let companyId = 'demo-company-id'
+    
+    // Try to find a demo company or create one
+    let demoCompany = await prisma.company.findFirst({
+      where: { name: 'Demo Company' }
+    })
+
+    if (!demoCompany) {
+      demoCompany = await prisma.company.create({
+        data: {
+          name: 'Demo Company',
+          code: 'DEMO',
+          email: 'admin@demo.com',
+          phone: '+1-555-0100',
+          industry: 'Technology',
+          employeeCount: 100,
+          tier: 'TIER_A',
+          isActive: true
+        }
+      })
+    }
+
+    companyId = demoCompany.id
+
+    // Create user in database
+    const user = await prisma.user.create({
+      data: {
+        email: email.toLowerCase(),
+        password: passwordHash,
+        firstName,
+        lastName,
+        phone: phone || null,
+        role: 'EMPLOYEE', // Default role for new registrations
+        companyId,
+        isActive: true
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        phone: true,
+        role: true,
+        companyId: true,
+        isActive: true,
+        createdAt: true
+      }
+    })
+
+    // Generate JWT token with role and companyId
     const token = jwt.sign(
-      { userId: mockUser.id, email: mockUser.email },
+      { 
+        userId: user.id, 
+        email: user.email,
+        role: user.role,
+        companyId: user.companyId
+      },
       process.env.JWT_SECRET || 'fallback_secret_key',
       { expiresIn: '7d' }
     )
@@ -131,9 +166,18 @@ router.post('/register', async (req: Request<{}, {}, RegisterRequest>, res: Resp
       success: true,
       message: 'User registered successfully',
       data: {
-        user: mockUser,
-        token,
-        profile: null // Will be created in onboarding
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          role: user.role,
+          companyId: user.companyId,
+          isActive: user.isActive,
+          createdAt: user.createdAt
+        },
+        token
       }
     })
 
@@ -158,22 +202,73 @@ router.post('/login', async (req: Request, res: Response) => {
       })
     }
 
-    // For demo purposes, simulate login with any valid credentials
-    // In production, you would verify against the database
-    const mockUser = {
-      id: `user_${Date.now()}`,
-      email: email.toLowerCase(),
-      firstName: 'Demo',
-      lastName: 'User',
-      phone: null,
-      isActive: true,
-      emailVerified: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
+    // Find user in database
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        firstName: true,
+        lastName: true,
+        phone: true,
+        role: true,
+        companyId: true,
+        isActive: true,
+        deletedAt: true
+      }
+    })
+
+    // Generic error message for security (don't reveal if email exists)
+    if (!user || user.deletedAt) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      })
     }
 
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: 'Account has been deactivated. Please contact support.'
+      })
+    }
+
+    // Verify password using constant-time comparison
+    const isPasswordValid = await verifyPassword(password, user.password)
+    
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      })
+    }
+
+    // Check if password needs rehashing (cost factor increased)
+    const shouldRehash = await needsRehash(user.password)
+    if (shouldRehash) {
+      const newHash = await hashPassword(password)
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password: newHash }
+      })
+    }
+
+    // Update last login timestamp
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() }
+    })
+
+    // Generate JWT token with role and companyId
     const token = jwt.sign(
-      { userId: mockUser.id, email: mockUser.email },
+      { 
+        userId: user.id, 
+        email: user.email,
+        role: user.role,
+        companyId: user.companyId
+      },
       process.env.JWT_SECRET || 'fallback_secret_key',
       { expiresIn: '7d' }
     )
@@ -182,7 +277,16 @@ router.post('/login', async (req: Request, res: Response) => {
       success: true,
       message: 'Login successful',
       data: {
-        user: mockUser,
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          role: user.role,
+          companyId: user.companyId,
+          isActive: user.isActive
+        },
         token
       }
     })

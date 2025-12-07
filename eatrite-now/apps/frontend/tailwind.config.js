@@ -14,163 +14,62 @@ export default {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px',
+        '2xl': '1320px',
       },
     },
     extend: {
-      // EatRite Premium Brand Typography
+      // Enterprise System Fonts
       fontFamily: {
-        heading: [
-          '"Playfair Display"',
-          '"Cormorant Garamond"',
-          'Georgia',
-          'serif',
-        ],
-        body: [
-          '"Inter"',
-          '"Nunito"',
-          '"SF Pro Display"',
+        sans: [
           '-apple-system',
           'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
           'sans-serif',
         ],
-        mono: ['"JetBrains Mono"', '"Fira Code"', 'Monaco', 'monospace'],
       },
 
-      // EatRite Premium Brand Colors - World-Class UI
+      // Enterprise Color Palette - Conservative & Predictable
       colors: {
-        // Fresh, Modern Color Palette
-        // Primary: Deep natural green for health & freshness
+        // Primary Brand Color - Single green only
         primary: {
-          DEFAULT: '#2E7D32',
-          light: '#4CAF50',
-          dark: '#1B5E20',
-        },
-        // Secondary Accent: Warm coral/orange for appetite, energy, CTAs
-        accent: {
-          DEFAULT: '#FF8A65',
-          light: '#FFAB91',
-          dark: '#FF5722',
-        },
-        // Legacy Brand Colors
-        brand: {
-          gold: '#D4B46A',
-          'dark-green': '#0F2B1E',
-          'soft-black': '#0A0A0A',
-          'off-white': '#F5F2E8',
-        },
-
-        // Surface Colors
-        surface: {
-          primary: '#0F2B1E',
-          secondary: '#152D22',
-          tertiary: '#1A3327',
-          overlay: '#0A0A0A',
-          accent: '#D4B46A',
-        },
-
-        // Text Colors
-        text: {
-          primary: '#F5F2E8',
-          secondary: '#E0DDD5',
-          tertiary: '#B8B5AD',
-          accent: '#D4B46A',
-          inverse: '#0A0A0A',
-        },
-
-        // Status Colors
-        success: '#4A7C59',
-        warning: '#D4B46A',
-        error: '#CC4444',
-        info: '#5A8A7A',
-
-        // Legacy colors for compatibility
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: '#3d8f6a',
+          50: '#f0f9f5',
+          100: '#d9f0e5',
+          200: '#b6e2cc',
+          300: '#88cfad',
+          400: '#5bb68b',
+          500: '#3d8f6a',
+          600: '#2f7556',
+          700: '#265d45',
+          800: '#204a38',
+          900: '#1b3e2f',
         },
       },
 
-      // Premium Border Radius
+      // Minimal Border Radius
       borderRadius: {
-        premium: '0.875rem', // 14px - matches logo aesthetic
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: '0.5rem',
+        md: '0.375rem',
+        sm: '0.25rem',
       },
 
-      // Premium Shadows with Gold Glow
+      // Subtle Shadows Only
       boxShadow: {
-        'gold-glow': '0 0 20px rgba(212, 180, 106, 0.3)',
-        'gold-glow-md': '0 0 30px rgba(212, 180, 106, 0.4)',
-        'gold-glow-lg': '0 0 40px rgba(212, 180, 106, 0.5)',
-        premium:
-          '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
-        'premium-lg':
-          '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       },
 
-      // Premium Animations
+      // State Transitions Only - No Decorative Animation
       keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
-        'gold-pulse': {
-          '0%, 100%': {
-            boxShadow: '0 0 20px rgba(212, 180, 106, 0.3)',
-          },
-          '50%': {
-            boxShadow: '0 0 30px rgba(212, 180, 106, 0.6)',
-          },
-        },
-        'gentle-float': {
-          '0%, 100%': {
-            transform: 'translateY(0px)',
-          },
-          '50%': {
-            transform: 'translateY(-10px)',
-          },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        'gold-pulse': 'gold-pulse 2s ease-in-out infinite',
-        'gentle-float': 'gentle-float 3s ease-in-out infinite',
+        'fade-in': 'fade-in 0.2s ease-in-out',
       },
     },
   },

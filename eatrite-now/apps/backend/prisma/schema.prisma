@@ -1,42 +1,96 @@
-// EatRite - Complete Meal Delivery Platform Schema
-// Web design by Sairam Perumalla
+// EatRite - Enterprise B2B Corporate Wellness & Meal Operations Platform
+// Enterprise-Grade Schema for Fortune 500 Compliance
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlserver"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// ============================================================================
+// BILLING & FINANCIAL ENUMS (IMMUTABLE)
+// ============================================================================
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum InvoiceLineItemType {
+  MEAL
+  SUBSCRIPTION
+  DISCOUNT
+  CREDIT
+  ADJUSTMENT
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  ACH
+  WIRE_TRANSFER
+  NET_30
+  NET_60
+}
+
+// ============================================================================
+// RBAC ENUMS
+// ============================================================================
+
+enum UserRole {
+  SUPER_ADMIN       // Platform administrator
+  COMPANY_ADMIN     // Corporate administrator
+  FINANCE_USER      // Financial/billing access
+  OPERATIONS_USER   // Order management
+  EMPLOYEE          // Limited end-user access
+}
+
+// ============================================================================
+// CORE USER MODEL (RBAC-ENABLED)
+// ============================================================================
 
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String?
-  name      String?
-  firstName String?
-  lastName  String?
+  password  String
+  firstName String
+  lastName  String
   phone     String?
-  role      String   @default("USER")
-  companyId String?
+  role      UserRole @default(EMPLOYEE)
+  companyId String
   isActive  Boolean  @default(true)
+  lastLogin DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime? // Soft delete for PII compliance
 
   // Relationships
-  subscriptions Subscription[]
-  orders        Order[]
-  preferences   UserPreference?
-  profile       UserProfile?
-  addresses     Address[]
-  company       Company? @relation(fields: [companyId], references: [id])
-  tasteProfile  TasteProfile?
-  
-  // Wellness tracking
-  wellnessScore WellnessScore[]
-  achievements  UserAchievement[]
+  company            Company            @relation(fields: [companyId], references: [id])
+  subscriptions      Subscription[]
+  orders             Order[]
+  preferences        UserPreference?
+  profile            UserProfile?
+  wellnessScore      WellnessScore[]
+  achievements       UserAchievement[]
+  auditLogsPerformed AuditLog[]         @relation("PerformedBy")
+  accessLogs         AccessLog[]
 
+  @@index([companyId])
+  @@index([email])
+  @@index([role])
   @@map("users")
 }
 
@@ -77,25 +131,6 @@ model UserPreference {
   @@map("user_preferences")
 }
 
-model Address {
-  id           String  @id @default(cuid())
-  userId       String
-  firstName    String
-  lastName     String
-  street       String
-  city         String
-  state        String
-  zipCode      String
-  country      String  @default("US")
-  isDefault    Boolean @default(false)
-  instructions String?
-
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orders Order[]
-
-  @@map("addresses")
-}
-
 model Category {
   id          String   @id @default(cuid())
   name        String   @unique
@@ -122,7 +157,7 @@ model Meal {
   ingredients     String[]
   allergens       String[]
   nutritionFacts  Json
-  price           Decimal  @db.Decimal(10, 2)
+  priceCents      Int
   calories        Int
   protein         Int
   carbs           Int
@@ -150,18 +185,16 @@ model Meal {
 }
 
 model Plan {
-  id            String   @id @default(cuid())
-  name          String
-  description   String
-  mealsPerWeek  Int
-  pricePerMeal  Decimal  @db.Decimal(10, 2)
-  totalPrice    Decimal  @db.Decimal(10, 2)
-  discount      Decimal? @db.Decimal(5, 2)
-  isActive      Boolean  @default(true)
-  isPopular     Boolean  @default(false)
-  features      String[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(cuid())
+  name              String
+  description       String
+  mealsPerWeek      Int
+  pricePerMealCents Int
+  totalPriceCents   Int
+  isActive          Boolean  @default(true)
+  features          String[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   subscriptions Subscription[]
 
@@ -191,63 +224,44 @@ model Subscription {
 model Order {
   id             String      @id @default(cuid())
   userId         String
+  companyId      String
   subscriptionId String?
-  addressId      String
   status         OrderStatus @default(PENDING)
   orderNumber    String      @unique
-  subtotal       Decimal     @db.Decimal(10, 2)
-  tax            Decimal     @db.Decimal(10, 2)
-  shipping       Decimal     @db.Decimal(10, 2)
-  total          Decimal     @db.Decimal(10, 2)
+  subtotalCents  Int
+  taxCents       Int
+  shippingCents  Int
+  totalCents     Int
   deliveryDate   DateTime?
   deliveredAt    DateTime?
   trackingNumber String?
-  notes          String?
+  deliveryAddress String
+  deliveryNotes  String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
   user         User          @relation(fields: [userId], references: [id])
   subscription Subscription? @relation(fields: [subscriptionId], references: [id])
-  address      Address       @relation(fields: [addressId], references: [id])
   items        OrderItem[]
 
+  @@index([companyId])
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
   @@map("orders")
 }
 
 model OrderItem {
-  id       String  @id @default(cuid())
-  orderId  String
-  mealId   String
-  quantity Int
-  price    Decimal @db.Decimal(10, 2)
+  id           String  @id @default(cuid())
+  orderId      String
+  mealId       String
+  quantity     Int
+  priceCents   Int
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
   meal  Meal  @relation(fields: [mealId], references: [id])
 
   @@map("order_items")
-}
-
-// Contact form submissions
-model Contact {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  subject   String?
-  message   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  @@map("contacts")
-}
-
-// Newsletter subscriptions
-model Newsletter {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-
-  @@map("newsletter")
 }
 
 enum SubscriptionStatus {
@@ -256,48 +270,175 @@ enum SubscriptionStatus {
   CANCELLED
 }
 
+// ============================================================================
+// ENTERPRISE BILLING MODELS (TIER 1 - IMMUTABLE, AUDITED)
+// ============================================================================
+
+model Invoice {
+  id            String        @id @default(cuid())
+  companyId     String
+  invoiceNumber String        @unique
+  periodStart   DateTime
+  periodEnd     DateTime
+  status        InvoiceStatus @default(DRAFT)
+  subtotalCents Int
+  taxCents      Int
+  totalCents    Int
+  currency      String        @default("USD")
+  dueDate       DateTime
+  issuedAt      DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  company   Company             @relation(fields: [companyId], references: [id])
+  lineItems InvoiceLineItem[]
+  payments  PaymentRecord[]
+
+  @@index([companyId])
+  @@index([invoiceNumber])
+  @@index([status])
+  @@index([dueDate])
+  @@map("invoices")
+}
+
+model InvoiceLineItem {
+  id             String              @id @default(cuid())
+  invoiceId      String
+  type           InvoiceLineItemType
+  description    String
+  quantity       Int
+  unitPriceCents Int
+  totalCents     Int
+  metadata       Json?
+  createdAt      DateTime            @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@map("invoice_line_items")
+}
+
+model PaymentRecord {
+  id                    String        @id @default(cuid())
+  invoiceId             String?
+  companyId             String
+  stripePaymentIntentId String?       @unique
+  amountCents           Int
+  status                PaymentStatus @default(PENDING)
+  paymentMethod         PaymentMethod @default(CREDIT_CARD)
+  failureReason         String?
+  metadata              Json?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  invoice   Invoice?   @relation(fields: [invoiceId], references: [id])
+  company   Company    @relation(fields: [companyId], references: [id])
+
+  @@index([invoiceId])
+  @@index([companyId])
+  @@index([status])
+  @@index([stripePaymentIntentId])
+  @@map("payment_records")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  entityType  String
+  entityId    String
+  action      String
+  performedBy String?
+  ipAddress   String?
+  userAgent   String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  user    User?    @relation("PerformedBy", fields: [performedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([performedBy])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model AccessLog {
+  id         String   @id @default(cuid())
+  userId     String
+  resource   String
+  action     String
+  ipAddress  String
+  userAgent  String?
+  success    Boolean
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([resource])
+  @@index([createdAt])
+  @@map("access_logs")
+}
+
+// ============================================================================
+// CORPORATE MODELS
+// ============================================================================
+
 // Corporate models
 model Company {
-  id                String   @id @default(cuid())
+  id                String      @id @default(cuid())
   name              String
-  code              String   @unique // Company signup code
-  email             String   @unique
+  code              String      @unique
+  email             String      @unique
   phone             String?
-  address           String?
+  industry          String?
+  employeeCount     Int?
+  billingAddress    String?
   tier              CompanyTier @default(TIER_A)
-  isActive          Boolean  @default(true)
+  isActive          Boolean     @default(true)
   billingContact    String?
+  billingEmail      String?
   employeeLimit     Int?
-  discountPercent   Decimal? @db.Decimal(5, 2)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  contractStart     DateTime?
+  contractEnd       DateTime?
+  paymentTerms      String      @default("NET_30")
+  onboardingCompleted    Boolean  @default(false)
+  onboardingCompletedAt  DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 
   // Relationships
-  users             User[]
-  bulkOrders        BulkOrder[]
+  users              User[]
+  bulkOrders         BulkOrder[]
   corporateAnalytics CorporateAnalytics[]
+  invoices           Invoice[]
+  paymentRecords     PaymentRecord[]
 
+  @@index([code])
+  @@index([tier])
   @@map("companies")
 }
 
 model BulkOrder {
-  id          String      @id @default(cuid())
-  companyId   String
-  adminUserId String
-  orderDate   DateTime
-  deliveryDate DateTime
-  totalMeals  Int
-  totalAmount Decimal     @db.Decimal(10, 2)
-  status      BulkOrderStatus @default(PENDING)
-  recurring   Boolean     @default(false)
-  frequency   String? // 'daily', 'weekly'
-  notes       String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id             String          @id @default(cuid())
+  companyId      String
+  adminUserId    String
+  orderDate      DateTime
+  deliveryDate   DateTime
+  totalMeals     Int
+  totalAmountCents Int
+  status         BulkOrderStatus @default(PENDING)
+  recurring      Boolean         @default(false)
+  frequency      String?
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
-  company     Company     @relation(fields: [companyId], references: [id])
-  items       BulkOrderItem[]
+  company Company         @relation(fields: [companyId], references: [id])
+  items   BulkOrderItem[]
 
+  @@index([companyId])
+  @@index([status])
   @@map("bulk_orders")
 }
 
@@ -306,7 +447,7 @@ model BulkOrderItem {
   bulkOrderId String
   mealId      String
   quantity    Int
-  price       Decimal   @db.Decimal(10, 2)
+  priceCents  Int
 
   bulkOrder   BulkOrder @relation(fields: [bulkOrderId], references: [id], onDelete: Cascade)
   meal        Meal      @relation(fields: [mealId], references: [id])
@@ -381,41 +522,9 @@ model CorporateAnalytics {
   @@map("corporate_analytics")
 }
 
-// Testimonials
-model Testimonial {
-  id        String   @id @default(cuid())
-  name      String
-  position  String?
-  company   String?
-  content   String
-  rating    Int      @default(5)
-  isApproved Boolean @default(false)
-  isFeatured Boolean @default(false)
-  imageUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("testimonials")
-}
-
-// Taste Profile
-model TasteProfile {
-  id                String   @id @default(cuid())
-  userId            String   @unique
-  spiceTolerance    Int      // 1-5 scale
-  proteinPreference String[] // ['chicken', 'fish', 'beef', 'plant-based']
-  cuisinePreference String[] // ['italian', 'asian', 'mediterranean', etc.]
-  dietaryGoals      String   // 'weight-loss', 'muscle-gain', 'maintenance'
-  allergens         String[]
-  healthConditions  String[]
-  mealComplexity    String   // 'simple', 'moderate', 'complex'
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("taste_profiles")
-}
+// ============================================================================
+// MEAL OPERATIONS MODELS
+// ============================================================================
 
 // Weekly Menu Management
 model WeeklyMenu {
@@ -448,10 +557,15 @@ model WeeklyMenuMeal {
   @@map("weekly_menu_meals")
 }
 
+// ============================================================================
+// ENUMS
+// ============================================================================
+
 enum CompanyTier {
-  TIER_A  // 10-30 employees
-  TIER_B  // 30-100 employees  
-  TIER_C  // 100-300 employees
+  TIER_A  // 10-50 employees
+  TIER_B  // 51-200 employees  
+  TIER_C  // 201-1000 employees
+  TIER_D  // 1000+ employees (Enterprise)
 }
 
 enum BulkOrderStatus {

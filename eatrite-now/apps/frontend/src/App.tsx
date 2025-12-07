@@ -11,6 +11,10 @@ import PageLayout from './components/PageLayout'
 // Critical Pages (loaded immediately)
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import OnboardingPage from './pages/OnboardingPage'
+
+// NEW: App Routes for role-based authenticated application
+import { AppRoutes } from './routes'
 
 // Lazy-loaded Pages for Performance
 const MenuPage = lazy(() => import('./pages/MenuPage'))
@@ -29,14 +33,6 @@ const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const VisitorTrackingDashboard = lazy(() => import('./components/VisitorTrackingDashboard'))
-
-// Premium & Revolutionary Pages (Lazy)
-const PremiumHomePage = lazy(() => import('./pages/PremiumHomePage').then(module => ({ default: module.PremiumHomePage })))
-const HomeDashboard = lazy(() => import('./pages/HomeDashboard'))
-const HomepageVersionSwitcher = lazy(() => import('./pages/HomepageVersionSwitcher'))
-const RevolutionaryMenuPage = lazy(() => import('./pages/RevolutionaryMenuPage'))
-const RevolutionaryPricingPage = lazy(() => import('./pages/RevolutionaryPricingPage'))
-const RevolutionaryPlansPage = lazy(() => import('./pages/RevolutionaryPlansPage'))
 
 // Corporate Pages (Lazy)
 const CorporateLandingPage = lazy(() => import('./pages/CorporateLandingPage'))
@@ -58,15 +54,10 @@ const MenuManagementSimplification = lazy(() => import('./components/MenuManagem
 const TestimonialSystem = lazy(() => import('./components/TestimonialSystem'))
 const CorporateROICalculator = lazy(() => import('./components/CorporateROICalculator'))
 const DietaryProfileSetup = lazy(() => import('./components/DietaryProfileSetup'))
-const B2BPartnershipROIDashboard = lazy(() => import('./components/B2BPartnershipROIDashboard'))
-const CorporatePartnerships = lazy(() => import('./components/CorporatePartnerships'))
 const InteractiveMealBuilder = lazy(() => import('./components/InteractiveMealBuilder'))
 import MealComparison from './components/MealComparison'
 import NutritionCalculator from './components/NutritionCalculator'
-import AIPoweredMealRecommendations from './components/AIPoweredMealRecommendations'
 import OrderTracking from './components/OrderTracking'
-import PersonalizedHealthGoals from './components/PersonalizedHealthGoals'
-import HealthAchievementBadges from './components/HealthAchievementBadges'
 
 // Context Providers
 import { CartProvider } from './context/CartContext'
@@ -215,18 +206,6 @@ function App() {
                       </PageLayout>
                     }
                   />
-                  {/* Premium Brand Homepage - Alternative */}
-                  <Route path="/premium" element={
-                    <PageLayout variant="premium">
-                      <PremiumHomePage />
-                    </PageLayout>
-                  } />
-                  {/* New Premium Dashboard */}
-                  <Route path="/dashboard" element={
-                    <PageLayout variant="dashboard">
-                      <HomeDashboard />
-                    </PageLayout>
-                  } />
                   {/* Corporate Landing Page */}
                   <Route 
                     path="/corporate" 
@@ -363,39 +342,6 @@ function App() {
                       </PageLayout>
                     }
                   />
-                  {/* Revolutionary Pages - Alternative Design */}
-                  <Route
-                    path="/revolutionary"
-                    element={
-                      <PageLayout variant="premium">
-                        <HomepageVersionSwitcher />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/revolutionary/menu"
-                    element={
-                      <PageLayout variant="premium">
-                        <RevolutionaryMenuPage />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/revolutionary/pricing"
-                    element={
-                      <PageLayout variant="premium">
-                        <RevolutionaryPricingPage />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/revolutionary/plans"
-                    element={
-                      <PageLayout variant="premium">
-                        <RevolutionaryPlansPage />
-                      </PageLayout>
-                    }
-                  />
                   {/* Feature Pages */}
                   <Route
                     path="/dietary-profile"
@@ -467,55 +413,10 @@ function App() {
                     }
                   />
                   <Route
-                    path="/ai-recommendations"
-                    element={
-                      <PageLayout variant="premium">
-                        <AIPoweredMealRecommendations />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
                     path="/order-tracking"
                     element={
                       <PageLayout variant="dashboard">
                         <OrderTracking />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/health-goals"
-                    element={
-                      <PageLayout variant="premium">
-                        <PersonalizedHealthGoals />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/achievements"
-                    element={
-                      <div className="min-h-screen flex flex-col bg-white">
-                        <Navbar />
-                        <main className="flex-grow">
-                          <HealthAchievementBadges />
-                        </main>
-                        <Footer />
-                      </div>
-                    }
-                  />
-                  {/* Business Pages */}
-                  <Route
-                    path="/b2b-dashboard"
-                    element={
-                      <PageLayout variant="corporate">
-                        <B2BPartnershipROIDashboard />
-                      </PageLayout>
-                    }
-                  />
-                  <Route
-                    path="/corporate-partnerships"
-                    element={
-                      <PageLayout variant="corporate">
-                        <CorporatePartnerships />
                       </PageLayout>
                     }
                   />
@@ -674,6 +575,17 @@ function App() {
                       <LoginPage />
                     </PageLayout>
                   } />
+                  
+                  {/* Onboarding Flow - Company Admin Required Setup */}
+                  <Route path="/onboarding" element={
+                    <OnboardingPage />
+                  } />
+
+                  {/* ═══════════════════════════════════════════════ */}
+                  {/* AUTHENTICATED APP ROUTES                        */}
+                  {/* Role-based routing: Employee, Admin, SuperAdmin */}
+                  {/* ═══════════════════════════════════════════════ */}
+                  <Route path="/app/*" element={<AppRoutes />} />
                 </Routes>
                       </RouteErrorBoundary>
                     </Suspense>

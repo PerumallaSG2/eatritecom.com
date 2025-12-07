@@ -18,10 +18,10 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white backdrop-blur-md sticky top-0 z-50 shadow-md border-b border-gray-100 hidden md:block">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-8">
         <div className="flex items-center justify-between h-16">
           {/* EatRite Full Logo - Left Side */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" className="flex-shrink-0 mr-8">
             <img
               src="/eatrite-full-logo.svg"
               alt="EatRite"
@@ -29,54 +29,77 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden lg:block flex-1">
-            <div className="flex items-center justify-center gap-8">
-              <Link
-                to="/menu"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Weekly Menu
-              </Link>
-              <Link
-                to="/plans"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Our Plans
-              </Link>
-              <Link
-                to="/ai-recommendations"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                AI Recommendations
-              </Link>
-              <Link
-                to="/meal-builder"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Meal Builder
-              </Link>
-              <Link
-                to="/corporate"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                B2B Solutions
-              </Link>
-              <Link
-                to="/supplements"
-                className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-3 py-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Supplements
-              </Link>
-
-
-            </div>
+          {/* Desktop Navigation - Full Width */}
+          <div className="hidden lg:flex flex-1 items-center justify-start gap-1">
+            <Link
+              to="/menu"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Weekly Menu
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link
+              to="/plans"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Our Plans
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link
+              to="/ai-recommendations"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              AI Recommendations
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link
+              to="/meal-builder"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Meal Builder
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link
+              to="/corporate"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              B2B Solutions
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <Link
+              to="/supplements"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Supplements
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            
+            {/* Enterprise Portals */}
+            <div className="h-6 w-px bg-gray-200 mx-3" />
+            
+            <Link
+              to="/app/employee/home"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Employee Portal
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            
+            <Link
+              to="/app/admin/home"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition-colors duration-200 px-4 py-2 relative group"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Admin Dashboard
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+            </Link>
           </div>
 
           {/* Right Side Actions */}

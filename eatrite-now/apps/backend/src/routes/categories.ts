@@ -1,46 +1,30 @@
-import express, { Router } from 'express'
-import { db } from '../services/database.js'
-import { FallbackDataService } from '../services/fallbackData.js'
+import express, { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
 
-const router: Router = express.Router()
+const router: Router = express.Router();
+const prisma = new PrismaClient();
 
-// Check if database is available
-const isDatabaseAvailable = async (): Promise<boolean> => {
-  try {
-    db.getPool()
-    return true
-  } catch {
-    return false
-  }
-}
-
-// @route   GET /api/categories
-// @desc    Get all active categories
-// @access  Public
+// GET /api/categories - Get all active categories
 router.get('/', async (req, res) => {
   try {
-    // Check if database is available
-    const dbAvailable = await isDatabaseAvailable()
+    const categories = await prisma.category.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        imageUrl: true,
+        sortOrder: true,
+        _count: { select: { meals: true } }
+      },
+      orderBy: { sortOrder: 'asc' }
+    });
 
-    if (!dbAvailable) {
-      // Use fallback data
-      const result = FallbackDataService.getCategories()
-      return res.json(result)
-    }
-
-    const result = await db.query('SELECT id, name, description, created_at FROM categories ORDER BY name')
-    const categories = result.recordset
-
-    return res.json({
-      success: true,
-      data: categories,
-    })
+    res.json({ success: true, data: categories, total: categories.length });
   } catch (error) {
-    console.error('Error fetching categories:', error)
-    // Fall back to mock data if database fails
-    const fallbackResult = FallbackDataService.getCategories()
-    return res.json(fallbackResult)
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch categories' });
   }
-})
+});
 
-export default router
+export default router;
