@@ -1,0 +1,4 @@
+apps/backend
+scripts
+node_modules
+.git
