@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd apps/frontend && pnpm install && pnpm build",
+  "buildCommand": "cd apps/frontend && pnpm install && pnpm run build",
   "outputDirectory": "apps/frontend/dist",
   "installCommand": "pnpm install",
   "routes": [
